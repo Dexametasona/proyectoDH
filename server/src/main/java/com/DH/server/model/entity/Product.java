@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,6 +28,10 @@ public class Product {
   @Column(length = 20)
   @Enumerated(EnumType.STRING)
   private ProductStatus status;
+
+  @OneToMany
+  @JoinColumn(name = "product_id")
+  private List<Photo> photos;
 
   @PrePersist
   public void onCreate(){
