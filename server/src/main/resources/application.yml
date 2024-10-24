@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: management
+  datasource:
+    url: ${DATABASE}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+api:
+  base: api/v1
