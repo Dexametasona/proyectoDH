@@ -1,4 +1,5 @@
-import { Menu, User } from "lucide-react";
+import Image from "next/image";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,15 +7,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { navbarOptions } from "@/types";
+import { Button } from "@/components/ui/button";
+
+import { Menu, User } from "lucide-react";
+import { navbarOptions } from "@/constants";
 
 const Header = () => {
   return (
-    <div className="h-20 bg-primary w-full p-4 rounded-b-3xl flex justify-between items-center sm:rounded-b-none">
+    <div className="h-20 bg-primary w-full p-4 rounded-b-3xl flex justify-between items-center sm:rounded-b-none sticky top-0">
       <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Menu />
+            <Menu className="text-white" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {navbarOptions.map((option) => (
@@ -25,14 +29,35 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <p className="uppercase text-center">GameYard</p>
-      <div className="gap-8 hidden sm:flex cursor-pointer">
+      <Image
+        width={54}
+        height={30}
+        src={"/assets/icons/logo-mobile.svg"}
+        alt={"logo"}
+        className="sm:hidden"
+      />
+      <Image
+        width={128}
+        height={48}
+        src={"/assets/icons/logo-desktop.svg"}
+        alt={"logo"}
+        className="hidden sm:block"
+      />
+      <div className="gap-8 hidden sm:flex cursor-pointer text-white">
         {navbarOptions.map((option) => (
           <p key={option.name}> {option.name} </p>
         ))}
       </div>
-      <div className="bg-secondary rounded-full flex items-center justify-center p-2">
+      <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden text-white">
         <User />
+      </div>
+      <div className="gap-2 sm:flex hidden">
+        <Button className="rounded-full text-sm border-white border">
+          Crear cuenta
+        </Button>
+        <Button className="rounded-full text-sm " variant={"secondary"}>
+          Iniciar sesión
+        </Button>
       </div>
     </div>
   );

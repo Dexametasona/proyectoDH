@@ -1,18 +1,14 @@
-export const navbarOptions = [
-  {
-    name: "Inicio",
-    link: "",
-  },
-  {
-    name: "Catálogo",
-    link: "",
-  },
-  {
-    name: "Eventos",
-    link: "",
-  },
-  {
-    name: "Contacto",
-    link: "",
-  },
-];
+export interface CardsContainerProps {
+  title: string;
+  cards: ProductCards[];
+  verticalColumnMobile?: boolean;
+  gap: string;
+}
+
+export interface ProductCards {
+  bgImage?: string;
+  cardImage?: string;
+  title: string;
+  price?: number;
+  review?: number;
+}
