@@ -10,7 +10,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
 
-    @Column(length = 100)
+    @Column(length = 80)
     private String name;
 
 }

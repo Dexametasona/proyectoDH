@@ -1,12 +1,10 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.CategoryException;
 import com.DH.server.model.entity.Category;
-import com.DH.server.model.entity.Product;
 import com.DH.server.persistance.CategoryRepository;
 import com.DH.server.service.interfaces.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getById(Long id) {
-        return this.categoryRepository.findById(id).orElseThrow();
+        return this.categoryRepository.findById(id).orElseThrow(() ->new CategoryException("nor found by id: "+id));
     }
 
     @Override
@@ -42,11 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAll() {
-        return List.of();
+        return this.categoryRepository.findAll();
     }
 
-    @Override
-    public Page<Category> getAll(Pageable page) {
-        return this.categoryRepository.findAll(page);
-    }
 }
