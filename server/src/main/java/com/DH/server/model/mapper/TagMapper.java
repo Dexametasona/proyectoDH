@@ -10,5 +10,5 @@ import org.mapstruct.*;
 public abstract class TagMapper {
 
     public abstract Tag toEntity(TagReqDto request);
-    public abstract TagResDto toResponse (Category entity);
+    public abstract TagResDto toResponse (Tag entity);
 }
