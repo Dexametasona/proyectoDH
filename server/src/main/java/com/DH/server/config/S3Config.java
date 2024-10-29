@@ -1,5 +1,6 @@
 package com.DH.server.config;
 
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -12,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3Config {
 
-    @Value("${cloud.aws.access.key}")
+    @Value("${cloud.aws.credentials.accessKey}")
     private String awsAccessKey;
 
-    @Value("${cloud.aws.secret.key}")
+    @Value("${cloud.aws.credentials.secretKey}")
     private String awsSecretKey;
 
     @Bean
