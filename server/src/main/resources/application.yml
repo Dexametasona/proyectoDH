@@ -12,3 +12,10 @@ spring:
     open-in-view: true
 api:
   base: api/v1
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET:gameyard-s3-assets}
