@@ -37,10 +37,14 @@ public class ProductController {
                                   @Validated(OnCreate.class)
                                   ProductReqDto request) {
     var newProduct = this.productMapper.toEntity(request);
-    newProduct = this.productService.create(newProduct);
+    newProduct = this.productService.create(
+            newProduct,
+            request.photos(),
+            request.categoryId(),
+            request.tagId());
     return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
+            .body(new ApiResponseDto<>(this.productMapper.toShortResponse(newProduct)));
   }
 
   @Operation(summary = "Get products", description = "Get all product with pagination and filters")
@@ -86,4 +90,5 @@ public class ProductController {
     this.productService.deleteById(id);
     return ResponseEntity.ok(new ApiResponseDto<>("Product delete successfully, id: "+id));
   }
+
 }

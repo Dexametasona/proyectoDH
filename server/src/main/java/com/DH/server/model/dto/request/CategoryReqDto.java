@@ -7,6 +7,6 @@ import jakarta.validation.constraints.Size;
 
 public record CategoryReqDto(
         @NotBlank(groups = {OnCreate.class})
-                             @Size(min = 5, max = 100, groups = {OnCreate.class, OnUpdate.class})
-                             String name) {
+        @Size(min = 5, max = 100, groups = {OnCreate.class, OnUpdate.class})
+        String name) {
 }

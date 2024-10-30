@@ -29,7 +29,7 @@ public class Product {
   @Enumerated(EnumType.STRING)
   private ProductStatus status;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "product_id")
   private List<Photo> photos;
 

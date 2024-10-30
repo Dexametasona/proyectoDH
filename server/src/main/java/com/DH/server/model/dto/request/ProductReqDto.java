@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public record ProductReqDto(
         @NotBlank(groups = {OnCreate.class})
@@ -19,6 +22,15 @@ public record ProductReqDto(
         Double price,
         @NotBlank(groups = {OnCreate.class})
         @Size(min = 2, max = 50, groups = {OnCreate.class, OnUpdate.class})
-        String brand
+        String brand,
+        @NotNull(groups = {OnCreate.class})
+        @Size(min = 4, groups = {OnCreate.class, OnUpdate.class})
+        List<MultipartFile> photos,
+        @NotNull(groups = {OnCreate.class})
+        @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
+        Integer categoryId,
+        @NotNull(groups = {OnCreate.class})
+        @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
+        Integer tagId
 ) {
 }

@@ -26,7 +26,7 @@ public class S3ServiceImpl implements S3Service {
   @Override
   public String uploadFile(MultipartFile file) {
     if (file.isEmpty()) return null;
-    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+    String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
     ObjectMetadata metadata = new ObjectMetadata();
     metadata.setContentType(file.getContentType());
