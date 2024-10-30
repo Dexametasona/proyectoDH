@@ -3,6 +3,7 @@ package com.DH.server.controller;
 import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
+import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.dto.request.ProductReqDto;
 import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.entity.Product;
@@ -12,6 +13,7 @@ import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,12 +43,15 @@ public class ProductController {
             .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
   }
 
-  @Operation(summary = "Get products", description = "Get all product with pagination")
+  @Operation(summary = "Get products", description = "Get all product with pagination and filters")
   @GetMapping
   public ResponseEntity<?> getAll(
           @Parameter(description = "Pagination and sorting")
-          @Nullable Pageable page) {
-    Page<Product> products = this.productService.getAll(page);
+          @Nullable Pageable page,
+          @Parameter(description = "Filters")
+          @Nullable
+          @Valid ProductFilters filters) {
+    Page<Product> products = this.productService.getAllByFilters(page, filters);
     Page<ProductResDto> productsResDto = products.map(productMapper::toResponse);
     return ResponseEntity.ok(
             new ApiResponseDto<>(this.productMapper.toCustomPage(productsResDto)));

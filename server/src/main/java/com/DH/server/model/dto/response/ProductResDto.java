@@ -6,6 +6,8 @@ public record ProductResDto(
         String description,
         double price,
         String brand,
-        int status
+        int status,
+        CategoryResDto category,
+        TagResDto tag
 ) {
 }

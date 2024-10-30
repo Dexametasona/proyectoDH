@@ -8,7 +8,7 @@ import com.DH.server.model.enums.ProductStatus;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class})
 public abstract class ProductMapper {
   public abstract Product toEntity(ProductReqDto request);
 
