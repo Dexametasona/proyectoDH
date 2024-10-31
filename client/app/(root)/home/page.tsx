@@ -1,6 +1,6 @@
 import CardsContainer from "@/components/CardsContainer";
 import Hero from "@/components/home/Hero";
-import { categoriesCards, recomendationsCards } from "@/constants";
+import { categoriesCards, recommendationsCards } from "@/constants";
 import React from "react";
 
 const page = () => {
@@ -16,7 +16,7 @@ const page = () => {
       <CardsContainer
         title={"Recomendaciones"}
         gap="6"
-        cards={recomendationsCards}
+        cards={recommendationsCards}
       />
     </>
   );

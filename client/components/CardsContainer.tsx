@@ -18,7 +18,8 @@ const CardsContainer = ({
       >
         {cards.map((card) => (
           <ProductsCards
-            key={card.title}
+            key={card.id}
+            id={card.id}
             bgImage={card.bgImage}
             title={card.title}
             cardImage={card.cardImage}
