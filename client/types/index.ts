@@ -6,6 +6,7 @@ export interface CardsContainerProps {
 }
 
 export interface ProductCards {
+  id: string;
   bgImage?: string;
   cardImage?: string;
   title: string;
