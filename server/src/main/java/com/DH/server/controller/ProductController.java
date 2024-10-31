@@ -47,7 +47,7 @@ public class ProductController {
             request.tagId());
     return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ApiResponseDto<>(this.productMapper.toShortResponse(newProduct)));
+            .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
   }
 
   @Operation(summary = "Get products", description = "Get all product with pagination and filters")
