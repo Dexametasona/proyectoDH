@@ -13,6 +13,7 @@ import com.DH.server.service.interfaces.TagService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +77,12 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Page<Product> getAll(Pageable page) {
     return this.productRepository.findAll(page);
+  }
+
+  @Override
+  public List<Product> getRandom() {
+    Pageable limit = PageRequest.of(0, 20);
+    return this.productRepository.findRandomProducts(limit);
   }
 
   @Override

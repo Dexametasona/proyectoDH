@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.base}/products")
@@ -59,6 +61,15 @@ public class ProductController {
     Page<ProductResDto> productsResDto = products.map(productMapper::toResponse);
     return ResponseEntity.ok(
             new ApiResponseDto<>(this.productMapper.toCustomPage(productsResDto)));
+  }
+
+  @Operation(summary = "Get random products", description = "Get 20 random products")
+  @GetMapping("/random")
+  public ResponseEntity<?> getAllRandom() {
+    List<Product> products = this.productService.getRandom();
+    List<ProductResDto> productsResDto = products.stream().map(productMapper::toResponse).toList();
+    return ResponseEntity.ok(
+            new ApiResponseDto<>(productsResDto));
   }
 
   @Operation(summary = "Get product by id", description = "fetch products using his id into url.")
