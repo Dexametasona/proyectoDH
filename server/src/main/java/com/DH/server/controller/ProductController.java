@@ -6,6 +6,7 @@ import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.dto.request.ProductReqDto;
 import com.DH.server.model.dto.response.ProductResDto;
+import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.service.interfaces.ProductService;
@@ -21,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +47,7 @@ public class ProductController {
             request.tagId());
     return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ApiResponseDto<>(this.productMapper.toShortResponse(newProduct)));
+            .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
   }
 
   @Operation(summary = "Get products", description = "Get all product with pagination and filters")
@@ -56,9 +59,18 @@ public class ProductController {
           @Nullable
           @Valid ProductFilters filters) {
     Page<Product> products = this.productService.getAllByFilters(page, filters);
-    Page<ProductResDto> productsResDto = products.map(productMapper::toResponse);
+    Page<ProductShortDto> productsResDto = products.map(productMapper::toShortResponse);
     return ResponseEntity.ok(
             new ApiResponseDto<>(this.productMapper.toCustomPage(productsResDto)));
+  }
+
+  @Operation(summary = "Get random products", description = "Get 20 random products")
+  @GetMapping("/random")
+  public ResponseEntity<?> getAllRandom() {
+    List<Product> products = this.productService.getRandom();
+    List<ProductShortDto> productsResDto = products.stream().map(productMapper::toShortResponse).toList();
+    return ResponseEntity.ok(
+            new ApiResponseDto<>(productsResDto));
   }
 
   @Operation(summary = "Get product by id", description = "fetch products using his id into url.")

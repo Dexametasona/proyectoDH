@@ -11,6 +11,7 @@ import java.util.List;
 public interface ProductService extends GenericService<Product> {
   Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId);
   Page<Product> getAll(Pageable page);
+  List<Product> getRandom();
 
   Page<Product> getAllByFilters(Pageable page,
                                 ProductFilters filters);
