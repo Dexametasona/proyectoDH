@@ -1,0 +1,7 @@
+package com.DH.server.exception;
+
+public class EntityException extends RuntimeException {
+  public EntityException(String message) {
+    super(message);
+  }
+}
