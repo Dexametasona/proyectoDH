@@ -21,7 +21,7 @@ const Header = () => {
   };
 
   return (
-    <div className="h-20 bg-primary w-full p-4 rounded-b-3xl flex justify-between items-center sm:rounded-b-none sticky top-0">
+    <div className="h-20 bg-primary w-full p-4 rounded-b-3xl flex justify-between items-center sm:rounded-b-none z-50 sticky top-0">
       <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger>
