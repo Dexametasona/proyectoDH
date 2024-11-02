@@ -38,17 +38,17 @@ export const socialMedia = [
 export const categoriesCards: ProductCards[] = [
   {
     id: "1",
-    bgImage: "/assets/images/product1.png",
+    bgImage: "/assets/images/product5.jpg",
     title: "Saltarines",
   },
   {
     id: "2",
-    bgImage: "/assets/images/product1.png",
+    bgImage: "/assets/images/product3.jpg",
     title: "Saltarines",
   },
   {
     id: "3",
-    bgImage: "/assets/images/product1.png",
+    bgImage: "/assets/images/product4.jpg",
     title: "Saltarines",
   },
 ];
@@ -56,42 +56,42 @@ export const categoriesCards: ProductCards[] = [
 export const recommendationsCards: ProductCards[] = [
   {
     id: "4",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product3.jpg",
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
   },
   {
     id: "5",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product5.jpg",
     title: "Saltarín Cocodrilo",
     price: 22,
     review: 3.8,
   },
   {
     id: "6",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product3.jpg",
     title: "Saltarín Cocodrilo",
     price: 22,
     review: 3.8,
   },
   {
     id: "7",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product4.jpg",
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
   },
   {
     id: "8",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product5.jpg",
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
   },
   {
     id: "9",
-    cardImage: "/assets/images/product2.png",
+    cardImage: "/assets/images/product3.jpg",
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,

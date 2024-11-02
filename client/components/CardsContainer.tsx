@@ -2,6 +2,7 @@ import { CardsContainerProps } from "@/types";
 import React from "react";
 import ProductsCards from "./ProductsCards";
 
+
 const CardsContainer = ({
   title,
   cards,
@@ -9,12 +10,11 @@ const CardsContainer = ({
   gap,
 }: CardsContainerProps) => {
   return (
+    
     <section className="flex flex-col gap-4 px-6 mt-12">
       <p className="text-primary text-2xl"> {title} </p>
       <div
-        className={`flex gap-${gap} ${
-          verticalColumnMobile ? "flex-col" : "flex-row"
-        } sm:flex-row`}
+        className={`grid grid-cols-1 mb-4 sm:grid-cols-2 gap-4 ${verticalColumnMobile ? "flex-col" : "grid"}`}
       >
         {cards.map((card) => (
           <ProductsCards
@@ -29,6 +29,7 @@ const CardsContainer = ({
         ))}
       </div>
     </section>
+    
   );
 };
 

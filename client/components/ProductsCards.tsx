@@ -33,15 +33,19 @@ const ProductsCards = ({
           </p>
         </div>
       ) : (
-        <div className="mt-2 text-center mb-4 bg-white p-3 rounded-lg shadow-md">
+        <div className="bg-[var(--secondary)] rounded-2xl shadow-lg p-4">
+        <div className="mt-2 text-center mb-4 bg-white p-3 rounded-lg shadow-md" onClick={() => handleRedirect("product")
+        }>
+           <div className="flex justify-center">
           <Image
             src={cardImage || ""}
             alt="product image"
-            width={160}
-            height={176}
-            className="mb-3 rounded-lg cursor-pointer"
-            onClick={() => handleRedirect("product")}
+            width={400}
+            height={200}
+            className="mb-3 w-96 h-96 rounded-lg cursor-pointer object-cover"
+            layout="fixed"
           />
+          </div>
           <div className="justify-items-start">
             <p className="text-text-color font-semibold"> {title} </p>
             <p className="text-primary font-bold text-lg"> ${price}/hora </p>
@@ -49,6 +53,7 @@ const ProductsCards = ({
               <span>⭐ {review}</span>
             </div>
           </div>
+        </div>
         </div>
       )}
     </>

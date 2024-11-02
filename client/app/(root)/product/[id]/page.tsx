@@ -6,14 +6,15 @@ import Image from "next/image";
 import { recommendationsCards } from "@/constants";
 import { ProductCards } from "@/types";
 
-const ProductPage = () => {
+
+function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState<ProductCards | null>(null);
 
   useEffect(() => {
     if (id) {
       const foundProduct = recommendationsCards.find(
-        (recommendation) => recommendation.id === id,
+        (recommendation) => recommendation.id === id
       );
       setProduct(foundProduct || null);
     }
@@ -29,8 +30,7 @@ const ProductPage = () => {
           alt={product.title}
           width={500}
           height={300}
-          className="rounded-md"
-        />
+          className="rounded-md" />
       </div>
       <div className="text-center mb-5 mt-5">
         <h1 className="text-2xl font-bold">{product.title}</h1>
@@ -50,8 +50,8 @@ const ProductPage = () => {
           Reservar
         </button>
       </div>
-    {/* Descripción */}
-    <div className="mb-4">
+      {/* Descripción */}
+      <div className="mb-4">
         <h2 className="text-xl font-semibold">Descripción</h2>
         <p className="text-gray-700">
           Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem...
@@ -60,6 +60,6 @@ const ProductPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ProductPage;
