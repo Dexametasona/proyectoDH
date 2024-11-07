@@ -7,7 +7,7 @@ import { recommendationsCards } from "@/constants";
 import { ProductCards } from "@/types";
 
 
-function ProductPage() {
+const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<ProductCards | null>(null);
 
