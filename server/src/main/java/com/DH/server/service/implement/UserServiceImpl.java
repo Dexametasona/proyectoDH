@@ -55,11 +55,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<UserEntity> getAll(Pageable pageable, UserFilters filters) {
+    Role role = filters.role() == null ? null : Role.fromId(filters.role());
     return this.userRepository.findAllByFilter(
             pageable,
             filters.name(),
             filters.lastname(),
-            Role.fromId(filters.role()),
+            role,
             filters.email());
   }
 
