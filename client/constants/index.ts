@@ -1,5 +1,12 @@
 import { ProductCards } from "@/types";
-import { Instagram, Youtube, Facebook } from "lucide-react";
+import {
+  Instagram,
+  Youtube,
+  Facebook,
+  LayoutDashboard,
+  LayoutList,
+  FolderClosed,
+} from "lucide-react";
 
 export const navbarOptions = [
   {
@@ -95,5 +102,116 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
+  },
+];
+
+export const adminMenuOptions = [
+  {
+    id: 1,
+    label: "Dashboard",
+    link: "/admin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    id: 2,
+    label: "Lista de Productos",
+    link: "/admin/product-list",
+    icon: LayoutList,
+  },
+];
+
+export const transactions = [
+  {
+    name: "Gimena Carcía",
+    image: "https://picsum.photos/200/300",
+    orders: 5,
+    total: 32,
+  },
+  {
+    name: "Carlos Méndez",
+    image: "https://picsum.photos/201/301",
+    orders: 8,
+    total: 45,
+  },
+  {
+    name: "Laura Sánchez",
+    image: "https://picsum.photos/202/302",
+    orders: 3,
+    total: 18,
+  },
+  {
+    name: "José López",
+    image: "https://picsum.photos/203/303",
+    orders: 6,
+    total: 27,
+  },
+  {
+    name: "Ana Rodríguez",
+    image: "https://picsum.photos/204/304",
+    orders: 4,
+    total: 22,
+  },
+  {
+    name: "Felipe Martínez",
+    image: "https://picsum.photos/205/305",
+    orders: 10,
+    total: 60,
+  },
+  {
+    name: "Gimena Carcía",
+    image: "https://picsum.photos/200/300",
+    orders: 5,
+    total: 32,
+  },
+  {
+    name: "Carlos Méndez",
+    image: "https://picsum.photos/201/301",
+    orders: 8,
+    total: 45,
+  },
+  {
+    name: "Laura Sánchez",
+    image: "https://picsum.photos/202/302",
+    orders: 3,
+    total: 18,
+  },
+  {
+    name: "José López",
+    image: "https://picsum.photos/203/303",
+    orders: 6,
+    total: 27,
+  },
+  {
+    name: "Ana Rodríguez",
+    image: "https://picsum.photos/204/304",
+    orders: 4,
+    total: 22,
+  },
+  {
+    name: "Felipe Martínez",
+    image: "https://picsum.photos/205/305",
+    orders: 10,
+    total: 60,
+  },
+];
+
+export const overviewCategories = [
+  {
+    icon: FolderClosed,
+    label: "Ordenes Totales",
+    link: "",
+    color: "blue",
+  },
+  {
+    icon: FolderClosed,
+    label: "Ingresos Totales",
+    link: "",
+    color: "red",
+  },
+  {
+    icon: FolderClosed,
+    label: "Servicios",
+    link: "",
+    color: "yellow",
   },
 ];
