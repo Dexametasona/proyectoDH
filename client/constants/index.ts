@@ -67,6 +67,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
+    stock: 4,
+    description:
+      "Pintores 10, Morelos, Venustiano Carranza, 15270 Ciudad de México, CDMX",
+    state: "En Reparación",
+    location: "Bodega 1",
   },
   {
     id: "5",
@@ -74,6 +79,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 22,
     review: 3.8,
+    stock: 6,
+    description:
+      "Calle Reforma 20, Centro, Cuauhtémoc, 06000 Ciudad de México, CDMX",
+    state: "Disponible",
+    location: "Bodega 2",
   },
   {
     id: "6",
@@ -81,6 +91,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 22,
     review: 3.8,
+    stock: 2,
+    description:
+      "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, 06760 Ciudad de México, CDMX",
+    state: "En Mantenimiento",
+    location: "Bodega 3",
   },
   {
     id: "7",
@@ -88,6 +103,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
+    stock: 5,
+    description:
+      "Eje Central 150, Doctores, Cuauhtémoc, 06720 Ciudad de México, CDMX",
+    state: "En Reparación",
+    location: "Bodega 1",
   },
   {
     id: "8",
@@ -95,6 +115,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
+    stock: 3,
+    description:
+      "Avenida Universidad 250, Copilco, Coyoacán, 04360 Ciudad de México, CDMX",
+    state: "Disponible",
+    location: "Bodega 2",
   },
   {
     id: "9",
@@ -102,6 +127,11 @@ export const recommendationsCards: ProductCards[] = [
     title: "Saltarín Cocodrilo",
     price: 12,
     review: 3.8,
+    stock: 1,
+    description:
+      "Periférico Sur 500, Pedregal, Álvaro Obregón, 01900 Ciudad de México, CDMX",
+    state: "En Uso",
+    location: "Bodega 3",
   },
 ];
 
