@@ -11,6 +11,7 @@ import com.DH.server.service.interfaces.UserService;
 import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,8 @@ public class UserController {
   private final UserService userService;
   private final UserMapper userMapper;
 
-  @Operation(summary = "Get users", description = "Get all user with pagination and filters")
+  @Operation(summary = "Get users", description = "Get all user with pagination and filters, only available for ADMIN",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @GetMapping
   public ResponseEntity<?> getAll(
           @Parameter(description = "Pagination and sorting")
@@ -43,7 +45,8 @@ public class UserController {
             new ApiResponseDto<>(this.userMapper.toCustomPage(productsResDto)));
   }
 
-  @Operation(summary = "Get user by id", description = "fetch users using his id into url.")
+  @Operation(summary = "Get user by id", description = "fetch users using his id into url, only available for ADMIN",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@Parameter(description = "User id", required = true)
                                    @PathVariable Long id) {
@@ -51,7 +54,8 @@ public class UserController {
     return ResponseEntity.ok(new ApiResponseDto<>(this.userMapper.toResponse(product)));
   }
 
-  @Operation(summary = "Update User by id", description = "fetch Users using his id into url, and json into body")
+  @Operation(summary = "Update User by id", description = "fetch Users using his id into url, and json into body",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @PutMapping(value = "/{id}")
   public ResponseEntity<?> update(@Parameter(description = "User id", required = true)
                                   @PathVariable Long id,
@@ -64,7 +68,8 @@ public class UserController {
             .ok(new ApiResponseDto<>(this.userMapper.toResponse(product)));
   }
 
-  @Operation(summary = "Delete User by id", description = "Delete user using his id into ur")
+  @Operation(summary = "Delete User by id", description = "Delete user using his id into ur",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteById(@Parameter(description = "User id", required = true)
                                       @PathVariable Long id){
