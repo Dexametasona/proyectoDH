@@ -58,6 +58,7 @@ public class AuthController {
   security = {@SecurityRequirement(name = "bearerAuth")})
   public ResponseEntity<?> getAuthUser(){
     UserEntity authUser = this.authService.getAuthUser();
-    return ResponseEntity.ok(new ApiResponseDto<>(authUser));
+    return ResponseEntity.ok(new ApiResponseDto<>(
+            this.userMapper.toResponse(authUser)));
   }
 }
