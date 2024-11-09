@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { GalleryModalProps } from '@/types';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const GalleryModal: React.FC<GalleryModalProps> = ({
    images, 
@@ -30,7 +31,7 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
           className="absolute top-2 right-2 text-white text-3xl"
           onClick={onClose}
         >
-          &times;
+          <X color="#ffffff" />
         </button>
 
         {/* Imagen Principal */}
@@ -47,13 +48,13 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
           className="absolute top-1/2 left-1 transform -translate-y-1/2 text-white text-3xl"
           onClick={handlePrevious}
         >
-          &#10094;
+          <ChevronLeft  color="#ffffff" />
         </button>
         <button
           className="absolute top-1/2 right-1  transform -translate-y-1/2 text-white text-3xl"
           onClick={handleNext}
         >
-          &#10095;
+          <ChevronRight color="#ffffff" />
         </button>
       </div>
     </div>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { recommendationsCards } from "@/constants";
 import { ProductCards } from "@/types";
 import GalleryModal from "@/components/modal/GalleryModal";
+import { Check } from "lucide-react";
 
 
 
@@ -72,10 +73,13 @@ const ProductPage = () => {
 
       {/* Información de disponibilidad y precio */}
       <div className="flex justify-between items-center mb-4 p-2 border-y border-primary-light">
-        <div className="flex flex-col">
-          <span className="text-green-600 font-bold">{product.status}</span>
+        <div className="flex flex-col gap-2">
           <p className="text-gray-700">{product.price} USD por hora</p>
           <p className="text-gray-500">Marca: {product.brand}</p>
+          <div className="flex flex-row gap-2 justify-start">
+          <Check color="#0eba69"/>
+          <span className="text-[var(--color-active)] font-bold">{product.status}</span>
+          </div>
         </div>
         <button className="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-600">
           Reservar
