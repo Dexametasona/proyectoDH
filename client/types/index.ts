@@ -12,4 +12,8 @@ export interface ProductCards {
   title: string;
   price?: number;
   review?: number;
+  stock?: number;
+  description?: string;
+  state?: string;
+  location?: string;
 }
