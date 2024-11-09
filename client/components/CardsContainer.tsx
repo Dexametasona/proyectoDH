@@ -4,7 +4,7 @@ import ProductsCards from "./ProductsCards";
 
 
 const CardsContainer = ({
-  title,
+  name,
   cards,
   verticalColumnMobile,
   gap,
@@ -12,7 +12,7 @@ const CardsContainer = ({
   return (
     
     <section className="flex flex-col gap-4 px-6 mt-12">
-      <p className="text-primary text-2xl"> {title} </p>
+      <p className="text-primary text-2xl"> {name} </p>
       <div
         className={`grid grid-cols-1 mb-4 sm:grid-cols-2 gap-4 ${verticalColumnMobile ? "flex-col" : "grid"}`}
       >
@@ -21,10 +21,13 @@ const CardsContainer = ({
             key={card.id}
             id={card.id}
             bgImage={card.bgImage}
-            title={card.title}
+            name={card.name}
+            brand={card.brand}
             cardImage={card.cardImage}
             price={card.price}
-            review={card.review}
+            description={card.description}
+            status={card.status}
+            thumbnails={card.thumbnails}
           />
         ))}
       </div>

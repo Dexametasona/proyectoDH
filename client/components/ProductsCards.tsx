@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 
 import { ProductCards } from "@/types";
 
+
 const ProductsCards = ({
   id,
   bgImage,
   cardImage,
-  title,
+  name,
   price,
-  review,
 }: ProductCards) => {
   const router = useRouter();
 
@@ -29,7 +29,7 @@ const ProductsCards = ({
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
           <p className="absolute bottom-4 left-4 text-white font-bold">
-            {title}
+            {name}
           </p>
         </div>
       ) : (
@@ -46,12 +46,11 @@ const ProductsCards = ({
             layout="fixed"
           />
           </div>
+       
           <div className="justify-items-start">
-            <p className="text-text-color font-semibold"> {title} </p>
+            <p className="text-text-color font-semibold"> {name} </p>
             <p className="text-primary font-bold text-lg"> ${price}/hora </p>
-            <div className="flex items-center justify-center mt-1 text-text-color text-sm">
-              <span>⭐ {review}</span>
-            </div>
+            
           </div>
         </div>
         </div>
