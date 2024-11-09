@@ -22,7 +22,10 @@ export interface ProductCards {
   name: string;
   brand?: string;
   price?: number;
-  description?: string;
   status?: string;
+  description?: string;
   thumbnails?: Thumbnail[];
+  stock?: number;
+  state?: string;
+  location?: string;
 }
