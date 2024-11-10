@@ -26,5 +26,7 @@ public record ProductFilters(
         @Min(0)
         @Schema(description = "Lower price limit, it must be use with upper price limit")
         Double priceLimitLower
+
 ) {
+        /*prueba*/
 }
