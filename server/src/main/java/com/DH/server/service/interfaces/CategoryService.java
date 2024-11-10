@@ -1,13 +1,14 @@
 package com.DH.server.service.interfaces;
 
 import com.DH.server.model.entity.Category;
-import com.DH.server.model.entity.Product;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public interface CategoryService extends GenericService<Category> {
 
-    //Page<Category> getAll(Pageable page);
+
+    Category create(Category entity, MultipartFile file);
+
+    Category updateById(Long id, Category entity, MultipartFile file);
+
 }
