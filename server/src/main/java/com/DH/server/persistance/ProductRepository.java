@@ -19,7 +19,8 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
   default Page<Product> findAllByFilter(
           Pageable page,
-          Integer categoryId,
+          List<Integer> categoryIds,
+          //Integer categoryId,
           Integer tagId,
           String name,
           String brand,
@@ -29,8 +30,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     return findAll((Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder builder)->{
       List<Predicate> predicates = new ArrayList<>();
 
-      if(categoryId != null){
-        predicates.add(builder.equal(root.get("category").get("id"), categoryId));
+      if(categoryIds != null && !categoryIds.isEmpty()){
+        predicates.add(root.get("category").get("id").in(categoryIds));
       }
       if(tagId != null){
         predicates.add(builder.equal(root.get("tag").get("id"), tagId));
