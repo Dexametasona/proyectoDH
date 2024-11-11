@@ -44,7 +44,7 @@ public class CategoryController {
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponseDto<>(this.categoryMapper.toResponse(newCategory)));
     }
-    @Operation(summary = "Get all Categories",description = "Get all categories withouth pagination")
+    @Operation(summary = "Get all Categories",description = "Get all categories without pagination")
     @GetMapping
     public ResponseEntity<?> getAll(){
         var categories =this.categoryService.getAll();
@@ -86,7 +86,7 @@ public class CategoryController {
             @PathVariable Long id
     ){
         this.categoryService.deleteById(id);
-        return ResponseEntity.ok(new ApiResponseDto<>("Category delete successfuly, id:"+id));
+        return ResponseEntity.ok(new ApiResponseDto<>("Category delete successfully, id:"+id));
     }
 
 
