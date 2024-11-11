@@ -14,6 +14,7 @@ public record UserFilters(
         String email,
         @Min(0)
         @Max(1)
-        Integer role
+        Integer role,
+        Boolean isDeleted
         ) {
 }

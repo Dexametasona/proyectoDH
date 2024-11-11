@@ -9,4 +9,6 @@ public interface UserService extends GenericService<UserEntity>{
   Page<UserEntity> getAll(Pageable pageable, UserFilters filters);
 
   UserEntity getByEmail(String email);
+
+  UserEntity updateRoleById(Long id, Integer role);
 }
