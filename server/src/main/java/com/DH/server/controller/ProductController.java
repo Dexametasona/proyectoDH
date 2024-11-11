@@ -3,8 +3,10 @@ package com.DH.server.controller;
 import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
+import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.dto.request.ProductReqDto;
 import com.DH.server.model.dto.response.ProductResDto;
+import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.service.interfaces.ProductService;
@@ -12,6 +14,7 @@ import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,21 +40,37 @@ public class ProductController {
                                   @Validated(OnCreate.class)
                                   ProductReqDto request) {
     var newProduct = this.productMapper.toEntity(request);
-    newProduct = this.productService.create(newProduct);
+    newProduct = this.productService.create(
+            newProduct,
+            request.photos(),
+            request.categoryId(),
+            request.tagId());
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
   }
 
-  @Operation(summary = "Get products", description = "Get all product with pagination")
+  @Operation(summary = "Get products", description = "Get all product with pagination and filters")
   @GetMapping
   public ResponseEntity<?> getAll(
           @Parameter(description = "Pagination and sorting")
-          @Nullable Pageable page) {
-    Page<Product> products = this.productService.getAll(page);
-    Page<ProductResDto> productsResDto = products.map(productMapper::toResponse);
+          @Nullable Pageable page,
+          @Parameter(description = "Filters")
+          @Nullable
+          @Valid ProductFilters filters) {
+    Page<Product> products = this.productService.getAllByFilters(page, filters);
+    Page<ProductShortDto> productsResDto = products.map(productMapper::toShortResponse);
     return ResponseEntity.ok(
             new ApiResponseDto<>(this.productMapper.toCustomPage(productsResDto)));
+  }
+
+  @Operation(summary = "Get random products", description = "Get 20 random products")
+  @GetMapping("/random")
+  public ResponseEntity<?> getAllRandom() {
+    List<Product> products = this.productService.getRandom();
+    List<ProductShortDto> productsResDto = products.stream().map(productMapper::toShortResponse).toList();
+    return ResponseEntity.ok(
+            new ApiResponseDto<>(productsResDto));
   }
 
   @Operation(summary = "Get product by id", description = "fetch products using his id into url.")
@@ -81,4 +102,5 @@ public class ProductController {
     this.productService.deleteById(id);
     return ResponseEntity.ok(new ApiResponseDto<>("Product delete successfully, id: "+id));
   }
+
 }

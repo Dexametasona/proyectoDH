@@ -61,7 +61,7 @@ public class TagController {
         return ResponseEntity.ok(new ApiResponseDto<>(this.tagMapper.toResponse(tagID)));
     }
 
-    @Operation(summary = "Update Tag",description = "fetchs tags using id")
+    @Operation(summary = "Update Tag",description = "fetch tags using id")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
                                     @Validated(OnUpdate.class)

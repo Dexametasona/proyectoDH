@@ -1,16 +1,11 @@
 package com.DH.server.model.dto.response;
 
-import java.util.List;
-
-public record ProductResDto(
+public record ProductShortDto(
         long id,
         String name,
-        String description,
         double price,
-        String brand,
-        int status,
         CategoryResDto category,
         TagResDto tag,
-        List<String> photoUrl
+        String photoUrl
 ) {
 }

@@ -8,13 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
-<<<<<<< Updated upstream
-public class CategoryReqDto {
-
-    @NotBlank(groups = {OnCreate.class})
-    @Size(min=5, max=100, groups = {OnCreate.class, OnUpdate.class})
-    String name;
-=======
 public record CategoryReqDto(
         @NotBlank(groups = {OnCreate.class})
         @Size(min = 5, max = 100, groups = {OnCreate.class, OnUpdate.class})
@@ -31,5 +24,4 @@ public record CategoryReqDto(
         MultipartFile photo
 
 ){
->>>>>>> Stashed changes
 }

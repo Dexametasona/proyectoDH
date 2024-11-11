@@ -29,9 +29,16 @@ public class Product {
   @Enumerated(EnumType.STRING)
   private ProductStatus status;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "product_id")
   private List<Photo> photos;
+
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  private Category category;
+  @ManyToOne
+  @JoinColumn(name = "tag_id")
+  private Tag tag;
 
   @PrePersist
   public void onCreate(){

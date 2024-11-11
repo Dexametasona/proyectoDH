@@ -12,3 +12,20 @@ spring:
     open-in-view: true
 api:
   base: api/v1
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET:gameyard-s3-assets}
+jwt:
+  secret:
+    key: ${JWT_SECRET}
+  time:
+    expiration: ${JWT_EXPIRATION}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web.authentication: DEBUG
+    org.springframework.security.web.access: DEBUG
