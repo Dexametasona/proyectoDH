@@ -62,8 +62,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
   private String getTokenFromRequest(HttpServletRequest request) {
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (authHeader != null && authHeader.startsWith("Bearer")) {
-      return authHeader.substring(7);
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      return authHeader.substring(7).trim();
     }
     return null;
   }
