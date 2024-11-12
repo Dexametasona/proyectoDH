@@ -11,6 +11,7 @@ public abstract class CategoryMapper {
 
     public abstract Category toEntity(CategoryReqDto request);
 
-    public abstract CategoryResDto toResponse (Category entity);
+
+    public abstract CategoryResDto toResponse(Category response);
 
 }

@@ -2,7 +2,9 @@
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `photo_Url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 

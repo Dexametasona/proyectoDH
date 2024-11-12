@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,12 +28,18 @@ public class CategoryController {
     private final CategoryMapper categoryMapper;
 
     @Operation(summary = "Create Category")
-    @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody
+    @PostMapping(consumes = "multipart/form-data")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
+    public ResponseEntity<?> createCategory(
                                             @Validated (OnCreate.class)
-                                            CategoryReqDto request){
+                                            @ModelAttribute CategoryReqDto request){
+
         var newCategory=this.categoryMapper.toEntity(request);
-        newCategory=this.categoryService.create(newCategory);
+
+        newCategory=this.categoryService.create(
+                newCategory,
+                request.photo());
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponseDto<>(this.categoryMapper.toResponse(newCategory)));
@@ -57,16 +64,16 @@ public class CategoryController {
     }
 
     @Operation(summary = "Update category",description = "fetchs categories using id")
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}", consumes =  "multipart/form-data")
     public ResponseEntity<?> update(
             @Parameter(description = "Category id",required = true)
             @PathVariable Long id,
             @Validated(OnUpdate.class)
-            @RequestBody
-            CategoryReqDto request){
+            @RequestPart("photo") MultipartFile file,
+            @RequestPart ("category") CategoryReqDto request){
 
         var category=this.categoryMapper.toEntity(request);
-        category=this.categoryService.updateById(id,category);
+        category=this.categoryService.updateById(id,category,file);
 
         return ResponseEntity
                 .ok(new ApiResponseDto<>(this.categoryMapper.toResponse(category)));
@@ -82,5 +89,5 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponseDto<>("Category delete successfully, id:"+id));
     }
 
- 
+
 }
