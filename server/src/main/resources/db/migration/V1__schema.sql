@@ -42,3 +42,19 @@ CREATE TABLE `photo` (
   KEY `FK8hs00tlacip0319kutudailre` (`product_id`),
   CONSTRAINT `FK8hs00tlacip0319kutudailre` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 );
+
+/* --------------------------------user */
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `is_deleted` bit(1) DEFAULT NULL,
+  `is_enabled` bit(1) DEFAULT NULL,
+  `lastname` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` enum('ADMIN','USER') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
+);
