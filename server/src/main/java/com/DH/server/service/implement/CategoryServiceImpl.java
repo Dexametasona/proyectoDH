@@ -2,7 +2,6 @@ package com.DH.server.service.implement;
 
 import com.DH.server.exception.CategoryException;
 import com.DH.server.model.entity.Category;
-import com.DH.server.model.entity.Photo;
 import com.DH.server.persistance.CategoryRepository;
 import com.DH.server.service.interfaces.CategoryService;
 import com.DH.server.service.interfaces.S3Service;
@@ -24,9 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (file != null && !file.isEmpty()) {
             String url=this.s3Service.uploadFile(file);
 
-            Photo photo=new Photo();
-            photo.setUrl(url);
-            entity.setPhoto(photo);
+            entity.setPhoto_Url(url);
         }
         return this.categoryRepository.save(entity);
     }
@@ -56,17 +53,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (file != null && !file.isEmpty()) {
 
-            if (previous.getPhoto() != null) {
-                String previousPhotoKey = previous.getPhoto().getUrl().substring(previous.getPhoto().getUrl().lastIndexOf("/") + 1);
+            if (previous.getPhoto_Url() != null) {
+                String previousPhotoKey = previous.getPhoto_Url().substring(previous.getPhoto_Url().lastIndexOf("/") + 1);
                 s3Service.deleteFileById(previousPhotoKey);
             }
-
-            String newPhoto=s3Service.uploadFile(file);
-
-            Photo photo=new Photo();
-            photo.setUrl(newPhoto);
-
-            previous.setPhoto(photo);
+            String newPhoto = s3Service.uploadFile(file);
+            previous.setPhoto_Url(newPhoto);
         }
 
         return this.categoryRepository.save(previous);
@@ -77,8 +69,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         var previous=this.getById(id);
 
-        if (previous.getPhoto() != null) {
-            String previousPhotoKey = previous.getPhoto().getUrl().substring(previous.getPhoto().getUrl().lastIndexOf("/") + 1);
+        if (previous.getPhoto_Url() != null) {
+            String previousPhotoKey = previous.getPhoto_Url().substring(previous.getPhoto_Url().lastIndexOf("/") + 1);
             s3Service.deleteFileById(previousPhotoKey);
         }
 
@@ -87,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAll() {
-        return this.categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
 }

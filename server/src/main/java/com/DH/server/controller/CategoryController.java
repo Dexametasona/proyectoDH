@@ -32,7 +32,7 @@ public class CategoryController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
     public ResponseEntity<?> createCategory(
                                             @Validated (OnCreate.class)
-                                            @RequestPart CategoryReqDto request){
+                                            @ModelAttribute CategoryReqDto request){
 
         var newCategory=this.categoryMapper.toEntity(request);
 

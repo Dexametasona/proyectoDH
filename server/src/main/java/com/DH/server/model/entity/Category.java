@@ -19,8 +19,7 @@ public class Category {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "photo_id")
-    private Photo photo;
+    @Column(length = 255)
+    private String photo_Url;
 
 }
