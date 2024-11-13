@@ -11,7 +11,7 @@ const CardsContainer = ({
 }: CardsContainerProps) => {
   return (
     
-    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 justify-center  px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
       
       <div
