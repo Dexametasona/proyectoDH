@@ -10,9 +10,9 @@ export interface Thumbnail {
 }
 export interface GalleryModalProps {
   images: { id: string; url: string }[]; // Lista de imágenes con id y url
-  isOpen: boolean;                       // Controla si el modal está abierto o cerrado
-  onClose: () => void;                   // Función para cerrar el modal
-  initialIndex?: number;                 // Índice inicial de la imagen que se mostrará en el modal
+  isOpen: boolean; // Controla si el modal está abierto o cerrado
+  onClose: () => void; // Función para cerrar el modal
+  initialIndex?: number; // Índice inicial de la imagen que se mostrará en el modal
 }
 
 export interface ProductCards {
@@ -27,4 +27,25 @@ export interface ProductCards {
   thumbnails?: Thumbnail[];
   stock?: number;
   location?: string;
+}
+
+interface Category {
+  id: number;
+  title: string;
+  description: string;
+  photo_Url: string;
+}
+
+interface Tag {
+  ID: number;
+  name: string;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: Category;
+  tag: Tag;
+  photoUrl: string;
 }
