@@ -24,7 +24,7 @@ public record ProductReqDto(
         @Size(min = 2, max = 50, groups = {OnCreate.class, OnUpdate.class})
         String brand,
         @NotNull(groups = {OnCreate.class})
-        @Size(min = 4, groups = {OnCreate.class, OnUpdate.class})
+        @Size(min = 4,max = 8, groups = {OnCreate.class, OnUpdate.class})
         List<MultipartFile> photos,
         @NotNull(groups = {OnCreate.class})
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
