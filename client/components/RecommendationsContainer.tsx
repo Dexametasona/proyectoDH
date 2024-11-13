@@ -1,28 +1,15 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-
-import { CardsContainerProps, Product } from "@/types";
+import { CardsContainerProps } from "@/types";
+import React from "react";
 import ProductsCards from "./ProductsCards";
-import { getAllProducts } from "@/lib/api_interface";
 
-const CardsContainer = ({
+const RecommendationsContainer = ({
   name,
+  cards,
   verticalColumnMobile,
+  gap,
 }: CardsContainerProps) => {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const fetchedProducts = await getAllProducts();
-      setProducts(fetchedProducts);
-    };
-
-    fetchProducts();
-  }, []);
-
   return (
-    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 px-6 items-center mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
 
       <div
@@ -30,14 +17,14 @@ const CardsContainer = ({
           verticalColumnMobile ? "flex-col" : "grid"
         }`}
       >
-        {products.map((card) => (
+        {cards.map((card) => (
           <ProductsCards
             key={card.id}
             id={card.id}
             bgImage={card.bgImage}
             name={card.name}
             brand={card.brand}
-            cardImage={card.photoUrl}
+            cardImage={card.cardImage}
             price={card.price}
             description={card.description}
             status={card.status}
@@ -49,4 +36,4 @@ const CardsContainer = ({
   );
 };
 
-export default CardsContainer;
+export default RecommendationsContainer;
