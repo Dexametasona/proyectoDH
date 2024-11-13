@@ -11,7 +11,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-
 @Configuration
 @PropertySource("classpath:email.properties")
 public class EmailConfig {
@@ -39,6 +38,6 @@ public class EmailConfig {
     }
     @Bean
     public ResourceLoader resourceLoader(){
-       return new DefaultResourceLoader();
+        return new DefaultResourceLoader();
     }
 }

@@ -14,5 +14,6 @@ public record UserResDto(
 ) {
     public String getEmail() {
         return email;
+
     }
 }
