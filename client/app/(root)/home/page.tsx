@@ -10,13 +10,13 @@ const page = () => {
       <Hero />
       <SearchBar/>
       <CardsContainer
-        title={"Categorías"}
+        name={"Categorías"}
         gap="4"
         verticalColumnMobile={true}
         cards={categoriesCards}
       />
       <CardsContainer
-        title={"Recomendaciones"}
+        name={"Recomendaciones"}
         gap="4"
         cards={recommendationsCards}
       />
