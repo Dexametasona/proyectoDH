@@ -2,20 +2,20 @@ import { CardsContainerProps } from "@/types";
 import React from "react";
 import ProductsCards from "./ProductsCards";
 
-
-const CardsContainer = ({
+const CategoriesContainer = ({
   name,
   cards,
   verticalColumnMobile,
   gap,
 }: CardsContainerProps) => {
   return (
-    
-    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
-      
+
       <div
-        className={` max-w-screen-lg grid grid-cols-1 mb-4 sm:grid-cols-2 gap-4 ${verticalColumnMobile ? "flex-col" : "grid"}`}
+        className={`grid grid-cols-1 mb-4 sm:grid-cols-3 gap-4 ${
+          verticalColumnMobile ? "flex-col" : "grid"
+        }`}
       >
         {cards.map((card) => (
           <ProductsCards
@@ -31,11 +31,9 @@ const CardsContainer = ({
             thumbnails={card.thumbnails}
           />
         ))}
-        </div>
-      
+      </div>
     </section>
-    
   );
 };
 
-export default CardsContainer;
+export default CategoriesContainer;
