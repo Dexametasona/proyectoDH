@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 import { ProductCards } from "@/types";
 
-
 const ProductsCards = ({
   id,
   bgImage,
@@ -34,25 +33,26 @@ const ProductsCards = ({
         </div>
       ) : (
         <div className="bg-[var(--secondary)] rounded-t-lg shadow-lg p-4">
-        <div className="mt-2 text-center mb-4 bg-white p-3 rounded-t-lg shadow-md" onClick={() => handleRedirect("product")
-        }>
-           <div className="flex justify-center item-center">
-          <Image
-            src={cardImage || ""}
-            alt="product image"
-            width={400}
-            height={200}
-            className="mb-3 w-72 h-72 rounded-t-lg cursor-pointer object-cover"
-            layout="fixed"
-          />
+          <div
+            className="mt-2 text-center mb-4 bg-white p-3 rounded-t-lg shadow-md"
+            onClick={() => handleRedirect("product")}
+          >
+            <div className="flex justify-center item-center">
+              <Image
+                src={cardImage || ""}
+                alt="product image"
+                width={400}
+                height={200}
+                className="mb-3 w-72 h-72 rounded-t-lg cursor-pointer object-cover"
+                layout="fixed"
+              />
+            </div>
+
+            <div className="justify-items-start">
+              <p className="text-text-color font-semibold"> {name} </p>
+              <p className="text-primary font-bold text-lg"> ${price}/hora </p>
+            </div>
           </div>
-       
-          <div className="justify-items-start">
-            <p className="text-text-color font-semibold"> {name} </p>
-            <p className="text-primary font-bold text-lg"> ${price}/hora </p>
-            
-          </div>
-        </div>
         </div>
       )}
     </>

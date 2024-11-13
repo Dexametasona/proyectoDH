@@ -8,7 +8,7 @@ const page = () => {
   return (
     <>
       <Hero />
-      <SearchBar/>
+      <SearchBar />
       <CardsContainer
         name={"Categorías"}
         gap="4"
