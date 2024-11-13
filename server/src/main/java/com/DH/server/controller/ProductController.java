@@ -13,6 +13,7 @@ import com.DH.server.service.interfaces.ProductService;
 import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,8 @@ public class ProductController {
   private final ProductService productService;
   private final ProductMapper productMapper;
 
-  @Operation(summary = "create product", description = "Using body as form-data")
+  @Operation(summary = "create product", description = "Using body as form-data, only available for ADMIN",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @PostMapping(consumes = "multipart/form-data")
   @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
   public ResponseEntity<?> create(@ModelAttribute
@@ -81,7 +83,8 @@ public class ProductController {
     return ResponseEntity.ok(new ApiResponseDto<>(this.productMapper.toResponse(product)));
   }
 
-  @Operation(summary = "Update product by id", description = "fetch products using his id into url, and json into body")
+  @Operation(summary = "Update product by id", description = "fetch products using his id into url, and json into body, available for ADMIN",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @PutMapping(value = "/{id}", consumes = "multipart/form-data")
   @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
   public ResponseEntity<?> update(@Parameter(description = "Product id", required = true)
@@ -95,7 +98,8 @@ public class ProductController {
             .ok(new ApiResponseDto<>(this.productMapper.toResponse(product)));
   }
 
-  @Operation(summary = "Delete Product by id", description = "Delete product using his id into ur")
+  @Operation(summary = "Delete Product by id", description = "Delete product using his id into url, only available for ADMIN",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteById(@Parameter(description = "Product id", required = true)
                                         @PathVariable Long id){
