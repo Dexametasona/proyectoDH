@@ -47,12 +47,12 @@ const ProductList = () => {
                   alt="product image"
                 />
               </TableCell>
-              <TableCell> {product.title} </TableCell>
+              <TableCell> {product.name} </TableCell>
               <TableCell> {product.stock} </TableCell>
               <TableCell> {product.price} </TableCell>
               <TableCell> {product.location} </TableCell>
               <TableCell> {product.description} </TableCell>
-              <TableCell> {product.state} </TableCell>
+              <TableCell> {product.status} </TableCell>
               <TableCell>
                 {" "}
                 <Button variant={"destructive"}>Eliminar</Button>{" "}

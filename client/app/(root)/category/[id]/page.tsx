@@ -26,7 +26,7 @@ const CategoryPage = () => {
   return (
     <div>
       <h1>Detalles de la categoría</h1>
-      <p>titulo: {category.title}</p>
+      <p>titulo: {category.name}</p>
     </div>
   );
 };

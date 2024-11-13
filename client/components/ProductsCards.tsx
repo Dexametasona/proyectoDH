@@ -33,16 +33,16 @@ const ProductsCards = ({
           </p>
         </div>
       ) : (
-        <div className="bg-[var(--secondary)] rounded-2xl shadow-lg p-4">
-        <div className="mt-2 text-center mb-4 bg-white p-3 rounded-lg shadow-md" onClick={() => handleRedirect("product")
+        <div className="bg-[var(--secondary)] rounded-t-lg shadow-lg p-4">
+        <div className="mt-2 text-center mb-4 bg-white p-3 rounded-t-lg shadow-md" onClick={() => handleRedirect("product")
         }>
-           <div className="flex justify-center">
+           <div className="flex justify-center item-center">
           <Image
             src={cardImage || ""}
             alt="product image"
             width={400}
             height={200}
-            className="mb-3 w-96 h-96 rounded-lg cursor-pointer object-cover"
+            className="mb-3 w-72 h-72 rounded-t-lg cursor-pointer object-cover"
             layout="fixed"
           />
           </div>

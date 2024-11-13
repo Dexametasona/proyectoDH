@@ -66,142 +66,100 @@ export const recommendationsCards: ProductCards[] = [
     cardImage: "/assets/images/product3.jpg",
     name: "Saltarín Cocodrilo",
     price: 12,
-<<<<<<< HEAD
-    brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
-    thumbnails: [
-      { id: "1", url: "/assets/images/thumb1.jpg" },
-      { id: "2", url: "/assets/images/thumb2.jpg" },
-      { id: "3", url: "/assets/images/thumb3.jpg" },
-      { id: "4", url: "/assets/images/thumb4.jpg" },
-    ],
-=======
-    review: 3.8,
     stock: 4,
     description:
       "Pintores 10, Morelos, Venustiano Carranza, 15270 Ciudad de México, CDMX",
-    state: "En Reparación",
+    status:  "Disponible",
     location: "Bodega 1",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
   {
     id: "5",
     cardImage: "/assets/images/product5.jpg",
     name: "Saltarín Cocodrilo",
     price: 22,
-<<<<<<< HEAD
     brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
     thumbnails: [
       { id: "1", url: "/assets/images/thumb1.jpg" },
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
-=======
-    review: 3.8,
     stock: 6,
     description:
       "Calle Reforma 20, Centro, Cuauhtémoc, 06000 Ciudad de México, CDMX",
-    state: "Disponible",
+    status: "Disponible",
     location: "Bodega 2",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
   {
     id: "6",
     cardImage: "/assets/images/product3.jpg",
     name: "Saltarín Cocodrilo",
     price: 22,
-<<<<<<< HEAD
     brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
     thumbnails: [
       { id: "1", url: "/assets/images/thumb1.jpg" },
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
-=======
-    review: 3.8,
     stock: 2,
     description:
       "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, 06760 Ciudad de México, CDMX",
-    state: "En Mantenimiento",
+    status:  "Disponible",
     location: "Bodega 3",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
   {
     id: "7",
     cardImage: "/assets/images/product4.jpg",
     name: "Saltarín Cocodrilo",
     price: 12,
-<<<<<<< HEAD
     brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
     thumbnails: [
       { id: "1", url: "/assets/images/thumb1.jpg" },
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
-=======
-    review: 3.8,
     stock: 5,
     description:
       "Eje Central 150, Doctores, Cuauhtémoc, 06720 Ciudad de México, CDMX",
-    state: "En Reparación",
+    status:  "Disponible",
     location: "Bodega 1",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
   {
     id: "8",
     cardImage: "/assets/images/product5.jpg",
     name: "Saltarín Cocodrilo",
     price: 12,
-<<<<<<< HEAD
     brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
     thumbnails: [
       { id: "1", url: "/assets/images/thumb1.jpg" },
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
-=======
-    review: 3.8,
     stock: 3,
+    status:  "Disponible",
     description:
       "Avenida Universidad 250, Copilco, Coyoacán, 04360 Ciudad de México, CDMX",
-    state: "Disponible",
     location: "Bodega 2",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
   {
     id: "9",
     cardImage: "/assets/images/product3.jpg",
     name: "Saltarín Cocodrilo",
     price: 12,
-<<<<<<< HEAD
     brand: "SALTASINA",
-    description: "Lorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbiLorem ipsum dolor sit amet consectetur. Ornare tincidunt adipiscing odio lorem. Morbi id adipiscing amet consequat. Purus morbi",
-    status: "Disponible",
     thumbnails: [
       { id: "1", url: "/assets/images/thumb1.jpg" },
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
-    ],
-=======
-    review: 3.8,
+    ], 
     stock: 1,
+    status: "Disponible",
     description:
       "Periférico Sur 500, Pedregal, Álvaro Obregón, 01900 Ciudad de México, CDMX",
-    state: "En Uso",
     location: "Bodega 3",
   },
 ];
@@ -314,6 +272,5 @@ export const overviewCategories = [
     label: "Servicios",
     link: "",
     color: "yellow",
->>>>>>> a7b230f5749ac977198dcad771370149982c3d2b
   },
 ];

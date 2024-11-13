@@ -26,6 +26,5 @@ export interface ProductCards {
   description?: string;
   thumbnails?: Thumbnail[];
   stock?: number;
-  state?: string;
   location?: string;
 }

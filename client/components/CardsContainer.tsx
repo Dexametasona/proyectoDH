@@ -11,10 +11,11 @@ const CardsContainer = ({
 }: CardsContainerProps) => {
   return (
     
-    <section className="flex flex-col gap-4 px-6 mt-12">
+    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
+      
       <div
-        className={`grid grid-cols-1 mb-4 sm:grid-cols-2 gap-4 ${verticalColumnMobile ? "flex-col" : "grid"}`}
+        className={` max-w-screen-lg grid grid-cols-1 mb-4 sm:grid-cols-2 gap-4 ${verticalColumnMobile ? "flex-col" : "grid"}`}
       >
         {cards.map((card) => (
           <ProductsCards
@@ -30,7 +31,8 @@ const CardsContainer = ({
             thumbnails={card.thumbnails}
           />
         ))}
-      </div>
+        </div>
+      
     </section>
     
   );
