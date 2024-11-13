@@ -30,8 +30,7 @@ public class CategoryController {
     @Operation(summary = "Create Category")
     @PostMapping(consumes = "multipart/form-data")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
-    public ResponseEntity<?> createCategory(
-                                            @Validated (OnCreate.class)
+    public ResponseEntity<?> createCategory(@Validated (OnCreate.class)
                                             @ModelAttribute CategoryReqDto request){
 
         var newCategory=this.categoryMapper.toEntity(request);
@@ -65,13 +64,15 @@ public class CategoryController {
 
     @Operation(summary = "Update category",description = "fetchs categories using id")
     @PutMapping(value = "/{id}", consumes =  "multipart/form-data")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
     public ResponseEntity<?> update(
-            @Parameter(description = "Category id",required = true)
+            @Parameter(description = "Category id", required = true)
             @PathVariable Long id,
-            @Validated(OnUpdate.class)
-            @RequestPart("photo") MultipartFile file,
-            @RequestPart ("category") CategoryReqDto request){
+            @RequestPart String title,
+            @RequestPart String description,
+            @RequestPart (value ="photo", required = false) MultipartFile file){
 
+        CategoryReqDto request=new CategoryReqDto(title,description,file);
         var category=this.categoryMapper.toEntity(request);
         category=this.categoryService.updateById(id,category,file);
 
