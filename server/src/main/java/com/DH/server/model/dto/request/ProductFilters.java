@@ -5,10 +5,13 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public record ProductFilters(
-        @Min(0)
-        @Schema(description = "Category id")
-        Integer categoryId,
+        List<Integer> categoryIds,
+        //@Min(0)
+        //@Schema(description = "Category id")
+        //Integer categoryId,
         @Min(0)
         @Schema(description = "Tag id")
         Integer tagId,
@@ -27,4 +30,5 @@ public record ProductFilters(
         @Schema(description = "Lower price limit, it must be use with upper price limit")
         Double priceLimitLower
 ) {
+
 }

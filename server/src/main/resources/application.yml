@@ -3,13 +3,17 @@ spring:
     name: management
   datasource:
     url: ${DATABASE}
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     open-in-view: true
+emailConfirm:
+  credentials:
+    email: ${CONFIRMATION_MAIL}
+    password: ${APPLICATION_PASSWORD}
 api:
   base: api/v1
 cloud:
@@ -19,3 +23,14 @@ cloud:
       secretKey: ${AWS_SECRET_KEY}
     s3:
       bucket: ${AWS_S3_BUCKET:gameyard-s3-assets}
+jwt:
+  secret:
+    key: ${JWT_SECRET}
+  time:
+    expiration: ${JWT_EXPIRATION}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web.authentication: DEBUG
+    org.springframework.security.web.access: DEBUG
+    com.amazonaws.util.VersionInfoUtils: ERROR

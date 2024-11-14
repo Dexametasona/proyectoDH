@@ -2,15 +2,15 @@
 INSERT INTO
   `category`
 VALUES
-  (1, 'Juegos de Dardos'),
-(2, 'Juegos de Tiro al Blanco'),
-(3, 'Simuladores'),
-(4, 'Juegos de Agua'),
-(5, 'Juegos de Fuerza'),
-(6, 'Juegos de Lanzamiento'),
-(7, 'Juegos de Habilidad'),
-(8, 'Juegos Infantiles'),
-(9, 'Juegos de Competencia');
+  (1, 'Juegos de Dardos',"description1","URLPHOTO1"),
+(2, 'Juegos de Tiro al Blanco',"description2","URLPHOTO2"),
+(3, 'Simuladores',"description3","URLPHOTO3"),
+(4, 'Juegos de Agua',"description4","URLPHOTO4"),
+(5, 'Juegos de Fuerza',"description5","URLPHOTO5"),
+(6, 'Juegos de Lanzamiento',"description6","URLPHOTO6"),
+(7, 'Juegos de Habilidad',"description7","URLPHOTO7"),
+(8, 'Juegos Infantiles',"description8","URLPHOTO8"),
+(9, 'Juegos de Competencia',"description9","URLPHOTO9");
 
 /* -----------------------------tag */
 INSERT INTO
@@ -178,4 +178,21 @@ VALUES
 (102, 'https://m.media-amazon.com/images/I/61qIkqaf42L._AC_UF894,1000_QL80_.jpg', 26),
 (103,'https://m.media-amazon.com/images/I/61qIkqaf42L._AC_UF894,1000_QL80_.jpg', 26),
 (104,'https://m.media-amazon.com/images/I/61qIkqaf42L._AC_UF894,1000_QL80_.jpg', 26);
+
+INSERT INTO `users`
+(`id`,
+`created_at`,
+`email`,
+`is_deleted`,
+`is_enabled`,
+`name`,
+`lastname`,
+`password`,
+`role`)
+VALUES
+(1, '2024-11-07 22:42:57.281862', 'prueba01@gmail.com', 0, 1, 'Cesar', 'Acuña', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'ADMIN'),
+(2, '2024-11-06 22:42:57.281862', 'prueba02@gmail.com', 0, 1, 'Antauro', 'Humala', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'ADMIN'),
+(3, '2024-11-05 22:42:57.281862', 'prueba03@gmail.com', 0, 1, 'Dinamita', 'Balearte', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'USER'),
+(4, '2024-11-04 22:42:57.281862', 'prueba04@gmail.com', 0, 1, 'Enrique', 'Peña Nieto', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'USER'),
+(5, '2024-11-03 22:42:57.281862', 'prueba05@gmail.com', 0, 1, 'Tekito', 'Lacarie', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'USER');
 

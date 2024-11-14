@@ -11,6 +11,6 @@ public record ProductResDto(
         int status,
         CategoryResDto category,
         TagResDto tag,
-        List<String> photoUrl
+        List<PhotoResDto> photos
 ) {
 }
