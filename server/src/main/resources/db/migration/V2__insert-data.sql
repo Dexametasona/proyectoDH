@@ -1,16 +1,13 @@
 /* --------------------------------category */
-INSERT INTO
-  `category`
-VALUES
-  (1, 'Juegos de Dardos',"description1","URLPHOTO1"),
-(2, 'Juegos de Tiro al Blanco',"description2","URLPHOTO2"),
-(3, 'Simuladores',"description3","URLPHOTO3"),
-(4, 'Juegos de Agua',"description4","URLPHOTO4"),
-(5, 'Juegos de Fuerza',"description5","URLPHOTO5"),
-(6, 'Juegos de Lanzamiento',"description6","URLPHOTO6"),
-(7, 'Juegos de Habilidad',"description7","URLPHOTO7"),
-(8, 'Juegos Infantiles',"description8","URLPHOTO8"),
-(9, 'Juegos de Competencia',"description9","URLPHOTO9");
+ (1, 'Juegos de Dardos', 'Diversión y precisión en juegos de dardos para todas las edades', 'https://i.ibb.co/yN1t1Rc/dardos.jpg'),
+  (2, 'Juegos de Tiro al Blanco', 'Desafíos de puntería con objetivos de diferentes tipos y tamaños', 'https://i.ibb.co/MpkxZ3J/tiro-al-blanco.jpg'),
+  (3, 'Simuladores', 'Experiencias interactivas y simulaciones realistas para eventos', 'https://i.ibb.co/82wZPz6/simuladores.jpg'),
+  (4, 'Juegos de Agua', 'Actividades refrescantes con pistolas y otros juegos de agua', 'https://i.ibb.co/NpgYBvT/agua.jpg'),
+  (5, 'Juegos de Fuerza', 'Demuestra tu fuerza en desafíos de martillos y otros retos', 'https://i.ibb.co/rk1YcwP/martillo.jpg'),
+  (6, 'Juegos de Lanzamiento', 'Encesta y lanza con precisión en juegos de lanzamiento variados', 'https://i.ibb.co/LhPsNKW/lanzamiento.jpg'),
+  (7, 'Juegos de Habilidad', 'Pon a prueba tu destreza y habilidades con juegos desafiantes', 'https://i.ibb.co/KKWqNL8/habilidad.jpg'),
+  (8, 'Juegos Infantiles', 'Juegos diseñados especialmente para los más pequeños', 'https://i.ibb.co/zGGzwN8/infantiles.jpg'),
+  (9, 'Juegos de Competencia', 'Competencias divertidas y emocionantes para todos los gustos', 'https://i.ibb.co/FV8SRhW/competencia.jpg');
 
 /* -----------------------------tag */
 INSERT INTO
