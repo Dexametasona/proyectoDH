@@ -29,30 +29,15 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {navbarOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.name}
-                onClick={() => handleNavigation(option.link)}
-              >
+              <DropdownMenuItem key={option.name} onClick={() => handleNavigation(option.link)}>
                 {option.name}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Image
-        width={54}
-        height={30}
-        src={"/assets/icons/logo-mobile.svg"}
-        alt={"logo"}
-        className="sm:hidden"
-      />
-      <Image
-        width={128}
-        height={48}
-        src={"/assets/icons/logo-desktop.svg"}
-        alt={"logo"}
-        className="hidden sm:block"
-      />
+      <Image width={54} height={30} src={"/assets/icons/logo-mobile.svg"} alt={"logo"} className="sm:hidden" />
+      <Image width={128} height={48} src={"/assets/icons/logo-desktop.svg"} alt={"logo"} className="hidden sm:block" />
       <div className="gap-8 hidden sm:flex cursor-pointer text-white">
         {navbarOptions.map((option) => (
           <p key={option.name} onClick={() => handleNavigation(option.link)}>
@@ -64,10 +49,8 @@ const Header = () => {
         <User />
       </div>
       <div className="gap-2 sm:flex hidden">
-        <Button className="rounded-full text-sm border-white border">
-          Crear cuenta
-        </Button>
-        <Button className="rounded-full text-sm " variant={"secondary"}>
+        <Button className="rounded-full text-sm border-white border">Crear cuenta</Button>
+        <Button className="rounded-full text-sm " variant={"secondary"} onClick={() => handleNavigation("/login")}>
           Iniciar sesión
         </Button>
       </div>
