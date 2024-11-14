@@ -49,7 +49,9 @@ const Header = () => {
         <User />
       </div>
       <div className="gap-2 sm:flex hidden">
-        <Button className="rounded-full text-sm border-white border">Crear cuenta</Button>
+        <Button className="rounded-full text-sm border-white border" onClick={() => handleNavigation("/signup")}>
+          Crear cuenta
+        </Button>
         <Button className="rounded-full text-sm " variant={"secondary"} onClick={() => handleNavigation("/login")}>
           Iniciar sesión
         </Button>
