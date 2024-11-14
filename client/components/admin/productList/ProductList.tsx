@@ -14,8 +14,8 @@ import Image from "next/image";
 const ProductList = () => {
   return (
     <section className="h-[calc(100vh-200px)] overflow-y-scroll">
-      <div className="flex justify-between">
-        <p>Listado de Productos</p>
+      <div className="flex justify-between px-4  py-4">
+        <h2 className="text-lg font-bold text-gray-800">Listado de Productos</h2>
         <Button className="bg-success">Agregar</Button>
       </div>
       <Table>

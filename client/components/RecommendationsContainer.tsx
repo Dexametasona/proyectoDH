@@ -1,15 +1,28 @@
-import { CardsContainerProps } from "@/types";
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+
+import { CardsContainerProps, Product } from "@/types";
 import ProductsCards from "./ProductsCards";
+import { getAllProducts } from "@/lib/api_interface";
 
 const RecommendationsContainer = ({
   name,
-  cards,
   verticalColumnMobile,
-  gap,
 }: CardsContainerProps) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const fetchedProducts = await getAllProducts();
+      setProducts(fetchedProducts);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
-    <section className="flex flex-col gap-4 px-6 items-center mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
 
       <div
@@ -17,20 +30,20 @@ const RecommendationsContainer = ({
           verticalColumnMobile ? "flex-col" : "grid"
         }`}
       >
-        {cards.map((card) => (
+        {/* {products.map((card) => (
           <ProductsCards
             key={card.id}
             id={card.id}
-            bgImage={card.bgImage}
+          //  bgImage={card.bgImage}
             name={card.name}
-            brand={card.brand}
-            cardImage={card.cardImage}
+          //  brand={card.brand}
+          //  cardImage={card.photoUrl}
             price={card.price}
-            description={card.description}
-            status={card.status}
+           // description={card.description}
+           // status={card.status}
             thumbnails={card.thumbnails}
           />
-        ))}
+        ))} */}
       </div>
     </section>
   );

@@ -49,3 +49,4 @@ export interface Product {
   tag: Tag;
   photoUrl: string;
 }
+

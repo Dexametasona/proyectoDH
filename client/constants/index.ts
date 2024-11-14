@@ -181,49 +181,49 @@ export const adminMenuOptions = [
 
 export const transactions = [
   {
-    name: "Gimena Carcía",
+    name: "Martina Vadone",
     image: "https://picsum.photos/200/300",
     orders: 5,
     total: 32,
   },
   {
-    name: "Carlos Méndez",
+    name: "Pamela Villamil",
     image: "https://picsum.photos/201/301",
     orders: 8,
     total: 45,
   },
   {
-    name: "Laura Sánchez",
+    name: "Martina Caravatti",
     image: "https://picsum.photos/202/302",
     orders: 3,
     total: 18,
   },
   {
-    name: "José López",
+    name: "Valentina Bruno",
     image: "https://picsum.photos/203/303",
     orders: 6,
     total: 27,
   },
   {
-    name: "Ana Rodríguez",
+    name: "Emilia Ruibal",
     image: "https://picsum.photos/204/304",
     orders: 4,
     total: 22,
   },
   {
-    name: "Felipe Martínez",
+    name: "Aldana Alvarez",
     image: "https://picsum.photos/205/305",
     orders: 10,
     total: 60,
   },
   {
-    name: "Gimena Carcía",
+    name: "Micaela Barrera",
     image: "https://picsum.photos/200/300",
     orders: 5,
     total: 32,
   },
   {
-    name: "Carlos Méndez",
+    name: "Melanie Briano",
     image: "https://picsum.photos/201/301",
     orders: 8,
     total: 45,

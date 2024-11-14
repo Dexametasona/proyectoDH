@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { ProductCards } from "@/types";
+import { Product } from "@/types";
 
 const ProductsCards = ({
   id,
@@ -11,7 +11,7 @@ const ProductsCards = ({
   cardImage,
   name,
   price,
-}: ProductCards) => {
+}: Product) => {
   const router = useRouter();
 
   const handleRedirect = (page: string) => {
