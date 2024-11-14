@@ -49,7 +49,14 @@ public class AuthServiceImpl implements AuthService {
     } catch (UserException ex) {
       entity.setPassword(encoder.encode(entity.getPassword()));
       entity.setRole(Role.USER);
-      return userService.create(entity);
+      UserEntity savedUser = userService.create(entity);
+      EmailDTO email = new EmailDTO(savedUser);
+      try {
+        this.emailService.sendMail(email);
+      } catch (MessagingException e) {
+        throw new UserException("Fail to send confirmation email.");
+      }
+      return savedUser;
     } catch (MessagingException e) {
       throw new UserException("Fail to send confirmation email.");
     }

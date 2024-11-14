@@ -66,18 +66,4 @@ public class AuthController {
     return ResponseEntity.ok(new ApiResponseDto<>(
             this.userMapper.toResponse(authUser)));
   }
-
-  @GetMapping("/prueba")
-  public ResponseEntity<?> prueba(){
-    UserEntity user = new UserEntity();
-    user.setEmail("usblibros72@gmail.com");
-    user.setName("Lucho");
-    user.setLastname("Portuano");
-    try {
-      this.emailService.sendMail(new EmailDTO(user));
-    } catch (MessagingException e) {
-      throw new RuntimeException(e);
-    }
-    return ResponseEntity.ok("Hola");
-  }
 }
