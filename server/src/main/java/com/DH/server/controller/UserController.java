@@ -4,6 +4,7 @@ import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.UserFilters;
 import com.DH.server.model.dto.request.UserReqDto;
+import com.DH.server.model.dto.request.UserUpdateDto;
 import com.DH.server.model.dto.response.UserShortDto;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
@@ -86,7 +87,7 @@ public class UserController {
   @Operation(summary = "Update User", description = "Update Users using json into body, available for ADMIN and USER",
           security = {@SecurityRequirement(name = "bearerAuth")})
   @PutMapping()
-  public ResponseEntity<?> update(@RequestBody @Validated(OnUpdate.class) UserReqDto request) {
+  public ResponseEntity<?> update(@RequestBody @Validated(OnUpdate.class) UserUpdateDto request) {
     UserEntity authUser = this.authService.getAuthUser();
     var product = this.userMapper.toEntity(request);
     product = this.userService.updateById(authUser.getId(), product);

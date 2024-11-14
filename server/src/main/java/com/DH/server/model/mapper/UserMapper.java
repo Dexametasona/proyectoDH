@@ -2,6 +2,7 @@ package com.DH.server.model.mapper;
 
 import com.DH.server.model.dto.CustomPage;
 import com.DH.server.model.dto.request.UserReqDto;
+import com.DH.server.model.dto.request.UserUpdateDto;
 import com.DH.server.model.dto.response.UserResDto;
 import com.DH.server.model.dto.response.UserShortDto;
 import com.DH.server.model.entity.UserEntity;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
   public abstract UserEntity toEntity(UserReqDto user);
+  public abstract UserEntity toEntity(UserUpdateDto user);
   public abstract UserResDto toResponse(UserEntity user);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

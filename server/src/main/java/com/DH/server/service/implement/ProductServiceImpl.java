@@ -76,8 +76,9 @@ public class ProductServiceImpl implements ProductService {
                             Integer categoryId,
                             Integer tagId) {
 
-    var previous = this.getById(id);
-    int lengthPhotosByProduct = previous.getPhotos().size()
+    Product previousProduct = this.getById(id);
+
+    int lengthPhotosByProduct = previousProduct.getPhotos().size()
             + (photos != null ? photos.size() : 0)
             - (deletePhoto != null ? deletePhoto.size() : 0);
     if (lengthPhotosByProduct > 8 || lengthPhotosByProduct < 4) {
@@ -86,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
     if (deletePhoto != null) {
       deletePhoto.forEach(delete->{
         this.photoService.deleteById(delete);
-        previous.getPhotos().removeIf(photo -> Objects.equals(photo.getId(), delete));
+        previousProduct.getPhotos().removeIf(photo -> Objects.equals(photo.getId(), delete));
       });
     }
     if (photos != null) {
@@ -96,24 +97,25 @@ public class ProductServiceImpl implements ProductService {
                 String url = this.s3Service.uploadFile(photo);
                 Photo currentPhoto = new Photo();
                 currentPhoto.setUrl(url);
-                currentPhoto.setProduct(previous);
+                currentPhoto.setProduct(previousProduct);
                 return currentPhoto;
               }).toList();
-      var response = newPhotos
+
+      List<Photo> savedPhotos = newPhotos
               .stream()
               .map(this.photoService::create)
               .toList();
-      previous.getPhotos().addAll(response);
+      previousProduct.getPhotos().addAll(savedPhotos);
     }
 
-    this.productMapper.update(previous, entity);
+    this.productMapper.update(previousProduct, entity);
     if (categoryId != null) {
-      previous.setCategory(categoryService.getById(categoryId.longValue()));
+      previousProduct.setCategory(categoryService.getById(categoryId.longValue()));
     }
     if (tagId != null) {
-      previous.setTag(tagService.getById(tagId.longValue()));
+      previousProduct.setTag(tagService.getById(tagId.longValue()));
     }
-    return this.productRepository.save(previous);
+    return this.productRepository.save(previousProduct);
   }
 
   @Override
