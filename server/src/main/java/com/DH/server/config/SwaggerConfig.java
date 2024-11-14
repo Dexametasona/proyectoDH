@@ -38,18 +38,21 @@ public class SwaggerConfig {
 
     SecurityRequirement securityItem = new SecurityRequirement()
             .addList(schemeName);
+
     SecurityScheme securityScheme = new SecurityScheme()
             .name(schemeName)
             .type(SecurityScheme.Type.HTTP)
             .bearerFormat(bearerFormat)
             .in(SecurityScheme.In.HEADER)
             .scheme(scheme);
+
     Components components = new Components()
-            .addSecuritySchemes(scheme, securityScheme);
+            .addSecuritySchemes(schemeName, securityScheme);
 
     return new OpenAPI()
             .info(information)
-            .servers(List.of(development));
+            .servers(List.of(development))
+            .components(components);
   }
 
 }

@@ -2,15 +2,15 @@
 INSERT INTO
   `category`
 VALUES
-  (1, 'Juegos de Dardos'),
-(2, 'Juegos de Tiro al Blanco'),
-(3, 'Simuladores'),
-(4, 'Juegos de Agua'),
-(5, 'Juegos de Fuerza'),
-(6, 'Juegos de Lanzamiento'),
-(7, 'Juegos de Habilidad'),
-(8, 'Juegos Infantiles'),
-(9, 'Juegos de Competencia');
+  (1, 'Juegos de Dardos',"description1","URLPHOTO1"),
+(2, 'Juegos de Tiro al Blanco',"description2","URLPHOTO2"),
+(3, 'Simuladores',"description3","URLPHOTO3"),
+(4, 'Juegos de Agua',"description4","URLPHOTO4"),
+(5, 'Juegos de Fuerza',"description5","URLPHOTO5"),
+(6, 'Juegos de Lanzamiento',"description6","URLPHOTO6"),
+(7, 'Juegos de Habilidad',"description7","URLPHOTO7"),
+(8, 'Juegos Infantiles',"description8","URLPHOTO8"),
+(9, 'Juegos de Competencia',"description9","URLPHOTO9");
 
 /* -----------------------------tag */
 INSERT INTO

@@ -8,7 +8,9 @@ import com.DH.server.model.dto.response.UserResDto;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
 import com.DH.server.service.interfaces.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("${api.base}/auth")
 @Tag(name = "Authentication", description = "Authentication controller")
+
 public class AuthController {
   private final AuthService authService;
   private final UserMapper userMapper;
 
+  @Operation(summary = "Register new user", description = "This endpoint is public")
   @PostMapping("/register")
   public ResponseEntity<?> register(
           @Parameter(description = "User request")
@@ -39,6 +43,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
+  @Operation(summary = "Login user", description = "This endpoint is public")
   public ResponseEntity<?> login(
           @Parameter(description = "Login request")
           @Validated(OnCreate.class)
@@ -49,8 +54,11 @@ public class AuthController {
   }
 
   @GetMapping
+  @Operation(summary = "Get authenticated user", description = "Get a user authenticated into token",
+  security = {@SecurityRequirement(name = "bearerAuth")})
   public ResponseEntity<?> getAuthUser(){
     UserEntity authUser = this.authService.getAuthUser();
-    return ResponseEntity.ok(new ApiResponseDto<>(authUser));
+    return ResponseEntity.ok(new ApiResponseDto<>(
+            this.userMapper.toResponse(authUser)));
   }
 }
