@@ -65,7 +65,6 @@ public class SecurityConfig {
       response.getWriter().write(convertToJson(message));
     };
   }
-
   @Bean
   public AccessDeniedHandler accessDeniedHandler() {
     return (request, response, accessDeniedException) -> {

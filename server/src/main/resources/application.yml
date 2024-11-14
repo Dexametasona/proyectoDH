@@ -3,8 +3,8 @@ spring:
     name: management
   datasource:
     url: ${DATABASE}
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
   jpa:
     hibernate:
       ddl-auto: update
@@ -29,4 +29,3 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.web.authentication: DEBUG
     org.springframework.security.web.access: DEBUG
-    com.amazonaws.util.VersionInfoUtils: ERROR
