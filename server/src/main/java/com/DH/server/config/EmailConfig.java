@@ -12,12 +12,11 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:email.properties")
 public class EmailConfig {
-    @Value("${email.username}")
+    @Value("${emailConfirm.credentials.email}")
     private String email;
 
-    @Value("${email.password}")
+    @Value("${emailConfirm.credentials.password}")
     private String password;
 
     private Properties getMailProperties(){
