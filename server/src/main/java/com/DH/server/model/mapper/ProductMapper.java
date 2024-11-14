@@ -2,6 +2,7 @@ package com.DH.server.model.mapper;
 
 import com.DH.server.model.dto.CustomPage;
 import com.DH.server.model.dto.request.ProductReqDto;
+import com.DH.server.model.dto.response.PhotoResDto;
 import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Photo;
@@ -17,7 +18,7 @@ public abstract class ProductMapper {
   public abstract Product toEntity(ProductReqDto request);
 
   @Mapping(target = "status", source = "status")
-  @Mapping(target = "photoUrl", source = "photos")
+  @Mapping(target = "photos", source = "photos")
   public abstract ProductResDto toResponse(Product entity);
 
   @Mapping(target = "photoUrl", source = "photos")
@@ -25,6 +26,7 @@ public abstract class ProductMapper {
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "photos", ignore = true)
   public abstract void update(@MappingTarget Product previous, Product current);
 
   @Mapping(target = "currentPage", source = "number")
@@ -40,8 +42,8 @@ public abstract class ProductMapper {
   public int map(ProductStatus status){
     return status.getId();
   }
-  public List<String> map(List<Photo> photos){
-    return photos.stream().map(Photo::getUrl).toList();
+  public List<PhotoResDto> map(List<Photo> photos){
+    return photos.stream().map(photo->new PhotoResDto(photo.getId(), photo.getUrl())).toList();
   }
   public String mapping(List<Photo> photos){
     return photos.getFirst().getUrl();

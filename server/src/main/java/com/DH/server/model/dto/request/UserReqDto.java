@@ -25,8 +25,8 @@ public record UserReqDto(
         @Size(min = 10, groups = {OnCreate.class, OnUpdate.class})
         String email,
         @NotBlank(groups = OnCreate.class)
-        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$",
-        message = "Doesn't match ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$",
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*(\\W|_))(?!.* ).{8,16}$",
+        message = "Doesn't match ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*(\\W|_))(?!.* ).{8,16}$",
         groups = {OnCreate.class, OnUpdate.class})
         String password
 ) {

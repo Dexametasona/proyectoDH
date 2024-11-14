@@ -12,8 +12,4 @@ public record UserResDto(
         boolean isDeleted,
         LocalDateTime createdAt
 ) {
-    public String getEmail() {
-        return email;
-
-    }
 }

@@ -1,6 +1,7 @@
 package com.DH.server.controller;
 
 import com.DH.server.model.dto.ApiResponseDto;
+import com.DH.server.model.dto.EmailDTO;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.request.UserReqDto;
@@ -8,11 +9,14 @@ import com.DH.server.model.dto.response.UserResDto;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
 import com.DH.server.service.interfaces.AuthService;
+import com.DH.server.service.interfaces.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
   private final AuthService authService;
   private final UserMapper userMapper;
+  private final EmailService emailService;
 
   @Operation(summary = "Register new user", description = "This endpoint is public")
   @PostMapping("/register")

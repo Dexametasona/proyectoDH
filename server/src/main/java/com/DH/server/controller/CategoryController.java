@@ -9,6 +9,7 @@ import com.DH.server.model.mapper.CategoryMapper;
 import com.DH.server.service.interfaces.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
 
-    @Operation(summary = "Create Category")
+    @Operation(summary = "Create Category",
+            description = "Only available for ADMIN",
+            security = {@SecurityRequirement(name = "bearerAuth")})
     @PostMapping(consumes = "multipart/form-data")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
     public ResponseEntity<?> createCategory(@Validated (OnCreate.class)
@@ -54,7 +57,8 @@ public class CategoryController {
                 new ApiResponseDto<>(categoryResDtos));
     }
 
-    @Operation(summary = "Get category by id",description = "Get category using id.")
+    @Operation(summary = "Get category by id",description = "Get category using id.",
+            security = {@SecurityRequirement(name = "bearerAuth")})
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@Parameter (description = "Category id",required = true)
             @PathVariable Long id){
@@ -62,7 +66,8 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponseDto<>(this.categoryMapper.toResponse(category)));
     }
 
-    @Operation(summary = "Update category",description = "fetchs categories using id")
+    @Operation(summary = "Update category",description = "fetch categories using id, only available for ADMIN",
+            security = {@SecurityRequirement(name = "bearerAuth")})
     @PutMapping(value = "/{id}", consumes =  "multipart/form-data")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
     public ResponseEntity<?> update(
@@ -80,7 +85,8 @@ public class CategoryController {
                 .ok(new ApiResponseDto<>(this.categoryMapper.toResponse(category)));
     }
 
-    @Operation(summary = "Delete category", description = "delete category by id")
+    @Operation(summary = "Delete category", description = "delete category by id, only for ADMIN",
+            security = {@SecurityRequirement(name = "bearerAuth")})
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
             @Parameter(description = "Category id",required = true)

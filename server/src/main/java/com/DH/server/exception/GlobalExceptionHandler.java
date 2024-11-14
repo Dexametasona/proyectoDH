@@ -1,6 +1,7 @@
 package com.DH.server.exception;
 
 import com.DH.server.model.dto.ApiResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
   @ExceptionHandler(EntityException.class)
   public ResponseEntity<?> handleEntityException(EntityException e) {
@@ -72,6 +74,15 @@ public class GlobalExceptionHandler {
     ApiResponseDto<List<String>> errorResponse = new ApiResponseDto<>(ex.getMessage(), data );
     return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
+            .body(errorResponse);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> handleExceptions(Exception ex) {
+    log.error("Unhandled exception: ", ex);
+    var errorResponse = new ApiResponseDto<>(ex.getMessage(), LocalDateTime.now());
+    return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(errorResponse);
   }
 }

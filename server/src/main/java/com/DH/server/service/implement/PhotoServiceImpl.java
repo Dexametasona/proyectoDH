@@ -1,22 +1,24 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.EntityException;
 import com.DH.server.model.entity.Photo;
-import com.DH.server.model.entity.Product;
-import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.persistance.PhotoRepository;
 import com.DH.server.service.interfaces.PhotoService;
+import com.DH.server.service.interfaces.S3Service;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PhotoServiceImpl implements PhotoService {
 
   private final PhotoRepository photoRepository;
+  private final S3Service s3Service;
 
   @Override
   public Photo create(Photo entity) {
@@ -26,7 +28,12 @@ public class PhotoServiceImpl implements PhotoService {
   @Override
   public Photo getById(Long id) {
     return this.photoRepository.findById(id)
-            .orElseThrow();
+            .orElseThrow(()->new EntityException("Photo: not found, id:"+id));
+  }
+
+  @Override
+  public List<Photo> getByProductId(Long id) {
+    return this.photoRepository.findByProductId(id);
   }
 
   @Override
@@ -40,8 +47,12 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public void deleteById(Long id) {
-    this.getById(id);
+    Photo currentPhoto = this.getById(id);
+    String fileUrl = currentPhoto.getUrl();
+    String basePath = "https://gameyard-s3-assets.s3.amazonaws.com/";
+    String fileId = fileUrl.substring(basePath.length());
     this.photoRepository.deleteById(id);
+    this.s3Service.deleteFileById(fileId);
   }
 
   @Override

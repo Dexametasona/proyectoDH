@@ -25,7 +25,8 @@ public interface UserRepository  extends JpaRepository<UserEntity, Long>, JpaSpe
           String name,
           String lastname,
           Role role,
-          String email
+          String email,
+          Boolean isDeleted
   ){
     return findAll((Root<UserEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder)->{
       List<Predicate> predicates = new ArrayList<>();
@@ -42,14 +43,17 @@ public interface UserRepository  extends JpaRepository<UserEntity, Long>, JpaSpe
       if(email != null){
         predicates.add(builder.like(root.get("email"), email+"%"));
       }
+      if(isDeleted != null){
+        predicates.add(builder.equal(root.get("isDeleted"), isDeleted));
+      }
 
       return builder.and(predicates.toArray(new Predicate[0]));
     }, page);
   }
 
   @Modifying
-  @Query("UPDATE UserEntity u SET u.isEnabled = :isActive WHERE u.id = :id")
-  int updateIsDeleted(long id, boolean isActive);
+  @Query("UPDATE UserEntity u SET u.isDeleted = :isDeleted WHERE u.id = :id")
+  int updateIsDeleted(long id, boolean isDeleted);
 
   Optional<UserEntity> findByEmail(String email);
 }

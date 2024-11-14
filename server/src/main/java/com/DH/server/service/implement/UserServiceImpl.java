@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -61,7 +63,8 @@ public class UserServiceImpl implements UserService {
             filters.name(),
             filters.lastname(),
             role,
-            filters.email());
+            filters.email(),
+            filters.isDeleted());
   }
 
   @Override
@@ -71,4 +74,13 @@ public class UserServiceImpl implements UserService {
 
   }
 
+  @Override
+  public UserEntity updateRoleById(Long id, Integer role) {
+    UserEntity currentUser = this.getById(id);
+    if(Objects.equals(currentUser.getEmail(), "prueba01@gmail.com")){
+      throw new UserException("You can't remove permissions to MASTER user");
+    }
+    currentUser.setRole(Role.fromId(role));
+    return this.userRepository.save(currentUser);
+  }
 }
