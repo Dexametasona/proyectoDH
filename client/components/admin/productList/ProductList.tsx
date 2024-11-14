@@ -12,6 +12,11 @@ import { recommendationsCards } from "@/constants";
 import Image from "next/image";
 
 const ProductList = () => {
+  const statusColors = {
+    "Reparación": "bg-red-100 text-red-500",
+    "Disponible": "bg-green-100 text-green-500",
+    "En Alquiler": "bg-yellow-100 text-yellow-500",
+  };
   return (
     <section className="h-[calc(100vh-200px)] overflow-y-scroll">
       <div className="flex justify-between px-4  py-4">
@@ -45,6 +50,7 @@ const ProductList = () => {
                   width={56}
                   height={56}
                   alt="product image"
+                  className="rounded-full"
                 />
               </TableCell>
               <TableCell> {product.name} </TableCell>
@@ -52,7 +58,11 @@ const ProductList = () => {
               <TableCell> {product.price} </TableCell>
               <TableCell> {product.location} </TableCell>
               <TableCell> {product.description} </TableCell>
-              <TableCell> {product.status} </TableCell>
+              <TableCell>
+                <span className={`rounded-lg px-2 m-1 py-1 ${statusColors[product.status]}`}>
+                  {product.status}
+                </span> 
+              </TableCell>
               <TableCell>
                 {" "}
                 <Button variant={"destructive"}>Eliminar</Button>{" "}

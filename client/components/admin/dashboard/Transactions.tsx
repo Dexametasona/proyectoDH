@@ -2,28 +2,30 @@ import React, { useEffect, useState } from "react";
 import { transactions } from "@/constants";
 import TransactionsCards from "./TransactionsCards";
 import { ChevronRight } from "lucide-react";
-import { getAllUsers } from "@/lib/api_interface";
+//import { getAllUsers } from "@/lib/api_interface";
 import { User } from "@/types";
 
 const Transactions = () => {
   const [isHidden, setIsHidden] = useState(false);
-  const [transactions, setTransactions] = useState<User[]>([]);
+  // const [transactions, setTransactions] = useState<User[]>([]);
 
   const toggleVisibility = () => {
     setIsHidden(!isHidden);
-  }; 
+   }; 
   
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      const fetchedTransactions = await getAllUsers();
-      setTransactions(fetchedTransactions);
-    };
+  // useEffect(() => {
+  //   const fetchTransactions = async () => {
+  //     const fetchedTransactions = await getAllUsers();
+  //     setTransactions(fetchedTransactions);
+  //   };
 
-    fetchTransactions();
-  }, []);
-
+  //   fetchTransactions();
+  // }, []);
+   console.log(transactions)
   return (
+
     <>
+    
     <div className="relative  self-start w-80 ">
       <div className="flex justify-between  px-4  py-4">
         <h2 className="text-lg font-bold text-gray-800">Últimas Transacciones</h2>
@@ -35,7 +37,7 @@ const Transactions = () => {
         <div className="space-y-4">
         {transactions.map((transaction) => (
           <div key={transaction.name}>
-            <TransactionsCards item={transactions} />
+            <TransactionsCards item={transaction} />
           </div>
         ))}
         </div>
