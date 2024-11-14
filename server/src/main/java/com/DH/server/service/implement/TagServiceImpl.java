@@ -5,6 +5,7 @@ import com.DH.server.exception.TagException;
 import com.DH.server.model.entity.Tag;
 import com.DH.server.persistance.TagRepository;
 import com.DH.server.service.interfaces.TagService;
+import com.DH.server.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
