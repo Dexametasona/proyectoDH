@@ -89,11 +89,19 @@ public class ProductController {
   @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Form-data")
   public ResponseEntity<?> update(@Parameter(description = "Product id", required = true)
                                   @PathVariable Long id,
+                                  @Parameter(description = "Photo ids that will delete")
+                                  @RequestParam(required = false)
+                                  List<Long> deletePhotoId,
                                   @ModelAttribute
                                   @Validated(OnUpdate.class)
                                   ProductReqDto request) {
     var product = this.productMapper.toEntity(request);
-    product = this.productService.updateById(id, product);
+    product = this.productService.updateById(id,
+            product,
+            deletePhotoId,
+            request.photos(),
+            request.categoryId(),
+            request.tagId());
     return ResponseEntity
             .ok(new ApiResponseDto<>(this.productMapper.toResponse(product)));
   }

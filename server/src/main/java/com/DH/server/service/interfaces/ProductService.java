@@ -10,6 +10,15 @@ import java.util.List;
 
 public interface ProductService extends GenericService<Product> {
   Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId);
+
+
+  Product updateById(Long id,
+                     Product entity,
+                     List<Long> deletePhotoUrls,
+                     List<MultipartFile> photos,
+                     Integer categoryId,
+                     Integer tagId);
+
   Page<Product> getAll(Pageable page);
   List<Product> getRandom();
 

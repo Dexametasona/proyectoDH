@@ -4,18 +4,14 @@ import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.TagReqDto;
-import com.DH.server.model.dto.response.CategoryResDto;
 import com.DH.server.model.dto.response.TagResDto;
 import com.DH.server.model.mapper.TagMapper;
-import com.DH.server.service.implement.TagServiceImpl;
 import com.DH.server.service.interfaces.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

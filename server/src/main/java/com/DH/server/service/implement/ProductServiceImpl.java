@@ -6,60 +6,113 @@ import com.DH.server.model.entity.Photo;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.persistance.ProductRepository;
-import com.DH.server.service.interfaces.CategoryService;
-import com.DH.server.service.interfaces.ProductService;
-import com.DH.server.service.interfaces.S3Service;
-import com.DH.server.service.interfaces.TagService;
+import com.DH.server.service.interfaces.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository productRepository;
   private final ProductMapper productMapper;
   private final S3Service s3Service;
   private final CategoryService categoryService;
   private final TagService tagService;
+  private final PhotoService photoService;
+
 
   @Override
   public Product create(Product entity) {
     return this.productRepository.save(entity);
   }
+
   @Transactional
   @Override
   public Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId) {
     List<Photo> photosUrl = photos
             .stream()
-            .map(photo->{
-                String url = this.s3Service.uploadFile(photo);
-                Photo currentPhoto = new Photo();
-                currentPhoto.setUrl(url);
-                return currentPhoto;
+            .map(photo -> {
+              String url = this.s3Service.uploadFile(photo);
+              Photo currentPhoto = new Photo();
+              currentPhoto.setUrl(url);
+              return currentPhoto;
             }).toList();
     entity.setPhotos(photosUrl);
     entity.setCategory(categoryService.getById(categoryId.longValue()));
     entity.setTag(tagService.getById(tagId.longValue()));
     return this.productRepository.save(entity);
   }
+
   @Override
   public Product getById(Long id) {
     return this.productRepository.findById(id)
-            .orElseThrow();
+            .orElseThrow(() -> new ProductException("not found, id: " + id));
   }
 
+  @Transactional
   @Override
   public Product updateById(Long id, Product entity) {
     var previous = this.getById(id);
     this.productMapper.update(previous, entity);
+    return this.productRepository.save(previous);
+  }
+
+  @Transactional
+  @Override
+  public Product updateById(Long id,
+                            Product entity,
+                            List<Long> deletePhoto,
+                            List<MultipartFile> photos,
+                            Integer categoryId,
+                            Integer tagId) {
+
+    var previous = this.getById(id);
+    int lengthPhotosByProduct = previous.getPhotos().size()
+            + (photos != null ? photos.size() : 0)
+            - (deletePhoto != null ? deletePhoto.size() : 0);
+    if (lengthPhotosByProduct > 8 || lengthPhotosByProduct < 4) {
+      throw new ProductException("The photos must will be between 4 and 8");
+    }
+    if (deletePhoto != null) {
+      deletePhoto.forEach(delete->{
+        this.photoService.deleteById(delete);
+        previous.getPhotos().removeIf(photo -> Objects.equals(photo.getId(), delete));
+      });
+    }
+    if (photos != null) {
+      List<Photo> newPhotos = photos
+              .stream()
+              .map(photo -> {
+                String url = this.s3Service.uploadFile(photo);
+                Photo currentPhoto = new Photo();
+                currentPhoto.setUrl(url);
+                currentPhoto.setProduct(previous);
+                return currentPhoto;
+              }).toList();
+      var response = newPhotos
+              .stream()
+              .map(this.photoService::create)
+              .toList();
+      previous.getPhotos().addAll(response);
+    }
+
+    this.productMapper.update(previous, entity);
+    if (categoryId != null) {
+      previous.setCategory(categoryService.getById(categoryId.longValue()));
+    }
+    if (tagId != null) {
+      previous.setTag(tagService.getById(tagId.longValue()));
+    }
     return this.productRepository.save(previous);
   }
 
