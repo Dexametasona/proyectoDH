@@ -22,7 +22,7 @@ const RecommendationsContainer = ({
   }, []);
 
   return (
-    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 items-center justify-center px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
 
       <div
@@ -30,20 +30,20 @@ const RecommendationsContainer = ({
           verticalColumnMobile ? "flex-col" : "grid"
         }`}
       >
-        {/* {products.map((card) => (
+        {products.map((card) => (
           <ProductsCards
             key={card.id}
             id={card.id}
-          //  bgImage={card.bgImage}
+            bgImage={card.bgImage}
             name={card.name}
-          //  brand={card.brand}
-          //  cardImage={card.photoUrl}
+            brand={card.brand}
+            cardImage={card.photoUrl}
             price={card.price}
-           // description={card.description}
-           // status={card.status}
+            description={card.description}
+            status={card.status}
             thumbnails={card.thumbnails}
           />
-        ))} */}
+        ))}
       </div>
     </section>
   );

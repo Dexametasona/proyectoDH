@@ -50,3 +50,9 @@ export interface Product {
   photoUrl: string;
 }
 
+export interface User {
+  name:string;
+  image:string;
+  orders:number;
+  total:number;
+}
