@@ -68,8 +68,8 @@ export const recommendationsCards: ProductCards[] = [
     price: 12,
     stock: 4,
     description:
-      "Pintores 10, Morelos, Venustiano Carranza, 15270 Ciudad de México, CDMX",
-    status:  "Disponible",
+      "Pintores 10, Morelos, Venustiano Carranza, CDMX",
+    status:  "Reparación",
     location: "Bodega 1",
   },
   {
@@ -86,8 +86,8 @@ export const recommendationsCards: ProductCards[] = [
     ],
     stock: 6,
     description:
-      "Calle Reforma 20, Centro, Cuauhtémoc, 06000 Ciudad de México, CDMX",
-    status: "Disponible",
+      "Calle Reforma 20, Centro, Cuauhtémoc, CDMX",
+    status: "En Alquiler",
     location: "Bodega 2",
   },
   {
@@ -104,7 +104,7 @@ export const recommendationsCards: ProductCards[] = [
     ],
     stock: 2,
     description:
-      "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, 06760 Ciudad de México, CDMX",
+      "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, CDMX",
     status:  "Disponible",
     location: "Bodega 3",
   },
@@ -122,8 +122,8 @@ export const recommendationsCards: ProductCards[] = [
     ],
     stock: 5,
     description:
-      "Eje Central 150, Doctores, Cuauhtémoc, 06720 Ciudad de México, CDMX",
-    status:  "Disponible",
+      "Eje Central 150, Doctores, Cuauhtémoc, CDMX",
+    status:  "Reparación",
     location: "Bodega 1",
   },
   {
@@ -141,7 +141,7 @@ export const recommendationsCards: ProductCards[] = [
     stock: 3,
     status:  "Disponible",
     description:
-      "Avenida Universidad 250, Copilco, Coyoacán, 04360 Ciudad de México, CDMX",
+      "Avenida Universidad 250, Copilco, Coyoacán, CDMX",
     location: "Bodega 2",
   },
   {
@@ -159,7 +159,7 @@ export const recommendationsCards: ProductCards[] = [
     stock: 1,
     status: "Disponible",
     description:
-      "Periférico Sur 500, Pedregal, Álvaro Obregón, 01900 Ciudad de México, CDMX",
+      "Periférico Sur 500, Pedregal, Álvaro Obregón, CDMX",
     location: "Bodega 3",
   },
 ];
@@ -181,49 +181,49 @@ export const adminMenuOptions = [
 
 export const transactions = [
   {
-    name: "Gimena Carcía",
+    name: "Martina Vadone",
     image: "https://picsum.photos/200/300",
     orders: 5,
     total: 32,
   },
   {
-    name: "Carlos Méndez",
+    name: "Pamela Villamil",
     image: "https://picsum.photos/201/301",
     orders: 8,
     total: 45,
   },
   {
-    name: "Laura Sánchez",
+    name: "Martina Caravatti",
     image: "https://picsum.photos/202/302",
     orders: 3,
     total: 18,
   },
   {
-    name: "José López",
+    name: "Valentina Bruno",
     image: "https://picsum.photos/203/303",
     orders: 6,
     total: 27,
   },
   {
-    name: "Ana Rodríguez",
+    name: "Emilia Ruibal",
     image: "https://picsum.photos/204/304",
     orders: 4,
     total: 22,
   },
   {
-    name: "Felipe Martínez",
+    name: "Aldana Alvarez",
     image: "https://picsum.photos/205/305",
     orders: 10,
     total: 60,
   },
   {
-    name: "Gimena Carcía",
+    name: "Micaela Barrera",
     image: "https://picsum.photos/200/300",
     orders: 5,
     total: 32,
   },
   {
-    name: "Carlos Méndez",
+    name: "Melanie Briano",
     image: "https://picsum.photos/201/301",
     orders: 8,
     total: 45,

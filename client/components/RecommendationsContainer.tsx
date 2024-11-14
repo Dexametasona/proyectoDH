@@ -6,7 +6,7 @@ import { CardsContainerProps, Product } from "@/types";
 import ProductsCards from "./ProductsCards";
 import { getAllProducts } from "@/lib/api_interface";
 
-const CardsContainer = ({
+const RecommendationsContainer = ({
   name,
   verticalColumnMobile,
 }: CardsContainerProps) => {
@@ -22,7 +22,7 @@ const CardsContainer = ({
   }, []);
 
   return (
-    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+    <section className="flex flex-col gap-4 items-center justify-center px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
 
       <div
@@ -49,4 +49,4 @@ const CardsContainer = ({
   );
 };
 
-export default CardsContainer;
+export default RecommendationsContainer;

@@ -49,3 +49,10 @@ export interface Product {
   tag: Tag;
   photoUrl: string;
 }
+
+export interface User {
+  name:string;
+  image:string;
+  orders:number;
+  total:number;
+}
