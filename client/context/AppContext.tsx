@@ -1,14 +1,21 @@
+"use client";
+
 import {
   ReactNode,
   useContext,
   createContext,
   useState,
   useEffect,
+  Dispatch,
+  SetStateAction,
 } from "react";
 
 interface AppContextType {
   windowWidth: number;
   isSmallScreen: boolean;
+  adminMenuSelected: string | null;
+  setAdminMenuSelected: Dispatch<SetStateAction<string>>;
+  handleMenuChange: (menuLabel: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -17,6 +24,11 @@ export const AppContextProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(0);
+  const [adminMenuSelected, setAdminMenuSelected] = useState("dashboard");
+
+  const handleMenuChange = (menuLabel: string) => {
+    setAdminMenuSelected(menuLabel);
+  };
 
   const handleResize = () => {
     setWindowWidth(window.innerWidth);
@@ -32,7 +44,15 @@ export const AppContextProvider: React.FC<{
   const isSmallScreen = windowWidth < 640;
 
   return (
-    <AppContext.Provider value={{ isSmallScreen, windowWidth }}>
+    <AppContext.Provider
+      value={{
+        isSmallScreen,
+        windowWidth,
+        adminMenuSelected,
+        setAdminMenuSelected,
+        handleMenuChange,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

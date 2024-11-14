@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
       }
     }
     return this.productRepository.findAllByFilter(page,
-            filters.categoryId(),
+            filters.categoryIds(),
             filters.tagId(),
             filters.name(),
             filters.brand(),
