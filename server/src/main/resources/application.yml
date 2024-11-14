@@ -10,6 +10,10 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: true
+emailConfirm:
+  credentials:
+    email: ${CONFIRMATION_MAIL}
+    password: ${APPLICATION_PASSWORD}
 api:
   base: api/v1
 cloud:
@@ -29,3 +33,4 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.web.authentication: DEBUG
     org.springframework.security.web.access: DEBUG
+    com.amazonaws.util.VersionInfoUtils: ERROR

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Correo de registro exitoso</title>
+    <style>
+        body{
+            margin: 0;
+            font-family: inter, sans-serif;
+        }
+        .header{
+            background-color: #3C096C;
+            display: block;
+            padding: 2rem;
+            border-radius: 0 0 25% 25%;
+            text-align: center;
+        }
+        .header>img{
+            width: 50px;
+        }
+        main{
+            padding: 2% 5%;
+        }
+        h1{
+            color: #54595E;
+            font-weight:bold;
+        }
+        p{
+            color:#54595E;
+            line-height:1.5rem;
+        }
+        .footer{
+            background-color: #3C096C;
+            padding: 2rem;
+            width: 100%;
+        }
+        tr{
+        }
+        td{
+            text-align:center;
+        }
+        .social>a{
+            margin-right:1rem;
+        }
+        .copyright>p{
+           color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <img src="https://i.ibb.co/5xK1mp2/logo-g.png" alt="logo">
+</header>
+<main>
+    <h1> Hola: [[${username}]]</h1>
+    <p>
+        Gracias por unirte a GameYard. Nos complace confirmar que tu registro ha sido exitoso.<br>
+        A continuaci&oacute;n, encontrar&aacute;s tus detalles de cuenta para que verifiques que la informaci&oacute;n
+        ingresada es correcta:<br>
+        Nombre de usuario: [[${username}]]<br>
+        Correo electr&oacute;nico: [[${email}]]<br>
+        Si estos datos son correctos, est&aacute;s listo para explorar todo lo que GameYard tiene para ofrecer. Haz clic
+        en
+        el enlace a continuaci&oacute;n para iniciar sesi&oacute;n en tu cuenta y comenzar a disfrutar de la
+        experiencia:<br>
+        <a href="http://localhost:8080/api/v1/auth/login">Iniciar sesi&oacute;n en GameYard</a><br>
+        Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.<br>
+        ¡Bienvenido a GameYard!<br>
+        Saludos.<br>
+        El equipo de GameYard</p>
+</main>
+<table class="footer" >
+    <tr >
+        <td class="social">
+            <a href="#">
+                <img src="https://i.ibb.co/xjVLKY8/facebook.png" alt="facebook-icon">
+            </a>
+            <a href="#">
+                <img src="https://i.ibb.co/xqbLVkV/youtube.png" alt="youtube">
+            </a>
+            <a href="#">
+                <img src="https://i.ibb.co/njZy52Z/instagram.png" alt="instagram">
+            </a>
+        </td>
+        <td class="copyright">
+            <p>© 2024 - Game Yard</p>
+        </td>
+        <td class="logo_bottom">
+            <img src="https://i.ibb.co/5xK1mp2/logo-g.png" alt="logo">
+        </td>
+    </tr>
+
+</table>
+</body>
+</html>

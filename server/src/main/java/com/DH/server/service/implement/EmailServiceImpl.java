@@ -27,7 +27,8 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(emailDTO.getRecipient());
             helper.setSubject(emailDTO.getSubject());
             Context context = new Context();
-            context.setVariable("message", emailDTO.getMessage());
+            context.setVariable("username", emailDTO.getUsername());
+            context.setVariable("email", emailDTO.getRecipient());
             String contentHTML = templateEngine.process("email", context);
             helper.setText(contentHTML, true);
             javaMailSender.send(message);
