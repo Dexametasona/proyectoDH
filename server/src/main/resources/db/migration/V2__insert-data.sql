@@ -1,5 +1,7 @@
 /* --------------------------------category */
- (1, 'Juegos de Dardos', 'Diversión y precisión en juegos de dardos para todas las edades', 'https://i.ibb.co/yN1t1Rc/dardos.jpg'),
+INSERT INTO `category`
+VALUES
+  (1, 'Juegos de Dardos', 'Diversión y precisión en juegos de dardos para todas las edades', 'https://i.ibb.co/yN1t1Rc/dardos.jpg'),
   (2, 'Juegos de Tiro al Blanco', 'Desafíos de puntería con objetivos de diferentes tipos y tamaños', 'https://i.ibb.co/MpkxZ3J/tiro-al-blanco.jpg'),
   (3, 'Simuladores', 'Experiencias interactivas y simulaciones realistas para eventos', 'https://i.ibb.co/82wZPz6/simuladores.jpg'),
   (4, 'Juegos de Agua', 'Actividades refrescantes con pistolas y otros juegos de agua', 'https://i.ibb.co/NpgYBvT/agua.jpg'),
