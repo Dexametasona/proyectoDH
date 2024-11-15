@@ -10,5 +10,9 @@ public interface UserService extends GenericService<UserEntity>{
 
   UserEntity getByEmail(String email);
 
+  UserEntity getByEmailToken(String emailToken);
+  void updateEnabledByUserId(Long id);
+  void updateTokenEmail(String email, String token);
+
   UserEntity updateRoleById(Long id, Integer role);
 }

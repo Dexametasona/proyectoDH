@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -66,7 +66,7 @@
         en
         el enlace a continuaci&oacute;n para iniciar sesi&oacute;n en tu cuenta y comenzar a disfrutar de la
         experiencia:<br>
-        <a href="http://localhost:8080/api/v1/auth/login">Iniciar sesi&oacute;n en GameYard</a><br>
+        <a th:href="${tokenUrl}">Iniciar sesi&oacute;n en GameYard</a><br>
         Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.<br>
         ¡Bienvenido a GameYard!<br>
         Saludos.<br>

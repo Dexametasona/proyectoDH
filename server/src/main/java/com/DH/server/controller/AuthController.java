@@ -1,7 +1,6 @@
 package com.DH.server.controller;
 
 import com.DH.server.model.dto.ApiResponseDto;
-import com.DH.server.model.dto.EmailDTO;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.request.UserReqDto;
@@ -9,18 +8,19 @@ import com.DH.server.model.dto.response.UserResDto;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
 import com.DH.server.service.interfaces.AuthService;
-import com.DH.server.service.interfaces.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +30,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
   private final AuthService authService;
   private final UserMapper userMapper;
-  private final EmailService emailService;
+
+  @Value("${api.redirectUrlEmailVerify}")
+  private String redirectUrl;
 
   @Operation(summary = "Register new user", description = "This endpoint is public")
   @PostMapping("/register")
@@ -65,5 +67,27 @@ public class AuthController {
     UserEntity authUser = this.authService.getAuthUser();
     return ResponseEntity.ok(new ApiResponseDto<>(
             this.userMapper.toResponse(authUser)));
+  }
+
+  @GetMapping("/verify")
+  @Operation(summary = "Verify email", description = "verify email token")
+  public ResponseEntity<?> verifyEmail(
+          @Parameter(description = "Email token", required = true)
+          @RequestParam String token){
+    this.authService.verifyAccountEmail(token);
+
+    URI redirectUri = URI.create(this.redirectUrl);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setLocation(redirectUri);
+    return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+  }
+
+  @GetMapping("/resend-email")
+  @Operation(summary = "Resend email", description = "Resend email verification")
+  public ResponseEntity<?> resendEmail(
+          @Parameter(description = "Email", required = true)
+          @RequestParam String email){
+    this.authService.resendEmailToken(email);
+    return ResponseEntity.ok(new ApiResponseDto<>("Email send successfully"));
   }
 }

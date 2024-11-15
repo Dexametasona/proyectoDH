@@ -8,4 +8,8 @@ public interface AuthService {
   UserEntity register(UserEntity entity);
   AuthRes login(LoginReq request);
   UserEntity getAuthUser();
+
+  void verifyAccountEmail(String token);
+
+  void resendEmailToken(String email);
 }

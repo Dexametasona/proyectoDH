@@ -29,6 +29,14 @@ public class GlobalExceptionHandler {
             .body(exception);
   }
 
+  @ExceptionHandler(ApplicationException.class)
+  public ResponseEntity<?> handleApplicationException(ApplicationException e) {
+    var exception = new ApiResponseDto<LocalDateTime>(e.getMessage(), LocalDateTime.now());
+    return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(exception);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
     List<String> errores = ex.getBindingResult()
