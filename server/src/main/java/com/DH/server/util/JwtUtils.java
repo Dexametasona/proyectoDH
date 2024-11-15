@@ -24,20 +24,31 @@ public class JwtUtils {
   @Value("${jwt.time.expiration}")
   private long sessionExpiration;
 
+  @Value("${jwt.email.expiration}")
+  private long emailExpiration;
+
   private SecretKey getKey() {
     byte[] keyBites = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBites);
   }
 
-  public String generateToken(UserDetails userDetail) {
+  private String generateToken(UserDetails userDetail, long timeExpiration) {
     Map<String, Object> extraClaims = new HashMap<>();
     return Jwts.builder()
             .claims(extraClaims)
             .subject(userDetail.getUsername())
             .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(Date.from(Instant.now().plus(sessionExpiration, ChronoUnit.MILLIS)))
+            .expiration(Date.from(Instant.now().plus(timeExpiration, ChronoUnit.MILLIS)))
             .signWith(this.getKey(), Jwts.SIG.HS256)
             .compact();
+  }
+
+  public String generateAuthToken(UserDetails userDetail){
+    return this.generateToken(userDetail, sessionExpiration);
+  }
+
+  public String generateEmailToken(UserDetails userDetail){
+    return this.generateToken(userDetail, emailExpiration);
   }
 
   private Claims getAllClaims(String token) throws Exception{

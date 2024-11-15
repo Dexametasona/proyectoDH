@@ -16,6 +16,8 @@ emailConfirm:
     password: ${APPLICATION_PASSWORD}
 api:
   base: api/v1
+  domain: ${DOMAIN}
+  redirectUrlEmailVerify: ${URL_EMAIL_REDIRECTION}
 cloud:
   aws:
     credentials:
@@ -28,6 +30,8 @@ jwt:
     key: ${JWT_SECRET}
   time:
     expiration: ${JWT_EXPIRATION}
+  email:
+    expiration: ${JWT_EMAIL_EXPIRATION}
 logging:
   level:
     org.springframework.security: DEBUG

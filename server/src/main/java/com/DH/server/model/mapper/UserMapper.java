@@ -25,6 +25,7 @@ public abstract class UserMapper {
   @Mapping(target = "isDeleted", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "role", ignore = true)
+  @Mapping(target = "tokenEmail", ignore = true)
   public abstract void update(@MappingTarget UserEntity previous, UserEntity current);
 
   public abstract UserShortDto toShortResponse(UserEntity userEntity);
