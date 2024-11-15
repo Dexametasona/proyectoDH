@@ -13,14 +13,16 @@ import Image from "next/image";
 
 const ProductList = () => {
   const statusColors = {
-    "Reparación": "bg-red-100 text-red-500",
-    "Disponible": "bg-green-100 text-green-500",
+    Reparación: "bg-red-100 text-red-500",
+    Disponible: "bg-green-100 text-green-500",
     "En Alquiler": "bg-yellow-100 text-yellow-500",
   };
   return (
     <section className="h-[calc(100vh-200px)] overflow-y-scroll">
       <div className="flex justify-between px-4  py-4">
-        <h2 className="text-lg font-bold text-gray-800">Listado de Productos</h2>
+        <h2 className="text-lg font-bold text-gray-800">
+          Listado de Productos
+        </h2>
         <Button className="bg-success">Agregar</Button>
       </div>
       <Table>
@@ -57,11 +59,15 @@ const ProductList = () => {
               <TableCell> {product.stock} </TableCell>
               <TableCell> {product.price} </TableCell>
               <TableCell> {product.location} </TableCell>
-              <TableCell> {product.description} </TableCell>
+              <TableCell> {product.address} </TableCell>
               <TableCell>
-                <span className={`rounded-lg px-2 m-1 py-1 ${statusColors[product.status]}`}>
+                <span
+                  className={`rounded-lg px-2 m-1 py-1 ${
+                    statusColors[product.status]
+                  }`}
+                >
                   {product.status}
-                </span> 
+                </span>
               </TableCell>
               <TableCell>
                 {" "}

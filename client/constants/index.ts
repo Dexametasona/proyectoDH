@@ -67,9 +67,10 @@ export const recommendationsCards: ProductCards[] = [
     name: "Saltarín Cocodrilo",
     price: 12,
     stock: 4,
+    address: "Pintores 10, Morelos, Venustiano Carranza, CDMX",
     description:
-      "Pintores 10, Morelos, Venustiano Carranza, CDMX",
-    status:  "Reparación",
+      "Este Saltarín Cocodrilo es ideal para eventos infantiles, brindando diversión segura y entretenimiento para los más pequeños. Su estructura está diseñada para soportar el uso prolongado y está fabricada con materiales resistentes y duraderos. Es ligero y fácil de transportar, lo que lo convierte en una excelente opción para cualquier tipo de celebración. El diseño de cocodrilo es colorido y atractivo, capturando la atención de los niños al instante. Perfecto para fiestas, festivales y eventos, garantiza una experiencia inolvidable y segura para los niños.",
+    status: "Reparación",
     location: "Bodega 1",
   },
   {
@@ -85,8 +86,9 @@ export const recommendationsCards: ProductCards[] = [
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
     stock: 6,
+    address: "Calle Reforma 20, Centro, Cuauhtémoc, CDMX",
     description:
-      "Calle Reforma 20, Centro, Cuauhtémoc, CDMX",
+      "El Saltarín Cocodrilo de la marca SALTASINA está diseñado para eventos de alto impacto, proporcionando horas de entretenimiento para los niños. Su diseño llamativo y divertido hace que sea una atracción instantánea en cualquier reunión. Fabricado con materiales de alta calidad, es resistente al uso y fácil de limpiar. Incluye detalles adicionales de seguridad para que los padres puedan estar tranquilos mientras sus hijos juegan. Perfecto para parques, fiestas privadas, o alquiler para eventos, este saltarín es una excelente inversión para empresas de entretenimiento.",
     status: "En Alquiler",
     location: "Bodega 2",
   },
@@ -103,9 +105,10 @@ export const recommendationsCards: ProductCards[] = [
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
     stock: 2,
+    address: "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, CDMX",
     description:
-      "Insurgentes Sur 300, Roma Sur, Cuauhtémoc, CDMX",
-    status:  "Disponible",
+      "Este producto es ideal para cualquier evento que necesite un toque de diversión y aventura. El Saltarín Cocodrilo tiene un diseño atractivo y está fabricado con materiales que garantizan seguridad y resistencia. Es fácil de inflar y desinflar, lo cual permite una instalación rápida y sin complicaciones. Ideal para el alquiler en eventos de empresas de entretenimiento o uso en fiestas particulares, cumple con todas las normas de seguridad para la tranquilidad de los usuarios.",
+    status: "Disponible",
     location: "Bodega 3",
   },
   {
@@ -121,9 +124,10 @@ export const recommendationsCards: ProductCards[] = [
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
     stock: 5,
+    address: "Eje Central 150, Doctores, Cuauhtémoc, CDMX",
     description:
-      "Eje Central 150, Doctores, Cuauhtémoc, CDMX",
-    status:  "Reparación",
+      "El Saltarín Cocodrilo es un producto pensado para la diversión al aire libre o en eventos bajo techo. Su diseño de cocodrilo es único y llamativo, lo que lo convierte en el centro de atención en cualquier evento. Resistente al desgaste, está hecho con materiales que soportan uso continuo. Los detalles de seguridad han sido meticulosamente considerados, ofreciendo una experiencia segura para los niños. Es ligero y fácil de transportar, y puede ser usado tanto en interiores como en exteriores.",
+    status: "Reparación",
     location: "Bodega 1",
   },
   {
@@ -139,9 +143,10 @@ export const recommendationsCards: ProductCards[] = [
       { id: "4", url: "/assets/images/thumb4.jpg" },
     ],
     stock: 3,
-    status:  "Disponible",
+    address: "Avenida Universidad 250, Copilco, Coyoacán, CDMX",
     description:
-      "Avenida Universidad 250, Copilco, Coyoacán, CDMX",
+      "Este divertido Saltarín Cocodrilo es perfecto para fiestas y eventos. Su atractivo diseño y la facilidad con la que puede ser montado lo convierten en una opción ideal para entretenimiento infantil. Está fabricado con materiales de alta resistencia y cuenta con refuerzos de seguridad. Es ligero y fácil de mover, lo cual permite su transporte a diferentes ubicaciones. Los niños disfrutarán saltando y jugando, mientras los padres pueden confiar en la seguridad del producto.",
+    status: "Disponible",
     location: "Bodega 2",
   },
   {
@@ -155,11 +160,12 @@ export const recommendationsCards: ProductCards[] = [
       { id: "2", url: "/assets/images/thumb2.jpg" },
       { id: "3", url: "/assets/images/thumb3.jpg" },
       { id: "4", url: "/assets/images/thumb4.jpg" },
-    ], 
+    ],
     stock: 1,
-    status: "Disponible",
+    address: "Periférico Sur 500, Pedregal, Álvaro Obregón, CDMX",
     description:
-      "Periférico Sur 500, Pedregal, Álvaro Obregón, CDMX",
+      "El Saltarín Cocodrilo es un inflable de alta calidad que brinda diversión sin fin. Es ideal para cualquier evento infantil gracias a su atractivo diseño y durabilidad. Está fabricado con materiales resistentes que permiten un uso prolongado. Es fácil de inflar y cuenta con medidas de seguridad, ofreciendo una experiencia divertida y segura para los niños. Este producto es una excelente opción para empresas de alquiler de entretenimiento y eventos familiares.",
+    status: "Disponible",
     location: "Bodega 3",
   },
 ];

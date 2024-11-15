@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { AuthenticateUserProps, RegisterUserProps } from "@/types";
+
 const BASE_URL = "http://localhost:8080/api/v1";
 
 export const getAllProducts = async () => {
@@ -20,5 +22,58 @@ export const getAllUsers = async () => {
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
+  }
+};
+
+export const authenticateUser = async ({
+  email,
+  password,
+}: AuthenticateUserProps) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/login`, {
+      email,
+      password,
+    });
+    if (response.status === 200) {
+      const { token } = response.data.data;
+      localStorage.setItem("authToken", token);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error:", error);
+    return false;
+  }
+};
+
+export const registerUser = async ({
+  name,
+  lastname,
+  email,
+  password,
+  setLoading,
+}: RegisterUserProps) => {
+  try {
+    console.log("before response");
+    const response = await axios.post(`${BASE_URL}/auth/register`, {
+      name,
+      lastname,
+      email,
+      password,
+    });
+
+    console.log(response);
+    console.log("outside if");
+    if (response.status === 200 || response.status === 201) {
+      console.log("inside if");
+      const { token } = response.data.data;
+      localStorage.setItem("authToken", token);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    setLoading(false);
   }
 };

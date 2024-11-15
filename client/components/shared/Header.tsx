@@ -12,9 +12,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { navbarOptions } from "@/constants";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const router = useRouter();
+
+  //TODO this logic needs to be replaced for the right one coming from backend
+
+  const [localStorageExists, setLocalStorageExists] = useState(false);
+
+  useEffect(() => {
+    setLocalStorageExists(Object.keys(localStorage).length > 0);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setLocalStorageExists(Object.keys(localStorage).length > 0);
+  };
 
   const handleNavigation = (path: string) => {
     router.push(`${path}`);
@@ -29,15 +43,30 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {navbarOptions.map((option) => (
-              <DropdownMenuItem key={option.name} onClick={() => handleNavigation(option.link)}>
+              <DropdownMenuItem
+                key={option.name}
+                onClick={() => handleNavigation(option.link)}
+              >
                 {option.name}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Image width={54} height={30} src={"/assets/icons/logo-mobile.svg"} alt={"logo"} className="sm:hidden" />
-      <Image width={128} height={48} src={"/assets/icons/logo-desktop.svg"} alt={"logo"} className="hidden sm:block" />
+      <Image
+        width={54}
+        height={30}
+        src={"/assets/icons/logo-mobile.svg"}
+        alt={"logo"}
+        className="sm:hidden"
+      />
+      <Image
+        width={128}
+        height={48}
+        src={"/assets/icons/logo-desktop.svg"}
+        alt={"logo"}
+        className="hidden sm:block"
+      />
       <div className="gap-8 hidden sm:flex cursor-pointer text-white">
         {navbarOptions.map((option) => (
           <p key={option.name} onClick={() => handleNavigation(option.link)}>
@@ -48,14 +77,30 @@ const Header = () => {
       <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden text-white">
         <User />
       </div>
-      <div className="gap-2 sm:flex hidden">
-        <Button className="rounded-full text-sm border-white border" onClick={() => handleNavigation("/signup")}>
-          Crear cuenta
+      {localStorageExists ? (
+        <Button
+          className="rounded-full text-sm border-white border"
+          onClick={() => handleLogout()}
+        >
+          Logout
         </Button>
-        <Button className="rounded-full text-sm " variant={"secondary"} onClick={() => handleNavigation("/login")}>
-          Iniciar sesión
-        </Button>
-      </div>
+      ) : (
+        <div className="gap-2 sm:flex hidden">
+          <Button
+            className="rounded-full text-sm border-white border"
+            onClick={() => handleNavigation("/signup")}
+          >
+            Crear cuenta
+          </Button>
+          <Button
+            className="rounded-full text-sm "
+            variant={"secondary"}
+            onClick={() => handleNavigation("/login")}
+          >
+            Iniciar sesión
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

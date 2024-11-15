@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface CardsContainerProps {
   name: string;
   cards: ProductCards[];
@@ -27,6 +29,7 @@ export interface ProductCards {
   thumbnails?: Thumbnail[];
   stock?: number;
   location?: string;
+  characteristics: object[];
 }
 
 interface Category {
@@ -51,8 +54,22 @@ export interface Product {
 }
 
 export interface User {
-  name:string;
-  image:string;
-  orders:number;
-  total:number;
+  name: string;
+  image: string;
+  orders: number;
+  total: number;
+}
+
+export interface AuthenticateUserProps {
+  email: string;
+  password: string;
+  setError: Dispatch<SetStateAction<string | null>>;
+}
+
+export interface RegisterUserProps {
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
