@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,9 +52,22 @@ public interface UserRepository  extends JpaRepository<UserEntity, Long>, JpaSpe
     }, page);
   }
 
+  @Transactional
   @Modifying
   @Query("UPDATE UserEntity u SET u.isDeleted = :isDeleted WHERE u.id = :id")
   int updateIsDeleted(long id, boolean isDeleted);
 
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity u SET u.isEnabled = :isEnabled, u.tokenEmail = null WHERE u.id = :id")
+  int updateIsEnabled(long id, boolean isEnabled);
+
   Optional<UserEntity> findByEmail(String email);
+
+  Optional<UserEntity> findByTokenEmail(String tokenEmail);
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity u SET u.tokenEmail = :token WHERE u.id = :id")
+  int updateTokenEmail(long id, String token);
 }

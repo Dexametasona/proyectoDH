@@ -36,12 +36,14 @@ public class SecurityConfig {
                     .requestMatchers(
                             "api/v1/auth/register",
                             "api/v1/auth/login",
+                            "api/v1/auth/verify",
+                            "api/v1/auth/resend-email",
                             "api/v1/auth/prueba",
                             "/swagger-ui/**",
                             "/v3/api-docs/**").permitAll()
-                    .requestMatchers(HttpMethod.GET,"api/v1/category").permitAll()
+                    .requestMatchers(HttpMethod.GET,"api/v1/category/**").permitAll()
                     .requestMatchers("api/v1/category/**").hasRole("ADMIN")
-                    .requestMatchers( HttpMethod.GET, "api/v1/tag").permitAll()
+                    .requestMatchers( HttpMethod.GET, "api/v1/tag/**").permitAll()
                     .requestMatchers( HttpMethod.GET, "api/v1/products/**").permitAll()
                     .requestMatchers(  "api/v1/products/**").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/users").hasRole("ADMIN")

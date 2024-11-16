@@ -57,6 +57,7 @@ CREATE TABLE `users` (
   `name` varchar(100) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role` enum('ADMIN','USER') DEFAULT NULL,
+  `token_email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
 );

@@ -1,5 +1,6 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.EmailException;
 import com.DH.server.exception.UserException;
 import com.DH.server.model.dto.request.UserFilters;
 import com.DH.server.model.entity.UserEntity;
@@ -72,6 +73,32 @@ public class UserServiceImpl implements UserService {
     return this.userRepository.findByEmail(email)
             .orElseThrow(()->new UserException("not found, email: "+email));
 
+  }
+
+  @Override
+  public UserEntity getByEmailToken(String emailToken) {
+    return this.userRepository.findByTokenEmail(emailToken)
+            .orElseThrow(()->new UserException("Token already used, replaced or invalid , token: "+emailToken));
+  }
+
+  @Override
+  public void updateEnabledByUserId(Long id) {
+    int rowsAffect = this.userRepository.updateIsEnabled(id, true);
+    if(rowsAffect != 1){
+      throw new UserException("Many users were affect when update enabled. id: "+ id);
+    }
+  }
+
+  @Override
+  public void updateTokenEmail(String email, String token) {
+    var currentUser = this.getByEmail(email);
+    if(currentUser.getTokenEmail() == null){
+      throw new EmailException("This account is already verified, email: "+email);
+    }
+    int rowsAffect = this.userRepository.updateTokenEmail(currentUser.getId(), token);
+    if(rowsAffect != 1){
+      throw new UserException("Many users were affect when update token. email: "+ email);
+    }
   }
 
   @Override

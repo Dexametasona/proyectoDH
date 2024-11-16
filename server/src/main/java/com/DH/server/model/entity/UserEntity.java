@@ -35,13 +35,14 @@ public class UserEntity implements UserDetails {
 
   private Boolean isEnabled;
   private Boolean isDeleted;
+  private String tokenEmail;
   @Column(updatable = false, nullable = false)
   private LocalDateTime createdAt;
 
   @PrePersist
   public void onCreate(){
     this.isDeleted = false;
-    this.isEnabled = true;
+    this.isEnabled = false;
     this.createdAt = LocalDateTime.now();
   }
 
