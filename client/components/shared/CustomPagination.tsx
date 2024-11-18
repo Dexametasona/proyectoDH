@@ -6,7 +6,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const CustomPagination = ({ currentPage, setCurrentPage }) => {
+const CustomPagination = ({ currentPage, setCurrentPage, totalPages }) => {
   return (
     <div>
       <Pagination>
@@ -14,7 +14,7 @@ const CustomPagination = ({ currentPage, setCurrentPage }) => {
           <PaginationItem>
             <PaginationPrevious
               className={
-                currentPage === 0 ? "pointer-events-none opacity-50" : undefined
+                currentPage === 1 ? "pointer-events-none opacity-50" : undefined
               }
               onClick={() => {
                 setCurrentPage(currentPage - 1);
@@ -25,7 +25,7 @@ const CustomPagination = ({ currentPage, setCurrentPage }) => {
           <PaginationItem>
             <PaginationNext
               className={
-                currentPage === 100
+                currentPage === totalPages
                   ? "pointer-events-none opacity-50"
                   : undefined
               }

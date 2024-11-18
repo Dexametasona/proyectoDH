@@ -8,7 +8,7 @@ import { Product } from "@/types";
 const ProductsCards = ({
   id,
   bgImage,
-  cardImage,
+  photoUrl,
   name,
   price,
 }: Product) => {
@@ -39,7 +39,7 @@ const ProductsCards = ({
           >
             <div className="flex justify-center item-center">
               <Image
-                src={cardImage || ""}
+                src={photoUrl || ""}
                 alt="product image"
                 width={400}
                 height={200}

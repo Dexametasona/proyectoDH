@@ -14,6 +14,16 @@ export const getAllProducts = async () => {
     return [];
   }
 };
+export const getRandomProducts = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/products/random`);
+
+    return response.data.data.content;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+};
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
