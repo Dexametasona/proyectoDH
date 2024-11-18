@@ -44,7 +44,7 @@ const RecommendationsContainer = ({
     currentPage * itemsPerPage
   );
 
-  console.log(currentPage)
+  
   return (
     <section className="flex flex-col gap-4 items-center justify-center px-6 mt-12 place-content-evenly ">
       <p className="text-primary text-2xl"> {name} </p>
