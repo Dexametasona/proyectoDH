@@ -14,6 +14,7 @@ export const getAllProducts = async () => {
     return [];
   }
 };
+
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
@@ -54,7 +55,6 @@ export const registerUser = async ({
   setLoading,
 }: RegisterUserProps) => {
   try {
-    console.log("before response");
     const response = await axios.post(`${BASE_URL}/auth/register`, {
       name,
       lastname,
@@ -62,10 +62,7 @@ export const registerUser = async ({
       password,
     });
 
-    console.log(response);
-    console.log("outside if");
     if (response.status === 200 || response.status === 201) {
-      console.log("inside if");
       const { token } = response.data.data;
       localStorage.setItem("authToken", token);
       return true;

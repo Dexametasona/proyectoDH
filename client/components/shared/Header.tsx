@@ -12,23 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { navbarOptions } from "@/constants";
-import { useEffect, useState } from "react";
+import { useAuthContext } from "@/context/AuthContext";
+import { logout } from "@/lib/utils";
 
 const Header = () => {
   const router = useRouter();
-
-  //TODO this logic needs to be replaced for the right one coming from backend
-
-  const [localStorageExists, setLocalStorageExists] = useState(false);
-
-  useEffect(() => {
-    setLocalStorageExists(Object.keys(localStorage).length > 0);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setLocalStorageExists(Object.keys(localStorage).length > 0);
-  };
+  const { isUser } = useAuthContext();
 
   const handleNavigation = (path: string) => {
     router.push(`${path}`);
@@ -77,10 +66,10 @@ const Header = () => {
       <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden text-white">
         <User />
       </div>
-      {localStorageExists ? (
+      {isUser ? (
         <Button
           className="rounded-full text-sm border-white border"
-          onClick={() => handleLogout()}
+          onClick={logout}
         >
           Logout
         </Button>
