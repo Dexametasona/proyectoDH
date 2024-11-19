@@ -15,3 +15,7 @@ export const validatePassword = (password: string) => {
   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
   return re.test(password);
 };
+
+export const logout = async () => {
+  localStorage.clear();
+};
