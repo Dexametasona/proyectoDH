@@ -183,6 +183,12 @@ export const adminMenuOptions = [
     link: "/admin/product-list",
     icon: LayoutList,
   },
+  {
+    id: 3,
+    label: "Lista de Usuarios",
+    link: "/admin/usersList",
+    icon: LayoutList,
+  },
 ];
 
 export const transactions = [
