@@ -41,12 +41,12 @@ const AuthenticateUser = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="overflow-hidden flex flex-col items-center justify-center h-screen sm:h-full sm:w-full sm:px-4">
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-[480px]"
+        className="bg-white shadow-lg rounded-2xl px-6 py-8 w-full max-w-md sm:px-2 pt-6 pb-8 w-[480px] sm:w-full sm:max-w-sm"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-2xl font-bold mb-6">INICIA SESIÓN</h2>
+        <h2 className="text-2xl font-bold mb-6 text-primary">INICIA SESIÓN</h2>
 
         <div className="mb-4">
           <label

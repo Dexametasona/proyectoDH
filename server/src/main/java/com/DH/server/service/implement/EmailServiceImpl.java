@@ -20,20 +20,19 @@ public class EmailServiceImpl implements EmailService {
         this.templateEngine = templateEngine;
     }
     @Override
-    public void sendMail(EmailDTO emailDTO) throws MessagingException {
+    public void sendMail(EmailDTO emailDTO, String template) throws MessagingException {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setTo(emailDTO.getRecipient());
-            helper.setSubject(emailDTO.getSubject());
+            helper.setTo(emailDTO.recipient());
+            helper.setSubject(emailDTO.subject());
             Context context = new Context();
-            context.setVariable("username", emailDTO.getUsername());
-            context.setVariable("email", emailDTO.getRecipient());
-            String contentHTML = templateEngine.process("email", context);
+            emailDTO.variables().forEach(context::setVariable);
+            String contentHTML = templateEngine.process(template, context);
             helper.setText(contentHTML, true);
             javaMailSender.send(message);
         }catch (Exception e){
-            throw new RuntimeException("Mensaje de confirmación no pudo ser enviado" + e.getMessage(), e);
+            throw new RuntimeException("Fail to send email: " + e.getMessage(), e);
         }
     }
 }

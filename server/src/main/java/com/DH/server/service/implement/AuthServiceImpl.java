@@ -1,5 +1,6 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.EmailException;
 import com.DH.server.exception.UserException;
 import com.DH.server.model.dto.EmailDTO;
 import com.DH.server.model.dto.request.LoginReq;
@@ -14,6 +15,8 @@ import com.DH.server.util.JwtUtils;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -22,8 +25,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
   private final PasswordEncoder encoder;
   private final AuthenticationManager authenticationManager;
@@ -31,6 +38,11 @@ public class AuthServiceImpl implements AuthService {
   private final UserMapper userMapper;
   private final JwtUtils jwtutils;
   private final EmailService emailService;
+
+  @Value("${api.domain}")
+  private String domain;
+  @Value("${api.base}")
+  private String apiBase;
 
   @Transactional
   @Override
@@ -41,24 +53,15 @@ public class AuthServiceImpl implements AuthService {
         this.userMapper.update(user, entity);
         user.setPassword(encoder.encode(entity.getPassword()));
         user.setRole(Role.USER);
-        UserEntity savedUser = userService.create(user);
-        EmailDTO email = new EmailDTO(savedUser);
-        this.emailService.sendMail(email);
-        return savedUser;
+        return userService.create(user);
       }
     } catch (UserException ex) {
       entity.setPassword(encoder.encode(entity.getPassword()));
       entity.setRole(Role.USER);
-      UserEntity savedUser = userService.create(entity);
-      EmailDTO email = new EmailDTO(savedUser);
-      try {
-        this.emailService.sendMail(email);
-      } catch (MessagingException e) {
-        throw new UserException("Fail to send confirmation email.");
-      }
+      entity.setTokenEmail(jwtutils.generateEmailToken(entity));
+      var savedUser = userService.create(entity);
+      this.sendAccountVerification(savedUser);
       return savedUser;
-    } catch (MessagingException e) {
-      throw new UserException("Fail to send confirmation email.");
     }
     throw new UserException("Already exist, email: " + entity.getEmail());
   }
@@ -72,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
       if (user.getIsDeleted()) {
         throw new UserException("this account was deleted");
       }
-      return new AuthRes(jwtutils.generateToken(user),
+      return new AuthRes(jwtutils.generateAuthToken(user),
               user.getRole().getId(),
               user.getId());
     } catch (DisabledException e) {
@@ -85,5 +88,36 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public UserEntity getAuthUser() {
     return (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+
+  private void sendAccountVerification(UserEntity account){
+    String tokenUrl = domain+"/"+apiBase+"/auth/verify?token="+account.getTokenEmail();
+    Map<String,String> variables = new HashMap<>();
+    variables.put("username", account.getName()+" "+account.getLastname());
+    variables.put("email", account.getEmail());
+    variables.put("tokenUrl", tokenUrl);
+    EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación", variables);
+    try {
+      this.emailService.sendMail(email, "emailVerify");
+    } catch (MessagingException e) {
+      throw new EmailException("Fail to send email to: "+account.getEmail());
+    }
+  }
+
+  @Override
+  public void verifyAccountEmail(String token){
+    UserEntity user = this.userService.getByEmailToken(token);
+    if(this.jwtutils.isTokenExpired(token)){
+     throw new EmailException("Email verify token is expired");
+    }
+    this.userService.updateEnabledByUserId(user.getId());
+  }
+
+  @Override
+  public void resendEmailToken(String email) {
+    UserEntity currentUser = this.userService.getByEmail(email);
+    currentUser.setTokenEmail(jwtutils.generateEmailToken(currentUser));
+    var updateUser = userService.create(currentUser);
+    this.sendAccountVerification(updateUser);
   }
 }

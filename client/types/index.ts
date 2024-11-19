@@ -48,8 +48,8 @@ export interface Product {
   id: number;
   name: string;
   price: number;
-  category: Category;
-  tag: Tag;
+  category?: Category;
+  tag?: Tag;
   photoUrl: string;
 }
 

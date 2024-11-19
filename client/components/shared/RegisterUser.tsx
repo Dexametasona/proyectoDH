@@ -66,17 +66,17 @@ const RegisterUser = () => {
   const isFormComplete = name && lastname && email && password;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="overflow-hidden flex flex-col items-center justify-center h-screen sm:h-full sm:w-full sm:px-4">
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-[480px]"
+        className="bg-white shadow-lg rounded-2xl px-6 py-8 w-full max-w-md sm:px-2 pt-6 pb-8 w-[480px] sm:w-full sm:max-w-sm"
         onSubmit={handleSubmit}
       >
         <h2 className="text-xl font-bold mb-6 text-primary">REGÍSTRATE</h2>
 
-        <div>
-          <p>Información personal</p>
+        <div className="mb-6">
+          <p className="font-bold text-gray-700 mb-2">Información personal</p>
 
-          <div className="mb-4">
+          
             <Input
               className="rounded-full"
               id="name"
@@ -85,24 +85,21 @@ const RegisterUser = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </div>
-
-          <div className="mb-4">
+            
             <Input
-              className="rounded-full"
+              className=" mt-4 rounded-full"
               id="lastname"
               type="text"
               placeholder="Apellido"
               value={lastname}
               onChange={(e) => setLastName(e.target.value)}
             />
-          </div>
+       
         </div>
 
-        <div>
-          <p>Usuario y contraseña</p>
+        <div className="mb-6">
+          <p  className="font-bold text-gray-700 mb-2">Usuario y contraseña</p>
 
-          <div className="mb-4">
             <Input
               className="rounded-full"
               id="email"
@@ -111,11 +108,10 @@ const RegisterUser = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
 
-          <div className="mb-6">
+
             <Input
-              className="rounded-full"
+              className="mt-4 rounded-full"
               id="password"
               type="password"
               placeholder="Contraseña"
@@ -123,7 +119,6 @@ const RegisterUser = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        </div>
 
         {error && <p className="text-error text-xs mb-4">{error}</p>}
 
