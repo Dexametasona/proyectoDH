@@ -15,7 +15,7 @@ const CustomPagination = ({
   setCurrentPage: (page: number) => void;
   totalPages: number;
 }) => {
-  const maxPageNum = 5; // Máximo número de páginas a mostrar
+  const maxPageNum = 5; 
   const pageNumLimit = Math.floor(maxPageNum / 2); // Páginas alrededor de la actual
 
   // Cálculo de las páginas visibles
@@ -90,7 +90,6 @@ const CustomPagination = ({
     <div>
       <Pagination>
         <PaginationContent>
-          {/* Botón de página anterior */}
           <PaginationItem>
             <PaginationPrevious
               className={
@@ -99,11 +98,7 @@ const CustomPagination = ({
               onClick={handlePrevPage}
             />
           </PaginationItem>
-
-          {/* Páginas dinámicas */}
           {renderPages()}
-
-          {/* Botón de página siguiente */}
           <PaginationItem>
             <PaginationNext
               className={
