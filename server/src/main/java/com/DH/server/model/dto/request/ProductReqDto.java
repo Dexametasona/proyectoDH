@@ -26,10 +26,8 @@ public record ProductReqDto(
         @NotNull(groups = {OnCreate.class})
         @Size(min = 4,max = 8, groups = {OnCreate.class})
         List<MultipartFile> photos,
-        @NotNull(groups = {OnCreate.class})
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
         Integer categoryId,
-        @NotNull(groups = {OnCreate.class})
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
         Integer tagId
 ) {

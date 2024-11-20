@@ -24,4 +24,6 @@ public interface ProductService extends GenericService<Product> {
 
   Page<Product> getAllByFilters(Pageable page,
                                 ProductFilters filters);
+
+  List<String> getProductNames(String name);
 }

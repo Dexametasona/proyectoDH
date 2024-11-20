@@ -5,6 +5,7 @@ import com.DH.server.model.dto.request.ProductReqDto;
 import com.DH.server.model.dto.response.PhotoResDto;
 import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.dto.response.ProductShortDto;
+import com.DH.server.model.entity.Order;
 import com.DH.server.model.entity.Photo;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.enums.ProductStatus;
@@ -13,13 +14,18 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class, OrderMapper.class})
 public abstract class ProductMapper {
   public abstract Product toEntity(ProductReqDto request);
 
   @Mapping(target = "status", source = "status")
   @Mapping(target = "photos", source = "photos")
   public abstract ProductResDto toResponse(Product entity);
+
+  @Mapping(target = "status", source = "entity.status")
+  @Mapping(target = "photos", source = "entity.photos")
+  @Mapping(target = "orders", source = "orders")
+  public abstract ProductResDto toResponse(Product entity, List<Order> orders);
 
   @Mapping(target = "photoUrl", source = "photos")
   public abstract ProductShortDto toShortResponse(Product entity);

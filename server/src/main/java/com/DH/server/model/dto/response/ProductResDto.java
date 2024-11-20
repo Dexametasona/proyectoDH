@@ -11,6 +11,7 @@ public record ProductResDto(
         int status,
         CategoryResDto category,
         TagResDto tag,
-        List<PhotoResDto> photos
+        List<PhotoResDto> photos,
+        List<OrderShortDto> orders
 ) {
 }

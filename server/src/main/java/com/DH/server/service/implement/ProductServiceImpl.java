@@ -1,6 +1,9 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.CategoryException;
+import com.DH.server.exception.OrderException;
 import com.DH.server.exception.ProductException;
+import com.DH.server.exception.TagException;
 import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.entity.Photo;
 import com.DH.server.model.entity.Product;
@@ -48,8 +51,14 @@ public class ProductServiceImpl implements ProductService {
               return currentPhoto;
             }).toList();
     entity.setPhotos(photosUrl);
+    try {
     entity.setCategory(categoryService.getById(categoryId.longValue()));
     entity.setTag(tagService.getById(tagId.longValue()));
+    } catch (CategoryException e) {
+      log.info("category not present");
+    } catch (TagException e){
+      log.info("tag not present");
+    }
     return this.productRepository.save(entity);
   }
 
@@ -85,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
       throw new ProductException("The photos must will be between 4 and 8");
     }
     if (deletePhoto != null) {
-      deletePhoto.forEach(delete->{
+      deletePhoto.forEach(delete -> {
         this.photoService.deleteById(delete);
         previousProduct.getPhotos().removeIf(photo -> Objects.equals(photo.getId(), delete));
       });
@@ -158,7 +167,13 @@ public class ProductServiceImpl implements ProductService {
             filters.brand(),
             filters.priceLimitUpper(),
             filters.priceLimitLower());
+  }
 
+  @Override
+  public List<String> getProductNames(String name){
+    if(name.trim().length() < 4) throw new OrderException("name must have at least 4 characters");
+    Pageable limit = PageRequest.of(0, 10);
+    return this.productRepository.findProductNames(limit, name);
   }
 
 }
