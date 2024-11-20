@@ -61,3 +61,21 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
 );
+
+/*------------------------------------order */
+CREATE TABLE `orders` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `amount` double NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `remarks` varchar(255) NOT NULL,
+  `ship_address` varchar(255) DEFAULT NULL,
+  `ship_end` date NOT NULL,
+  `ship_start` date NOT NULL,
+  `product_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK787ibr3guwp6xobrpbofnv7le` (`product_id`),
+  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK787ibr3guwp6xobrpbofnv7le` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+);
