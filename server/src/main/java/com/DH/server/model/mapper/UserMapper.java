@@ -34,7 +34,7 @@ public abstract class UserMapper {
   @Mapping(target = "pageSize", source = "size")
   @Mapping(target = "isFirst", source = "first")
   @Mapping(target = "isLast", source = "last")
-  public abstract CustomPage<UserShortDto> toCustomPage(Page<UserShortDto> productsResDto);
+  public abstract CustomPage<UserShortDto> toCustomPage(Page<UserShortDto> userResDto);
 
   public int map(Role role){
     return role.getId();

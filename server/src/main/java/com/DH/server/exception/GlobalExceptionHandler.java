@@ -7,6 +7,7 @@ import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -80,6 +81,15 @@ public class GlobalExceptionHandler {
     data.add("message: "+ ex.getMessage());
 
     ApiResponseDto<List<String>> errorResponse = new ApiResponseDto<>(ex.getMessage(), data );
+    return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(errorResponse);
+  }
+
+  @ExceptionHandler(AuthorizationDeniedException.class)
+  public ResponseEntity<?> handleDeniedException(AuthorizationDeniedException ex) {
+
+    var errorResponse = new ApiResponseDto<>(ex.getMessage(), LocalDateTime.now() );
     return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(errorResponse);

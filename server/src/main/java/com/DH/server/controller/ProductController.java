@@ -5,10 +5,10 @@ import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.dto.request.ProductReqDto;
-import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
+import com.DH.server.service.interfaces.OrderService;
 import com.DH.server.service.interfaces.ProductService;
 import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import java.util.List;
 public class ProductController {
   private final ProductService productService;
   private final ProductMapper productMapper;
+  private final OrderService orderService;
 
   @Operation(summary = "create product", description = "Using body as form-data, only available for ADMIN",
           security = {@SecurityRequirement(name = "bearerAuth")})
@@ -74,13 +76,21 @@ public class ProductController {
     return ResponseEntity.ok(
             new ApiResponseDto<>(productsResDto));
   }
+  @Operation(summary = "Get autocomplete products", description = "Get 10 autocomplete products name")
+  @GetMapping("/autocomplete/{name}")
+  public ResponseEntity<?> getAutocomplete(@PathVariable @NotBlank String name) {
+    List<String> names = this.productService.getProductNames(name);
+    return ResponseEntity.ok(
+            new ApiResponseDto<>(names));
+  }
 
   @Operation(summary = "Get product by id", description = "fetch products using his id into url.")
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@Parameter(description = "Product id", required = true)
                                    @PathVariable Long id) {
     var product = this.productService.getById(id);
-    return ResponseEntity.ok(new ApiResponseDto<>(this.productMapper.toResponse(product)));
+    var orders = this.orderService.getCurrentOrdersByProduct(id);
+    return ResponseEntity.ok(new ApiResponseDto<>(this.productMapper.toResponse(product, orders)));
   }
 
   @Operation(summary = "Update product by id", description = "fetch products using his id into url, and json into body, available for ADMIN",
