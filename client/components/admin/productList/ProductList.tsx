@@ -79,7 +79,7 @@ const ProductList = () => {
             </TableRow>
           ))}
         </TableBody>
-      </Table> : <AddProductForm />}
+      </Table> : <AddProductForm></AddProductForm>}
     </section>
   );
 };
