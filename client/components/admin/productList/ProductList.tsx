@@ -10,20 +10,29 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { recommendationsCards } from "@/constants";
 import Image from "next/image";
+import { useState } from "react";
+import AddProductForm from "./AddProductForm";
 
 const ProductList = () => {
+  const [addChange, setAddChange] = useState(false);
+
   const statusColors = {
     "Reparación": "bg-red-100 text-red-500",
     "Disponible": "bg-green-100 text-green-500",
     "En Alquiler": "bg-yellow-100 text-yellow-500",
   };
+
+  const handleClickAdd = () => {
+    setAddChange(true);
+  }
+
   return (
     <section className="h-[calc(100vh-200px)] overflow-y-scroll">
       <div className="flex justify-between px-4  py-4">
         <h2 className="text-lg font-bold text-gray-800">Listado de Productos</h2>
-        <Button className="bg-success">Agregar</Button>
+        <Button className="bg-success" onClick={handleClickAdd}>Agregar</Button>
       </div>
-      <Table>
+      {!addChange ? <Table>
         <TableHeader>
           <TableRow>
             <TableHead></TableHead>
@@ -70,7 +79,7 @@ const ProductList = () => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table> : <AddProductForm />}
     </section>
   );
 };
