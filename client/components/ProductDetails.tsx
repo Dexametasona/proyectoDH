@@ -17,16 +17,13 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (id) {
-      console.log("ID FOUND: ", id);
-
       getProductById(id)
         .then((foundProduct) => {
-          setProduct(foundProduct); // Set the product
-          console.log("PRODUCT FOUND: ", foundProduct);
+          setProduct(foundProduct);
         })
         .catch((error) => {
           console.error("Error fetching product:", error);
-          setProduct(null); // Handle errors by setting null
+          setProduct(null);
         });
     }
   }, [id]);
@@ -70,42 +67,33 @@ const ProductDetails = () => {
       </div>
 
       <div className="text-center mb-5 mt-5">
-        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <h1 className="text-2xl font-bold text-primary">{product.name}</h1>
       </div>
 
       <div className="flex justify-between items-center mb-4 p-2 border-y border-primary-light">
         <div className="flex flex-col gap-4">
-          {" "}
-          {/* Increase gap for consistent spacing */}
-          {/* Price */}
           <div className="flex items-center gap-2">
-            {" "}
-            {/* Flex row with consistent gap */}
-            <DollarSignIcon className="text-gray-500" />
-            <p className="text-gray-700">
+            <DollarSignIcon className="text-grey-subtext" />
+            <p>
               <strong>{product.price} USD</strong> por hora
             </p>
           </div>
           {/* Brand */}
           <div className="flex items-center gap-2">
-            {" "}
-            {/* Flex row with consistent gap */}
-            <CrownIcon className="text-gray-500" />
-            <p className="text-gray-500">Marca: {product.brand}</p>
+            <CrownIcon className="text-grey-subtext" />
+            <p>Marca: {product.brand}</p>
           </div>
           {/* Status */}
           <div className="flex items-center gap-2">
-            {" "}
-            {/* Flex row with consistent gap */}
             {product.status ? (
               <>
-                <Check className="text-green-500" /> {/* Adjust icon size/color if needed */}
+                <Check className="text-success" />
                 <span className="text-[var(--color-active)] font-bold">Disponible</span>
               </>
             ) : (
               <>
-                <XIcon className="text-red-600" /> {/* Replace this with your preferred "x" icon */}
-                <span className="text-red-600 font-bold">No disponible</span>
+                <XIcon className="text-error" />
+                <span className="text-error font-bold">No disponible</span>
               </>
             )}
           </div>
@@ -114,31 +102,25 @@ const ProductDetails = () => {
 
       {/* Descripción */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold">Descripción</h2>
-        <p className="text-gray-700">{product.description}</p>
-        {/* <a href="#" className="text-blue-600" onClick={() => openModal(0)}>
-          Ver más
-        </a> */}
+        <h2 className="text-xl font-semibold text-primary">Descripción</h2>
+        <p>{product.description}</p>
       </div>
 
       <div className="flex justify-center items-center mb-4 p-2">
         <div className="flex flex-col gap-2">
-          <a href="#" className="text-yellow-600 mr-12 underline" onClick={() => openModal(0)}>
+          <a href="#" className="text-secondary mr-12 underline" onClick={() => openModal(0)}>
             Ver más
           </a>
         </div>
         <button
           className={`py-4 px-24 rounded-full ml-12 font-normal ${
-            product.status
-              ? "bg-yellow-500 text-black hover:bg-yellow-600"
-              : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            product.status ? "bg-secondary text-black hover:bg-secondary" : "bg-disabled cursor-not-allowed"
           }`}
           disabled={!product.status}
         >
           {product.status ? "Reservar" : "No disponible"}
         </button>
       </div>
-
       <GalleryModal images={product.photos} isOpen={isModalOpen} onClose={closeModal} initialIndex={initialIndex} />
     </div>
   );
