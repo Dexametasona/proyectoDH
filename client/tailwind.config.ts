@@ -23,6 +23,7 @@ const config: Config = {
         success: "var(--color-success)",
         error: "var(--color-error)",
         active: "var(--color-active)",
+        disabled: "var(--color-grey-ash)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
