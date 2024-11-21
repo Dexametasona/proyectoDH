@@ -3,6 +3,7 @@ package com.DH.server.model.mapper;
 import com.DH.server.model.dto.CustomPage;
 import com.DH.server.model.dto.request.ProductReqDto;
 import com.DH.server.model.dto.response.PhotoResDto;
+import com.DH.server.model.dto.response.ProductAutocompleteResDto;
 import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Order;
@@ -29,6 +30,8 @@ public abstract class ProductMapper {
 
   @Mapping(target = "photoUrl", source = "photos")
   public abstract ProductShortDto toShortResponse(Product entity);
+
+  public abstract ProductAutocompleteResDto toAutocompleteResponse(Product entity);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   @Mapping(target = "id", ignore = true)

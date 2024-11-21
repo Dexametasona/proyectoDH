@@ -79,9 +79,12 @@ public class ProductController {
   @Operation(summary = "Get autocomplete products", description = "Get 10 autocomplete products name")
   @GetMapping("/autocomplete/{name}")
   public ResponseEntity<?> getAutocomplete(@PathVariable @NotBlank String name) {
-    List<String> names = this.productService.getProductNames(name);
+    List<Product> names = this.productService.getProductNames(name);
+    var autocompleteProduct = names.stream()
+            .map(this.productMapper::toAutocompleteResponse)
+            .toList();
     return ResponseEntity.ok(
-            new ApiResponseDto<>(names));
+            new ApiResponseDto<>(autocompleteProduct));
   }
 
   @Operation(summary = "Get product by id", description = "fetch products using his id into url.")

@@ -53,7 +53,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
   @Query("SELECT p FROM Product p ORDER BY function('RAND')")
   List<Product> findRandomProducts(Pageable pageable);
 
-  @Query("SELECT p.name FROM Product p WHERE p.name LIKE %:name%")
-  List<String> findProductNames(Pageable pageable, String name);
+  @Query("SELECT p FROM Product p WHERE p.name LIKE %:name%")
+  List<Product> findProductNames(Pageable pageable, String name);
 
 }

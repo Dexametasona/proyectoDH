@@ -170,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<String> getProductNames(String name){
+  public List<Product> getProductNames(String name){
     if(name.trim().length() < 4) throw new OrderException("name must have at least 4 characters");
     Pageable limit = PageRequest.of(0, 10);
     return this.productRepository.findProductNames(limit, name);
