@@ -56,9 +56,9 @@ const Header = () => {
         alt={"logo"}
         className="hidden sm:block"
       />
-      <div className="gap-8 md:flex hidden bg-black cursor-pointer text-white">
+      <div className="gap-8 md:flex hidden cursor-pointer text-white">
         {navbarOptions.map((option) => (
-          <p key={option.name} onClick={() => handleNavigation(option.link)}>
+          <p key={option.name} onClick={() => handleNavigation(option.link)} className="hover:text-gray-400 transition-all ease-in-out duration-300">
             {option.name}
           </p>
         ))}
