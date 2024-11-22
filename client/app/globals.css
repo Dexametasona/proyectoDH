@@ -85,3 +85,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.heightHooterHeader {
+  height: calc(100vh-176px);
+}
