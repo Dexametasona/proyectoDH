@@ -25,6 +25,12 @@ export const getProductById = async (id: string | string[]) => {
 	}
 };
 
+// export const getProductById = async ({ id }: number) => {
+//   try {
+//     const response = await axios.get(`${BASE_URL}/products/${id}`);
+//   } catch (error) {}
+// };
+
 export const getAllUsers = async () => {
 	try {
 		const response = await axios.get(`${BASE_URL}/users`);
@@ -84,3 +90,15 @@ export const registerUser = async ({
 		setLoading(false);
 	}
 };
+
+export const filterByName = async (name: string) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/products/autocomplete/${name}`,
+    );
+
+    return response;
+  } catch (error) {}
+};
+
+// export const selectDates = async (id) => {};

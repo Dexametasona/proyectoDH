@@ -1,15 +1,36 @@
 "use client";
 import { CalendarDays, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "./ui/button";
+import { filterByName, getProductById, selectDates } from "@/lib/api_interface";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [openFromCalendar, setOpenFromCalendar] = useState(false);
   const [openToCalendar, setOpenToCalendar] = useState(false);
+  const [listOfProducts, setListOfProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState("");
+
+  useEffect(() => {
+    if (search.length >= 4) {
+      filterByName(search).then((result) => {
+        const products = result?.data.data;
+        setListOfProducts(products);
+      });
+      setSelectedProduct("");
+      setListOfProducts([]);
+    }
+
+    if (search.length === 0) {
+    }
+
+    console.log(search);
+  }, [search]);
+
+  console.log(listOfProducts);
 
   const handleOpenFromCalendar = () => {
     setOpenFromCalendar(!openFromCalendar);
@@ -17,6 +38,13 @@ const SearchBar = () => {
 
   const handleOpenToCalendar = () => {
     setOpenToCalendar(!openToCalendar);
+  };
+
+  const handleSelectProduct = (product: string) => {
+    setSelectedProduct(product);
+    setSearch(product);
+
+    // getProductById(result?.data.id);
   };
 
   return (
@@ -70,6 +98,22 @@ const SearchBar = () => {
       <Button className="rounded-full w-full sm:w-fit sm:text-lg py-3 px-4 sm:h-12">
         Buscar
       </Button>
+      {listOfProducts.length > 0 && selectedProduct === "" && (
+        <div className="relative">
+          <div className="absolute right-[-180px] sm:right-[-16px] bottom-[-8px] sm:top-4 z-10 rounded-2xl sm:rounded-b-2xl sm:border-b sm:border-x border-primary w-[calc(100vw-62px)] sm:w-[calc(100vw-62px)] bg-background ">
+            {listOfProducts.map((product) => (
+              <div
+                key={product}
+                className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
+                onClick={() => handleSelectProduct(product)}
+              >
+                <Search className="text-disabled" />
+                <p>{product}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
