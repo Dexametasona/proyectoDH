@@ -79,3 +79,20 @@ CREATE TABLE `orders` (
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FK787ibr3guwp6xobrpbofnv7le` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 );
+
+/* --------------------------------review */
+
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE `review` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `comment` TEXT NOT NULL,
+  `score` INT NOT NULL,
+  `user_id` BIGINT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `product_id` BIGINT NOT NULL,
+  `order_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `fk_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
+);
