@@ -45,26 +45,27 @@ const ProductDetails = () => {
 
   return (
 
-    <>
-      <div className="text-primary p-1 my-2 shadow-md ">
+    <section className="justify-self-start">
+      <div className="text-primary p-1 my-2 bg-white shadow-md ">
         <div className="flex rounded hover:bg-primary-light m-1 p-1">
-          <ChevronLeft onClick={handleBackHome}/> Atrás
+          <ChevronLeft onClick={handleBackHome} /> Atrás
         </div>
       </div>
 
-      <div className="mx-auto my-6 lg:max-w-6xl p-6 bg-white lg:border lg:border-primary-light rounded-lg shadow-lg ">
-        <div className="flex flex-col  md:flex-row justify-center">
-          <div className="flex mb-4 md:mb-0 md:mr-4 md:h-96 md:w-96">
+      <div className="container-layout mx-auto lg:max-w-6xl sm:mx-20 lg:mx-auto bg-white lg:border lg:border-primary-light rounded-lg shadow-lg ">
+        <div className="container-images items-center px-2 flex flex-col  md:flex-row justify-center">
+          <div className="container-img-main flex grow mb-4 md:mb-0 md:mr-4 md:h-96 md:w-96">
             <Image
               src={product.photos.length ? product.photos[0].url : ""}
               alt={product.name}
               width={800}
               height={800}
-              className="w-full grow h-auto rounded-lg object-cover"
+              className="w-full grow h-auto rounded-lg object-contain"
             />
           </div>
+
           {product.photos && product.photos.length > 0 && (
-            <div className="flex md:grid md:grid-auto align-items md:space-x-0 justify-between  lg:gap-4 lg:grid lg:grid-cols-2">
+            <div className="container-img-gallery flex gap-2 grow justify-evenly lg:grid lg:grid-cols-2">
               {product.photos.map((thumb) => (
                 <Image
                   key={thumb.id}
@@ -72,12 +73,13 @@ const ProductDetails = () => {
                   alt={`Thumbnail ${thumb.id}`}
                   width={100}
                   height={100}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-24  md:p-1 md:h-24 lg:w-auto lg:h-auto self-stretch rounded-md object-cover cursor-pointer hover:ring-2 hover:ring-primary"
+                  className="min-w-16  lg:w-full self-stretch rounded-md object-cover cursor-pointer hover:ring-2 hover:ring-primary"
                   onClick={() => openModal(thumb.id)}
                 />
               ))}
             </div>
           )}
+
         </div>
 
         <div className="text-center mb-5 mt-5">
@@ -143,7 +145,7 @@ const ProductDetails = () => {
         </div>
         <GalleryModal images={product.photos} isOpen={isModalOpen} onClose={closeModal} initialIndex={initialIndex} />
       </div>
-    </>
+    </section>
   );
 };
 
