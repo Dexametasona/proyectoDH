@@ -40,6 +40,7 @@ public class Product {
   @JoinColumn(name = "tag_id")
   private Tag tag;
 
+
   @PrePersist
   public void onCreate(){
     this.status = ProductStatus.AVAILABLE;

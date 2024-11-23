@@ -39,6 +39,7 @@ public class UserEntity implements UserDetails {
   @Column(updatable = false, nullable = false)
   private LocalDateTime createdAt;
 
+
   @PrePersist
   public void onCreate(){
     this.isDeleted = false;

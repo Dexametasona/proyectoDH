@@ -79,3 +79,12 @@ CREATE TABLE `orders` (
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FK787ibr3guwp6xobrpbofnv7le` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 );
+/* --------------------------------favorite */
+DROP TABLE IF EXISTS `favorites`;
+CREATE TABLE `favorites` (
+    `id` bigint AUTO_INCREMENT PRIMARY KEY,
+    `user_id` bigint NOT NULL,
+    `product_id` bigint NOT NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+);
