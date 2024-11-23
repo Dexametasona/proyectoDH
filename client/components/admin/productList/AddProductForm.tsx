@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
     detail: {
         margin: "1em",
         border: "1px solid #EFF0F4",
@@ -38,7 +38,7 @@ const styles = {
     inputContainerImage: {
         display: "flex",
         justifyContent: "space-between",
-        alignItem: "center"
+        alignItems: "center"
     },
     input: {
         fontSize: "12px",
@@ -59,22 +59,31 @@ const styles = {
         fontSize: "12px"
     },
     btnGuardar: {
-        widthSize: "14px",
+        fontSize: "14px",
         backgroundColor: "#AFAFAF",
         color: "white",
         padding: "0.5em 1em",
         borderRadius: "5px",
     },
-    imageContainer: {
+    imagesContainer: {
         overflow: "scroll",
         overflowX: "hidden",
         border: "1px solid #EFF0F4",
         borderRadius: "5px",
         padding: "1em",
         width: "100%",
-        maxWidth: "633px",
         height: "100%",
         maxHeight: "232px",
+        display: "flex",
+        justifyContent: "left",
+        flexWrap: "wrap",
+        gap: "1em",
+    },
+    imageDiv: {
+        display: "flex",
+        alignItems: "end",
+        width: "125px",
+        borderRadius: "5px",
     }
 }
 
@@ -87,9 +96,9 @@ const AddProductForm = () => {
         marca: string;
         politicas: string;
         categoria: string;
-        imagenes: File[]; // Asegúrate de que sea un array de archivos
+        imagenes: File[];
     }
-    
+
     const dataProduct: Product = {
         nombre: "",
         descripcion: "",
@@ -102,55 +111,54 @@ const AddProductForm = () => {
 
     const [productDetail, setProductDetail] = useState(dataProduct);
     const [listCategory, setListCaterogy] = useState<Category[]>([]);
-    const [listProduct, setListProduct] = useState<Product[]>([]);
+    const [listProduct, setListProduct] = useState<Product1[]>([]);
     const [registry, setRegistry] = useState({});
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const productExists = listProduct.find(product => product.nombre === productDetail.nombre);
+        // validaciones del nombre
+        const productExists = listProduct.find(product => product.name === productDetail.nombre);
         if (productExists) {
             alert("Ya existe un producto con este nombre. Por favor cambiarlo.");
         } else {
-            setRegistry(productDetail.nombre);
-            alert("Producto registrado con éxito.");
-
+            let data = productDetail.nombre;
+            if (data.length < 10 || data.length > 100) {
+                alert("El nombre debe tener entre 10 a 100 caracteres")
+            } else {
+                setRegistry(productDetail.nombre);
+                alert("Producto registrado con éxito.");
+            }
         }
         console.log(productDetail);
     }
-    const handleNombre = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleNombre = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProductDetail({ ...productDetail, nombre: e.target.value })
     }
-    const handleDescripcion = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleDescripcion = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProductDetail({ ...productDetail, descripcion: e.target.value })
     }
-    const handlePrecio = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handlePrecio = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProductDetail({ ...productDetail, precio: parseFloat(e.target.value) });
     }
-    const handleMarca = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleMarca = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProductDetail({ ...productDetail, marca: e.target.value })
     }
-    const handlePoliticas = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handlePoliticas = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setProductDetail({ ...productDetail, politicas: e.target.value })
     }
     const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProductDetail({ ...productDetail, categoria: e.target.value })
     }
     const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const selectedFiles = Array.from(e.target.files); // Convierte FileList a un array
-            setProductDetail({ ...productDetail, imagenes: selectedFiles });
+        const eFiles = e.target.files;
+        if (eFiles && eFiles.length >= 4) {
+            const selectedFiles = Array.from(eFiles); // Convierte FileList a un array
+            setProductDetail((prevDetail) => ({ ...prevDetail, imagenes: selectedFiles }));
+        } else {
+            alert("Por favor, selecciona al menos 4 imágenes.");
         }
-        // const files = e.target.files;
-        // if (files.length < 4) {
-        //     alert("Por favor, selecciona al menos 4 imágenes.");
-        // }
-        // const formData = new FormData();
-        // Array.from(files).forEach((file, index) => [
-        //     formData.append(`imagen_${index + 1}`, file)
-        // ]);
-        // setProductDetail()
     }
-    
+
     useEffect(() => {
         if (registry !== "" || registry !== undefined || registry !== null) {
             registerProduct();
@@ -159,10 +167,10 @@ const AddProductForm = () => {
 
     const registerProduct = () => {
         const formData = new FormData();
-        productDetail.imagenes.forEach((file: File) => {
-          formData.append("imagenes", file);
+        productDetail.imagenes.forEach((file: File, index: number) => {
+            formData.append(`imagen_${index + 1}`, file)
         });
-        
+
         const buildData = {
             brand: productDetail.marca,
             categoryId: productDetail.categoria,
@@ -170,13 +178,13 @@ const AddProductForm = () => {
             name: productDetail.nombre,
             photos: productDetail.imagenes,
             price: productDetail.precio,
-            tagId: 1
+            tagId: 1,
         }
         const url = "http://localhost:8080/api/v1/products";
         const token = localStorage.getItem("authToken") || null;
         fetch(url, {
             method: "POST",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}` || ""
             },
@@ -192,8 +200,6 @@ const AddProductForm = () => {
             .then(result => result.json())
             .then(info => {
                 setListProduct(info.data.content);
-                console.log(info.data.content);
-                console.log(info.data);
             })
             .catch(error => console.log(error));
     }, []);
@@ -268,7 +274,6 @@ const AddProductForm = () => {
                                     </option>
                                 ))}
                             </select>
-                            {/* <select id='categoria' type="text" style={styles.input} placeholder="Ej.: AA0123K" /> */}
                         </div>
                         <div style={styles.inputContainerImage}>
                             <label htmlFor="imagenes" style={{ fontSize: "13px" }}>Imágenes</label>
@@ -276,7 +281,7 @@ const AddProductForm = () => {
                                 <input
                                     type="file"
                                     id="fileInput"
-                                    multiple 
+                                    multiple
                                     style={{ display: 'none' }}
                                     onChange={handleImagenes}
                                 />
@@ -287,8 +292,12 @@ const AddProductForm = () => {
                                 <img src={"/assets/icons/folder-check.svg"} alt="" />
                             </div>
                         </div>
-                        <div style={styles.imageContainer}>
-
+                        <div style={styles.imagesContainer}>
+                            {productDetail.imagenes.map((img, index) => (
+                                <div key={index} style={styles.imageDiv}>
+                                    <img src={URL.createObjectURL(img)} alt={`Imagen ${index + 1}`} style={styles.img} />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
