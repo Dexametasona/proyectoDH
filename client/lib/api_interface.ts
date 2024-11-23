@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { AuthenticateUserProps, ProductById, RegisterUserProps } from "@/types";
+import { AuthenticateUserProps, RegisterUserProps } from "@/types";
 
-const BASE_URL = "http://localhost:8080/api/v1";
+const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
 
 export const getAllProducts = async () => {
 	try {
