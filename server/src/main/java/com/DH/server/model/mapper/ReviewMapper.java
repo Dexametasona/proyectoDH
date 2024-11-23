@@ -1,7 +1,8 @@
 package com.DH.server.model.mapper;
 
 import com.DH.server.model.dto.request.ReviewReqDto;
-import com.DH.server.model.dto.request.ReviewShoReqDto;
+import com.DH.server.model.dto.request.ReviewShortDto;
+import com.DH.server.model.dto.response.ReviewResDto;
 import com.DH.server.model.entity.Review;
 import org.mapstruct.Mapper;
 
@@ -10,7 +11,7 @@ public abstract class ReviewMapper {
 
     public abstract Review toEntity(ReviewReqDto request);
 
-    public abstract Review toEntity(ReviewShoReqDto request);
+    public abstract Review toEntity(ReviewShortDto request);
 
-    public abstract Review toResponse(Review response);
+    public abstract ReviewResDto toResponse(Review response);
 }

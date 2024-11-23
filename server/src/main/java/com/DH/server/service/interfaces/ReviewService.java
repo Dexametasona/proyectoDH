@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewService extends GenericService<Review>{
 
-    Review create(Review entity, Long order_id);
+    //Review create(Review entity, Long order_id);
 
     List <Review> getAllByProducts(Long product_id);
 

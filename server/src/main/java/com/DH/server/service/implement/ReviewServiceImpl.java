@@ -31,11 +31,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final ProductService productService;
 
     @Override
-    public Review create(Review entity, Long order_id) {
+    public Review create(Review entity) {
 
         UserEntity authUser = this.authService.getAuthUser();
 
-        Order order = orderService.getById(order_id);
+        Order order = orderService.getById(entity.getOrder().getId());
 
         entity.setProduct(order.getProduct());
         entity.setAuthor(authUser);
@@ -57,11 +57,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getAllByUsers(Long user_id) {
-        return null;
-    }
-
-    @Override
-    public Review create(Review entity) {
         return null;
     }
 
