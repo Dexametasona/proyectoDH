@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <div className="h-20 bg-primary w-full p-4 rounded-b-3xl flex justify-between items-center sm:rounded-b-none z-50 sticky top-0">
-      <div className="bg-secondary rounded-full flex items-center justify-center p-2 sm:hidden">
+      <div className="bg-secondary rounded-full flex items-center justify-center p-2 md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Menu className="text-white" />
@@ -56,9 +56,9 @@ const Header = () => {
         alt={"logo"}
         className="hidden sm:block"
       />
-      <div className="gap-8 hidden sm:flex cursor-pointer text-white">
+      <div className="gap-8 md:flex hidden cursor-pointer text-white">
         {navbarOptions.map((option) => (
-          <p key={option.name} onClick={() => handleNavigation(option.link)}>
+          <p key={option.name} onClick={() => handleNavigation(option.link)} className="hover:text-gray-400 transition-all ease-in-out duration-300">
             {option.name}
           </p>
         ))}

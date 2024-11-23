@@ -32,10 +32,12 @@ export default function RootLayout({
       <AppContextProvider>
         <html lang="en">
           <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}
           >
             <Header />
-            {children}
+            <div className="containerLayout flex-grow bg-[--background-color] flex flex-col justify-center ">
+              {children}
+            </div>
             <Footer />
           </body>
         </html>
