@@ -21,21 +21,21 @@ public class Review {
     private String comment;
 
     @Column(nullable = false)
-    private int score;
+    private Integer score;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",nullable = false)
     private UserEntity author;
 
     @Column(updatable = false)
     private LocalDateTime date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id",nullable = false)
     private Product product;
 
-    @OneToOne
-    @JoinColumn(name = "order_id",nullable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id",nullable = false,unique = true)
     private Order order;
 
     @PrePersist

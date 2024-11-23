@@ -184,7 +184,6 @@ public class ProductServiceImpl implements ProductService {
 
           Product product=this.getById(product_id);
           product.setAvgScore(average);
-
           productRepository.save(product);
   }
 

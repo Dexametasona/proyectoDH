@@ -5,7 +5,9 @@ import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.ReviewReqDto;
 import com.DH.server.model.dto.request.ReviewShortDto;
+import com.DH.server.model.entity.Order;
 import com.DH.server.model.mapper.ReviewMapper;
+import com.DH.server.service.interfaces.OrderService;
 import com.DH.server.service.interfaces.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,14 +26,16 @@ public class ReviewController {
 
     private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
+    private final OrderService orderService;
 
 
     @Operation(summary = "Create review", description = "Create review only for UserAuth")
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> create(@Validated (OnCreate.class)
-                                    @RequestBody ReviewReqDto request){
+    public ResponseEntity<?> create( @RequestBody @Validated (OnCreate.class) ReviewReqDto request){
 
+            Order order=orderService.getById(request.order_id());
         var review=this.reviewMapper.toEntity(request);
+        review.setOrder(order);
         review=reviewService.create(review);
 
         return ResponseEntity

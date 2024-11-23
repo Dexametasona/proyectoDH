@@ -8,11 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record ReviewShortDto(
-        @NotBlank(groups = {OnCreate.class})
+
         @Size(min = 3,max = 300, groups = {OnCreate.class, OnUpdate.class})
         String comment,
 
-        @Min(1)
-        @Max(5)
+        @Min(1) @Max(5)
         int score){
 }

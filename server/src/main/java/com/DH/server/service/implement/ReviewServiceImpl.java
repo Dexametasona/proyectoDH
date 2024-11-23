@@ -6,16 +6,10 @@ import com.DH.server.model.entity.Order;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.Review;
 import com.DH.server.model.entity.UserEntity;
-import com.DH.server.persistance.OrderRepository;
-import com.DH.server.persistance.ProductRepository;
 import com.DH.server.persistance.ReviewRepository;
-import com.DH.server.persistance.UserRepository;
 import com.DH.server.service.interfaces.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,14 +31,30 @@ public class ReviewServiceImpl implements ReviewService {
 
         Order order = orderService.getById(entity.getOrder().getId());
 
+        if (order.getReview() != null) {
+            throw new IllegalArgumentException("Ya existe una reseña para esta orden:");
+        }
+
+        entity.setOrder(order);
+
+        if (entity.getScore() < 1 || entity.getScore() > 5) {
+            throw new IllegalArgumentException("El puntaje debe estar entre 1 y 5.");
+        }
+
         entity.setProduct(order.getProduct());
         entity.setAuthor(authUser);
+
+        if (entity.getDate() == null) {
+            entity.setDate(LocalDateTime.now());
+        }
 
         //convertir localdate a LocalDateTime
         if (!entity.getDate().isBefore(order.getShipEnd().atStartOfDay())) {
 
-            productService.averageProductScore(entity.getProduct().getId());
-            return this.reviewRepository.save(entity);
+            Review review=this.reviewRepository.save(entity);
+            order.setReview(review);
+            productService.averageProductScore(review.getProduct().getId());
+            return review;
         }
 
         throw new IllegalArgumentException("La fecha de reserva es posterior a la fecha de reseña");
@@ -62,7 +72,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review getById(Long id) {
-        return this.reviewRepository.findById(id).orElseThrow(() ->new ReviewException("Review not found by id: "+id)) ;
+        return this.reviewRepository.findById(id).orElseThrow(() ->new ReviewException(" not found by id: "+id)) ;
 
     }
 
@@ -70,12 +80,21 @@ public class ReviewServiceImpl implements ReviewService {
     public Review updateById(Long id, Review entity) {
         Review review= this.getById(id);
         UserEntity authUser = this.authService.getAuthUser();
+
         if (review.getAuthor().getId().equals(authUser.getId())) {
-            review.setComment(entity.getComment());
-            review.setScore(entity.getScore());
+
+            if (entity.getComment() != null && !entity.getComment().isBlank()) {
+                review.setComment(entity.getComment());
+            }
+
+            if (entity.getScore() >= 1 && entity.getScore() <= 5) {
+                review.setScore(entity.getScore());
+            }
         }
-        productService.averageProductScore(entity.getProduct().getId());
-        return this.reviewRepository.save(review);
+
+        Review reviewUpdated=this.reviewRepository.save(review);
+        productService.averageProductScore(review.getProduct().getId());
+        return reviewUpdated;
     }
 
     @Override

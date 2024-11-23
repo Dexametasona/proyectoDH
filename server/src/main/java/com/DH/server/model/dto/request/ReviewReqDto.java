@@ -9,15 +9,11 @@ public record ReviewReqDto(
         @Size(min = 3,max = 300, groups = {OnCreate.class, OnUpdate.class})
         String comment,
 
-        @Min(1)
-        @Max(5)
+        @Min(1) @Max(5)
         int score,
 
         @NotNull(groups = {OnCreate.class})
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
         Long order_id
 
-) {
-
-
-}
+) {}
