@@ -80,20 +80,41 @@ const styles = {
 
 const AddProductForm = () => {
 
-    let dataProduct = {
+    interface Product {
+        nombre: string;
+        descripcion: string;
+        precio: number;
+        marca: string;
+        politicas: string;
+        categoria: string;
+        imagenes: File[]; // Asegúrate de que sea un array de archivos
+    }
+    
+    const dataProduct: Product = {
         nombre: "",
         descripcion: "",
-        precio: 0.00,
+        precio: 0,
         marca: "",
         politicas: "",
-        categoria: ""
+        categoria: "",
+        imagenes: []
     }
 
     const [productDetail, setProductDetail] = useState(dataProduct);
     const [listCategory, setListCaterogy] = useState<Category[]>([]);
+    const [listProduct, setListProduct] = useState<Product[]>([]);
+    const [registry, setRegistry] = useState({});
 
     const handleSubmit = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
+        const productExists = listProduct.find(product => product.nombre === productDetail.nombre);
+        if (productExists) {
+            alert("Ya existe un producto con este nombre. Por favor cambiarlo.");
+        } else {
+            setRegistry(productDetail.nombre);
+            alert("Producto registrado con éxito.");
+
+        }
         console.log(productDetail);
     }
     const handleNombre = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -103,7 +124,7 @@ const AddProductForm = () => {
         setProductDetail({ ...productDetail, descripcion: e.target.value })
     }
     const handlePrecio = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProductDetail({ ...productDetail, precio: Number(e.target.value) })
+        setProductDetail({ ...productDetail, precio: parseFloat(e.target.value) });
     }
     const handleMarca = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProductDetail({ ...productDetail, marca: e.target.value })
@@ -114,20 +135,78 @@ const AddProductForm = () => {
     const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProductDetail({ ...productDetail, categoria: e.target.value })
     }
+    const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const selectedFiles = Array.from(e.target.files); // Convierte FileList a un array
+            setProductDetail({ ...productDetail, imagenes: selectedFiles });
+        }
+        // const files = e.target.files;
+        // if (files.length < 4) {
+        //     alert("Por favor, selecciona al menos 4 imágenes.");
+        // }
+        // const formData = new FormData();
+        // Array.from(files).forEach((file, index) => [
+        //     formData.append(`imagen_${index + 1}`, file)
+        // ]);
+        // setProductDetail()
+    }
+    
+    useEffect(() => {
+        if (registry !== "" || registry !== undefined || registry !== null) {
+            registerProduct();
+        }
+    }, [registry]);
+
+    const registerProduct = () => {
+        const formData = new FormData();
+        productDetail.imagenes.forEach((file: File) => {
+          formData.append("imagenes", file);
+        });
+        
+        const buildData = {
+            brand: productDetail.marca,
+            categoryId: productDetail.categoria,
+            description: productDetail.descripcion,
+            name: productDetail.nombre,
+            photos: productDetail.imagenes,
+            price: productDetail.precio,
+            tagId: 1
+        }
+        const url = "http://localhost:8080/api/v1/products";
+        const token = localStorage.getItem("authToken") || null;
+        fetch(url, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` || ""
+            },
+            body: JSON.stringify(buildData)
+        })
+            .then(result => result.json())
+            .catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        const url = "http://localhost:8080/api/v1/products";
+        fetch(url)
+            .then(result => result.json())
+            .then(info => {
+                setListProduct(info.data.content);
+                console.log(info.data.content);
+                console.log(info.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
     useEffect(() => {
         const url = "http://localhost:8080/api/v1/category";
         fetch(url)
             .then(result => result.json())
             .then(info => {
-                console.log(info.data);
                 setListCaterogy(info.data)
             })
             .catch(error => console.log(error));
-    }, [])
-
-    console.log(listCategory);
-
+    }, []);
 
     return (
         <div>
@@ -142,19 +221,19 @@ const AddProductForm = () => {
                     <div style={styles.column1}>
                         <div style={styles.inputContainer}>
                             <label htmlFor="nombre" style={{ fontSize: "13px" }}>Nombre</label>
-                            <input id='nombre' type="text" style={styles.input} placeholder="Ej.: AA0123K" onChange={handleNombre} />
+                            <input id='nombre' type="text" style={styles.input} placeholder="Ej.: AA0123K" onChange={handleNombre} required />
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="descripcion" style={{ fontSize: "13px" }}>Descripción</label>
-                            <input id='descripcion' type="text" style={styles.input} placeholder="Ej.: Juego de mesa" onChange={handleDescripcion} />
+                            <input id='descripcion' type="text" style={styles.input} placeholder="Ej.: Juego de mesa" onChange={handleDescripcion} required />
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="precio" style={{ fontSize: "13px" }}>Precio</label>
-                            <input id='precio' type="number" style={styles.input} placeholder="Ej.: $0.00" onChange={handlePrecio} />
+                            <input id='precio' type="float" style={styles.input} placeholder="Ej.: $0.00" onChange={handlePrecio} required />
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="marca" style={{ fontSize: "13px" }}>Marca</label>
-                            <input id='marca' type="text" style={styles.input} placeholder="Ej.: Acme" onChange={handleMarca} />
+                            <input id='marca' type="text" style={styles.input} placeholder="Ej.: Acme" onChange={handleMarca} required />
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="politicas" style={{ fontSize: "13px" }}>Políticas de uso</label>
@@ -165,7 +244,7 @@ const AddProductForm = () => {
                                 placeholder="Ej.: Apto para mayores"
                                 style={styles.input}
                                 onChange={handlePoliticas}
-                            />
+                                required />
                         </div>
                     </div>
                     <div style={styles.column1}>
@@ -181,9 +260,8 @@ const AddProductForm = () => {
                                 style={{
                                     fontSize: "13px", padding: "12px", border: "1px solid #EFF0F4",
                                     borderRadius: "0.5em",
-                                }}
-                            >
-                                <option value="" style={{color: "#EFF0F4"}} disabled>Categoría...</option>
+                                }}>
+                                <option value="" style={{ color: "#EFF0F4" }} disabled>Categoría...</option>
                                 {listCategory.map((category) => (
                                     <option key={category.id} value={category.id}>
                                         {category.title}
@@ -198,9 +276,9 @@ const AddProductForm = () => {
                                 <input
                                     type="file"
                                     id="fileInput"
-                                    accept="image/*"
+                                    multiple 
                                     style={{ display: 'none' }}
-                                // onChange={handleFileChange}
+                                    onChange={handleImagenes}
                                 />
                                 {/* Etiqueta personalizada */}
                                 <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
