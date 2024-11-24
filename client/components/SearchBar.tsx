@@ -40,9 +40,9 @@ const SearchBar = () => {
     setOpenToCalendar(!openToCalendar);
   };
 
-  const handleSelectProduct = (product: string) => {
-    setSelectedProduct(product);
-    setSearch(product);
+  const handleSelectProduct = ({ name, id }) => {
+    setSelectedProduct(name);
+    setSearch(name);
 
     // getProductById(result?.data.id);
   };
@@ -103,12 +103,12 @@ const SearchBar = () => {
           <div className="absolute right-[-180px] sm:right-[-16px] bottom-[-8px] sm:top-4 z-10 rounded-2xl sm:rounded-b-2xl sm:border-b sm:border-x border-primary w-[calc(100vw-62px)] sm:w-[calc(100vw-62px)] bg-background ">
             {listOfProducts.map((product) => (
               <div
-                key={product}
+                key={product.id}
                 className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
-                onClick={() => handleSelectProduct(product)}
+                onClick={() => handleSelectProduct(product.name)}
               >
                 <Search className="text-disabled" />
-                <p>{product}</p>
+                <p>{product.name}</p>
               </div>
             ))}
           </div>
