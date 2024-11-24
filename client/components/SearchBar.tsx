@@ -26,11 +26,7 @@ const SearchBar = () => {
 
     if (search.length === 0) {
     }
-
-    console.log(search);
   }, [search]);
-
-  console.log(listOfProducts);
 
   const handleOpenFromCalendar = () => {
     setOpenFromCalendar(!openFromCalendar);
@@ -40,11 +36,9 @@ const SearchBar = () => {
     setOpenToCalendar(!openToCalendar);
   };
 
-  const handleSelectProduct = ({ name, id }) => {
+  const handleSelectProduct = (name: string) => {
     setSelectedProduct(name);
     setSearch(name);
-
-    // getProductById(result?.data.id);
   };
 
   return (
@@ -101,14 +95,14 @@ const SearchBar = () => {
       {listOfProducts.length > 0 && selectedProduct === "" && (
         <div className="relative">
           <div className="absolute right-[-180px] sm:right-[-16px] bottom-[-8px] sm:top-4 z-10 rounded-2xl sm:rounded-b-2xl sm:border-b sm:border-x border-primary w-[calc(100vw-62px)] sm:w-[calc(100vw-62px)] bg-background ">
-            {listOfProducts.map((product) => (
+            {listOfProducts.map(({ name, id }) => (
               <div
-                key={product.id}
+                key={id}
                 className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
-                onClick={() => handleSelectProduct(product.name)}
+                onClick={() => handleSelectProduct(name)}
               >
                 <Search className="text-disabled" />
-                <p>{product.name}</p>
+                <p>{name}</p>
               </div>
             ))}
           </div>
