@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 
 const styles: Record<string, React.CSSProperties> = {
     detail: {
@@ -113,6 +114,19 @@ const AddProductForm = () => {
     const [listCategory, setListCaterogy] = useState<Category[]>([]);
     const [listProduct, setListProduct] = useState<Product1[]>([]);
     const [registry, setRegistry] = useState({});
+    const [ready, setReady] = useState(false);
+
+    const clearForm = () => {
+        setProductDetail({
+            nombre: "",
+            descripcion: "",
+            precio: 0,
+            marca: "",
+            politicas: "",
+            categoria: "",
+            imagenes: []
+        });
+    };
 
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -125,8 +139,13 @@ const AddProductForm = () => {
             if (data.length < 10 || data.length > 100) {
                 alert("El nombre debe tener entre 10 a 100 caracteres")
             } else {
-                setRegistry(productDetail.nombre);
-                alert("Producto registrado con éxito.");
+                let pictures = productDetail.imagenes;
+                if (pictures.length < 4 || pictures.length > 8) {
+                    alert("Debe seleccionar entre 4 y 8 fotos para registrar el producto.")
+                } else {
+                    setRegistry(productDetail.nombre);
+                    setReady(true);
+                }
             }
         }
         console.log(productDetail);
@@ -149,50 +168,83 @@ const AddProductForm = () => {
     const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProductDetail({ ...productDetail, categoria: e.target.value })
     }
+    const handleClearPhotos = () => {
+        setProductDetail({ ...productDetail, imagenes: [] })
+    }
     const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
         const eFiles = e.target.files;
-        if (eFiles && eFiles.length >= 4) {
+        if (eFiles && eFiles.length > 0) {
             const selectedFiles = Array.from(eFiles); // Convierte FileList a un array
-            setProductDetail((prevDetail) => ({ ...prevDetail, imagenes: selectedFiles }));
-        } else {
-            alert("Por favor, selecciona al menos 4 imágenes.");
+            setProductDetail((prevDetail) => ({
+                ...prevDetail,
+                imagenes: [...prevDetail.imagenes, ...selectedFiles], // Agrega las nuevas imágenes a las existentes
+            }));
         }
-    }
+    };
 
     useEffect(() => {
         if (registry !== "" || registry !== undefined || registry !== null) {
-            registerProduct();
+            if (ready) {
+                registerProduct();
+            }
         }
-    }, [registry]);
+    }, [ready]);
 
     const registerProduct = () => {
+        // Crear el FormData
         const formData = new FormData();
-        productDetail.imagenes.forEach((file: File, index: number) => {
-            formData.append(`imagen_${index + 1}`, file)
+
+        // Agregar los datos al FormData
+        formData.append("brand", productDetail.marca);
+        formData.append("categoryId", productDetail.categoria);
+        formData.append("description", productDetail.descripcion);
+        formData.append("name", productDetail.nombre);
+
+        productDetail.imagenes.forEach((file: File) => {
+            formData.append("photos", file);
         });
 
-        const buildData = {
-            brand: productDetail.marca,
-            categoryId: productDetail.categoria,
-            description: productDetail.descripcion,
-            name: productDetail.nombre,
-            photos: productDetail.imagenes,
-            price: productDetail.precio,
-            tagId: 1,
-        }
+        formData.append("price", String(productDetail.precio));
+        formData.append("tagId", "1");
+
         const url = "http://localhost:8080/api/v1/products";
         const token = localStorage.getItem("authToken") || null;
+
+        // Enviar la solicitud
         fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` || ""
+                "Authorization": `Bearer ${token}` || "",
             },
-            body: JSON.stringify(buildData)
+            body: formData,
         })
-            .then(result => result.json())
-            .catch(error => console.log(error));
-    }
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Respuesta del servidor:", data);
+                Swal.fire({
+                    title: "¡Guardado con Éxito!",
+                    text: "El producto ha sido guardado agregado al inventario exitosamente.",
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                    confirmButtonColor: "#008000",
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        clearForm();
+                    }
+                });
+
+            })
+            .catch((error) => {
+                console.error("Error al registrar el producto:", error);
+                alert("Ocurrió un error al registrar el producto. Inténtalo nuevamente.");
+            });
+    };
 
     useEffect(() => {
         const url = "http://localhost:8080/api/v1/products";
@@ -200,6 +252,8 @@ const AddProductForm = () => {
             .then(result => result.json())
             .then(info => {
                 setListProduct(info.data.content);
+                console.log(info.data);
+
             })
             .catch(error => console.log(error));
     }, []);
@@ -227,19 +281,19 @@ const AddProductForm = () => {
                     <div style={styles.column1}>
                         <div style={styles.inputContainer}>
                             <label htmlFor="nombre" style={{ fontSize: "13px" }}>Nombre</label>
-                            <input id='nombre' type="text" style={styles.input} placeholder="Ej.: AA0123K" onChange={handleNombre} required />
+                            <input id='nombre' type="text" style={styles.input} placeholder="Ej.: AA0123K" onChange={handleNombre} required value={productDetail.nombre}/>
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="descripcion" style={{ fontSize: "13px" }}>Descripción</label>
-                            <input id='descripcion' type="text" style={styles.input} placeholder="Ej.: Juego de mesa" onChange={handleDescripcion} required />
+                            <input id='descripcion' type="text" style={styles.input} placeholder="Ej.: Juego de mesa" onChange={handleDescripcion} required value={productDetail.descripcion}/>
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="precio" style={{ fontSize: "13px" }}>Precio</label>
-                            <input id='precio' type="float" style={styles.input} placeholder="Ej.: $0.00" onChange={handlePrecio} required />
+                            <input id='precio' type="float" style={styles.input} placeholder="Ej.: $0.00" onChange={handlePrecio} required value={productDetail.precio || ""}/>
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="marca" style={{ fontSize: "13px" }}>Marca</label>
-                            <input id='marca' type="text" style={styles.input} placeholder="Ej.: Acme" onChange={handleMarca} required />
+                            <input id='marca' type="text" style={styles.input} placeholder="Ej.: Acme" onChange={handleMarca} required value={productDetail.marca}/>
                         </div>
                         <div style={styles.inputContainer}>
                             <label htmlFor="politicas" style={{ fontSize: "13px" }}>Políticas de uso</label>
@@ -250,7 +304,8 @@ const AddProductForm = () => {
                                 placeholder="Ej.: Apto para mayores"
                                 style={styles.input}
                                 onChange={handlePoliticas}
-                                required />
+                                required 
+                                value={productDetail.politicas}/>
                         </div>
                     </div>
                     <div style={styles.column1}>
@@ -277,6 +332,7 @@ const AddProductForm = () => {
                         </div>
                         <div style={styles.inputContainerImage}>
                             <label htmlFor="imagenes" style={{ fontSize: "13px" }}>Imágenes</label>
+                            <button onClick={handleClearPhotos}>Limpiar fotos</button>
                             <div style={styles.labelChosen}>
                                 <input
                                     type="file"
