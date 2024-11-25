@@ -1,16 +1,22 @@
 "use client";
-import { CalendarDays, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "./ui/button";
-import { filterByName, getProductById, selectDates } from "@/lib/api_interface";
+import { filterByName, getProductById } from "@/lib/api_interface";
+import { DatePickerWithRange } from "./DateRangePicker";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
-  const [openFromCalendar, setOpenFromCalendar] = useState(false);
-  const [openToCalendar, setOpenToCalendar] = useState(false);
+  const [selectedDates, setSelectedDates] = useState({
+    from: null,
+    to: null,
+  });
+  const [productAvailability, setProductAvailability] = useState([]);
+
+  // const [openFromCalendar, setOpenFromCalendar] = useState(false);
+  // const [openToCalendar, setOpenToCalendar] = useState(false);
   const [listOfProducts, setListOfProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -28,17 +34,23 @@ const SearchBar = () => {
     }
   }, [search]);
 
-  const handleOpenFromCalendar = () => {
-    setOpenFromCalendar(!openFromCalendar);
-  };
+  useEffect(() => {
+    if (selectedProduct) {
+      console.log("Producto seleccionado (desde useEffect):", selectedProduct);
+    }
+  }, [selectedProduct]);
 
-  const handleOpenToCalendar = () => {
-    setOpenToCalendar(!openToCalendar);
-  };
-
-  const handleSelectProduct = (name: string) => {
+  const handleSelectProduct = async ({ name, id }) => {
     setSelectedProduct(name);
     setSearch(name);
+    const productsInfo = await getProductById(id);
+    const productAvailability = await productsInfo.orders;
+    setProductAvailability(productAvailability);
+  };
+
+  const handleDateChange = (dates) => {
+    console.log("Fechas seleccionadas:", dates);
+    setSelectedDates(dates);
   };
 
   return (
@@ -62,30 +74,22 @@ const SearchBar = () => {
       <div className="flex w-full gap-2 sm:gap-3">
         <div className="mx-auto relative flex flex-col items-start w-full max-w-72 sm:gap-3">
           <p className="text-primary">Desde</p>
-          <div onClick={handleOpenFromCalendar} className="max-w-72 w-full">
-            <Input
-              placeholder="dd/mm/aaaa"
-              className="border-gray-300 rounded-full bg-white placeholder-disabled w-full"
-            />
-            <CalendarDays className="hidden sm:block absolute right-2 top-10 text-disabled" />
-          </div>
-          {openFromCalendar && (
-            <Calendar className="absolute bg-white top-20 z-50" />
-          )}
+          <DatePickerWithRange
+            date={selectedDates}
+            onDateChange={handleDateChange}
+            productAvailability={productAvailability}
+            type="from"
+          />
         </div>
 
         <div className="mx-auto relative flex flex-col items-start max-w-72 w-full sm:gap-3">
           <p className="text-primary">Hasta</p>
-          <div onClick={handleOpenToCalendar} className="max-w-72 w-full">
-            <Input
-              placeholder="dd/mm/aaaa"
-              className="border-gray-300 rounded-full bg-white placeholder-disabled"
-            />
-            <CalendarDays className="hidden sm:block absolute right-2 top-10 text-disabled" />
-          </div>
-          {openToCalendar && (
-            <Calendar className="absolute bg-white top-20 z-50" />
-          )}
+          <DatePickerWithRange
+            date={selectedDates}
+            onDateChange={handleDateChange}
+            productAvailability={productAvailability}
+            type="to"
+          />
         </div>
       </div>
 
@@ -99,7 +103,7 @@ const SearchBar = () => {
               <div
                 key={id}
                 className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
-                onClick={() => handleSelectProduct(name)}
+                onClick={() => handleSelectProduct({ name, id })}
               >
                 <Search className="text-disabled" />
                 <p>{name}</p>
