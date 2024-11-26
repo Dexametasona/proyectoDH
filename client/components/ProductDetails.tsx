@@ -149,17 +149,15 @@ const ProductDetails = () => {
             <p>{product.description}</p>
           </div>
 
-          <div className="flex justify-center items-center p-2">
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row justify-center sm:justify-evenly gap-2 items-center p-2">
               <a
                 href="#"
-                className="text-secondary mr-12 underline"
+                className="text-secondary underline"
                 onClick={() => openModal(0)}
               >
                 Ver más
               </a>
-            </div>
-            <Button className="bg-secondary" onClick={openReservaModal}>Reservar</Button>
+            <Button className="bg-secondary w-full sm:w-60 rounded-full" onClick={openReservaModal}>Reservar</Button>
           </div>
           <GalleryModal
             images={product.photos}
