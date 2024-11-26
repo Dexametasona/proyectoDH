@@ -12,6 +12,7 @@ public record ProductResDto(
         CategoryResDto category,
         TagResDto tag,
         List<PhotoResDto> photos,
-        List<OrderShortDto> orders
+        List<OrderShortDto> orders,
+        Double avgScore
 ) {
 }

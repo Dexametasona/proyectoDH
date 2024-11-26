@@ -26,4 +26,6 @@ public interface ProductService extends GenericService<Product> {
                                 ProductFilters filters);
 
   List<Product> getProductNames(String name);
+
+  void averageProductScore (Long product_id);
 }

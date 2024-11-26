@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class UserEntity implements UserDetails {
   @Column(updatable = false, nullable = false)
   private LocalDateTime createdAt;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+  private List<Review> reviews=new ArrayList<>();
 
   @PrePersist
   public void onCreate(){

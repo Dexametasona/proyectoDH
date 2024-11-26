@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -40,9 +41,16 @@ public class Product {
   @JoinColumn(name = "tag_id")
   private Tag tag;
 
+  @Column(nullable = false)
+  private Double avgScore;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+  private List<Review> review = new ArrayList<>();
+
 
   @PrePersist
   public void onCreate(){
     this.status = ProductStatus.AVAILABLE;
+    this.avgScore=0.0;
   }
 }

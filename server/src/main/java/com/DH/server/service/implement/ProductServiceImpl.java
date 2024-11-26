@@ -9,6 +9,7 @@ import com.DH.server.model.entity.Photo;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.persistance.ProductRepository;
+import com.DH.server.persistance.ReviewRepository;
 import com.DH.server.service.interfaces.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class ProductServiceImpl implements ProductService {
   private final CategoryService categoryService;
   private final TagService tagService;
   private final PhotoService photoService;
+
+  private final ReviewRepository reviewRepository;
 
 
   @Override
@@ -174,6 +177,14 @@ public class ProductServiceImpl implements ProductService {
     if(name.trim().length() < 4) throw new OrderException("name must have at least 4 characters");
     Pageable limit = PageRequest.of(0, 10);
     return this.productRepository.findProductNames(limit, name);
+  }
+
+  public void averageProductScore (Long product_id){
+          Double average= reviewRepository.averageScorebyProduct(product_id);
+
+          Product product=this.getById(product_id);
+          product.setAvgScore(average);
+          productRepository.save(product);
   }
 
 }
