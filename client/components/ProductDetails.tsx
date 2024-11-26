@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
+import BookingModal from "./ReservaModal";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const ProductDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
+  const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
 
   const handleBackHome = () => {
     router.push("/home"); // Redirige al inicio
@@ -49,6 +51,14 @@ const ProductDetails = () => {
   };
 
   const closeModal = () => setIsModalOpen(false);
+
+  const openReservaModal = () => {
+    setIsReservaModalOpen(true);
+  };
+
+  const closeReservaModal = () => {
+    setIsReservaModalOpen(false);
+  };
 
   return (
     <section className="w-full">
@@ -149,7 +159,7 @@ const ProductDetails = () => {
                 Ver más
               </a>
             </div>
-            <Button className="bg-secondary">Reservar</Button>
+            <Button className="bg-secondary" onClick={openReservaModal}>Reservar</Button>
           </div>
           <GalleryModal
             images={product.photos}
@@ -158,6 +168,8 @@ const ProductDetails = () => {
             initialIndex={initialIndex}
           />
         </div>
+        {/* Modal de reserva */}
+        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} />
       </div>
     </section>
   );
