@@ -100,7 +100,7 @@ const ProductDetails = () => {
           <div className="text-center mb-5 mt-5 px-2">
             <h1 className="text-2xl font-bold text-primary">{product.name}</h1>
           </div>
-          <div className="flex flex-col gap-4 px-2 md:grid md:grid-cols-2 border-y border-primary-light">
+          <div className="flex flex-col gap-4 p-2 mt-2 md:grid md:grid-cols-2 border-y border-primary-light">
             <div className="flex flex-col gap-2 mb-2">
               <div className="flex items-center gap-2">
                 <DollarSignIcon className="text-grey-subtext" />
@@ -131,7 +131,7 @@ const ProductDetails = () => {
               </div>
             </div>
             {/* Características solo visual */}
-            <div className="flex md:flex-col gap-4 align-items lg:flex-row">
+            <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
               <div className="flex content-center flex-wrap gap-2">
                 <TruckIcon className="text-primary" /> Incluye transporte
               </div>
@@ -144,7 +144,7 @@ const ProductDetails = () => {
             </div>
           </div>
           {/* Descripción */}
-          <div className="mb-4 px-2">
+          <div className="mb-4 p-2">
             <h2 className="text-xl font-semibold text-primary">Descripción</h2>
             <p>{product.description}</p>
           </div>
