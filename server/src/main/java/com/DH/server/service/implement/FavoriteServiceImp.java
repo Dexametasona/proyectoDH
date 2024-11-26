@@ -3,36 +3,50 @@ package com.DH.server.service.implement;
 import com.DH.server.model.entity.Favorite;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
+import com.DH.server.model.enums.ProductStatus;
 import com.DH.server.persistance.FavoriteRepository;
+import com.DH.server.service.interfaces.AuthService;
+import com.DH.server.service.interfaces.FavoriteService;
+import com.DH.server.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FavoriteServiceImp {
-    @Autowired
-    private FavoriteRepository favoriteRepository;
+public class FavoriteServiceImp implements FavoriteService {
 
-    public List<Favorite> getFavoritesByUser(Long userId) {
-        return favoriteRepository.findByUserId(userId);
+    private final FavoriteRepository favoriteRepository;
+    private final ProductService productService;
+    private final AuthService authService;
+    @Override
+    public List<Favorite> getFavoritesByUser(UserEntity authUser) {
+        return favoriteRepository.findByUser(authUser);
     }
-    public void addFavorite(Long userId, Long productId) {
-        if (!favoriteRepository.existsByUserIdAndProductId(userId, productId)) {
+    @Override
+    public List<Favorite> addFavorite(UserEntity authUser, Long productId) {
+        Product product = productService.getById(productId);
+        if (product.getStatus() != ProductStatus.AVAILABLE) {
+            throw new IllegalArgumentException("The product is not available and cannot be added to favorites.");
+        } else if(!favoriteRepository.existsByUserAndProductId(authUser, productId)) {
             Favorite favorite = new Favorite();
-            UserEntity user = new UserEntity();
-            user.setId(userId);
-            Product product = new Product();
+            authUser.setId(authUser.getId());
             product.setId(productId);
-
-            favorite.setUser(user);
+            favorite.setUser(authUser);
             favorite.setProduct(product);
             favoriteRepository.save(favorite);
+        } else {
+            throw new IllegalArgumentException("The product is already in your favorites.");
         }
-}
-    public void removeFavorite(Long userId, Long productId) {
-        favoriteRepository.deleteByUserIdAndProductId(userId, productId);
+        return getFavoritesByUser(authUser);
+    }
+    @Override
+    public List<Favorite> removeFavorite(UserEntity authUser, Long productId) {
+        if (!favoriteRepository.existsByUserAndProductId(authUser, productId)) {
+            throw new IllegalArgumentException("The product is not in your favorites.");
+        }
+        favoriteRepository.deleteByUserAndProductId(authUser, productId);
+        return getFavoritesByUser(authUser);
     }
 }
