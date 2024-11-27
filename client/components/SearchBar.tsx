@@ -15,8 +15,6 @@ const SearchBar = () => {
   });
   const [productAvailability, setProductAvailability] = useState([]);
 
-  // const [openFromCalendar, setOpenFromCalendar] = useState(false);
-  // const [openToCalendar, setOpenToCalendar] = useState(false);
   const [listOfProducts, setListOfProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -34,24 +32,16 @@ const SearchBar = () => {
     }
   }, [search]);
 
-  useEffect(() => {
-    if (selectedProduct) {
-      console.log("Producto seleccionado (desde useEffect):", selectedProduct);
-    }
-  }, [selectedProduct]);
-
   const handleSelectProduct = async ({ name, id }) => {
     setSelectedProduct(name);
     setSearch(name);
     const productsInfo = await getProductById(id);
     setSelectedProduct(productsInfo);
-    console.log(productsInfo.orders);
     const productAvailability = await productsInfo.orders;
     setProductAvailability(productAvailability);
   };
 
   const handleDateChange = (dates) => {
-    console.log("Fechas seleccionadas:", dates);
     setSelectedDates(dates);
   };
 
