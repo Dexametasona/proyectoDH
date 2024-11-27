@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -56,4 +57,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
   @Query("SELECT p FROM Product p WHERE p.name LIKE %:name%")
   List<Product> findProductNames(Pageable pageable, String name);
 
+  Optional<Product> findByName(String name);
 }

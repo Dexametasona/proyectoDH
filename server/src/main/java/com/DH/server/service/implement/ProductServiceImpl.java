@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,9 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   @Override
   public Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId) {
+
+    Optional<Product> currentProduct =  this.productRepository.findByName(entity.getName());
+    if(currentProduct.isPresent()) throw new ProductException("Product name is already in use");
     List<Photo> photosUrl = photos
             .stream()
             .map(photo -> {
