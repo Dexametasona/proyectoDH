@@ -43,4 +43,8 @@ public class Order {
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "review_id",unique = true)
+  private Review review;
 }
