@@ -6,8 +6,7 @@ import {
   login,
   logout,
 } from "@/services/authService";
-import { User } from "@/types";
-import { IAuthReq, IAuthRes } from "@/types/IAuth";
+import { IAuthReq, IAuthRes, User } from "@/types/IAuth";
 import {
   ReactNode,
   useContext,
@@ -19,7 +18,7 @@ import {
 interface AuthContextType {
   user: User | null;
   authData: IAuthRes | null;
-  loginContext: (credential: IAuthReq) => Promise<void>;
+  loginContext: (credential: IAuthReq) => Promise<IAuthRes>;
   logoutContext:()=>void
 }
 
@@ -53,6 +52,7 @@ export const AuthContextProvider: React.FC<{
       setAuthData(authData);
       const currentUser = await getAuthUser();
       setUser(currentUser);
+      return authData;
     } catch (error) {
       console.error(error)
       setAuthData(null);
@@ -60,6 +60,7 @@ export const AuthContextProvider: React.FC<{
       throw error;
     }
   };
+
   const logoutContext = () => {
     logout();
     setUser(null)
