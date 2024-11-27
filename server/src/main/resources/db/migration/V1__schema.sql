@@ -28,7 +28,7 @@ CREATE TABLE `product` (
   `category_id` bigint DEFAULT NULL,
   `tag_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UKnamed8b65v9fd1d68tdsob9ck` (`email`)
+  UNIQUE KEY `UKnamed8b65v9fd1d68tdsob9ck` (`name`),
   KEY `FK1mtsbur82frn64de7balymq9s` (`category_id`),
   KEY `FKskejd8b65v9fd1d68tdsob9ck` (`tag_id`),
   CONSTRAINT `FK1mtsbur82frn64de7balymq9s` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
