@@ -23,26 +23,6 @@ function Calendar({
   const [year, setYear] = React.useState(month.getFullYear());
   const [currentMonth, setCurrentMonth] = React.useState(month);
 
-  const changeMonth = (direction: "previous" | "next") => {
-    const newMonth = new Date(currentMonth);
-    if (direction === "previous") {
-      newMonth.setMonth(currentMonth.getMonth() - 1);
-    } else {
-      newMonth.setMonth(currentMonth.getMonth() + 1);
-    }
-    setCurrentMonth(newMonth);
-  };
-
-  const changeYear = (direction: "previous" | "next") => {
-    const newYear = new Date(currentMonth);
-    if (direction === "previous") {
-      newYear.setFullYear(currentMonth.getFullYear() - 1);
-    } else {
-      newYear.setFullYear(currentMonth.getFullYear() + 1);
-    }
-    setCurrentMonth(newYear);
-  };
-
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -104,49 +84,6 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
-      caption={
-        <Caption>
-          <div className="flex justify-center items-center">
-            {/* Control de mes */}
-            <div className="flex items-center">
-              <button
-                onClick={() => changeMonth("previous")}
-                className="h-4 w-4 p-0 opacity-50 hover:opacity-100"
-              >
-                <ChevronLeftIcon className="h-4 w-4" />
-              </button>
-              <span className="mx-2 text-lg font-medium">
-                {currentMonth.toLocaleString("default", { month: "long" })}
-              </span>
-              <button
-                onClick={() => changeMonth("next")}
-                className="h-4 w-4 p-0 opacity-50 hover:opacity-100"
-              >
-                <ChevronRightIcon className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Control de año */}
-            <div className="ml-4 flex items-center">
-              <button
-                onClick={() => changeYear("previous")}
-                className="h-4 w-4 p-0 opacity-50 hover:opacity-100"
-              >
-                <ChevronLeftIcon className="h-4 w-4" />
-              </button>
-              <span className="mx-2 text-lg font-medium">
-                {currentMonth.getFullYear()}
-              </span>
-              <button
-                onClick={() => changeYear("next")}
-                className="h-4 w-4 p-0 opacity-50 hover:opacity-100"
-              >
-                <ChevronRightIcon className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </Caption>
-      }
       {...props}
     />
   );

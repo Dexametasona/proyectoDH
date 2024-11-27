@@ -44,6 +44,8 @@ const SearchBar = () => {
     setSelectedProduct(name);
     setSearch(name);
     const productsInfo = await getProductById(id);
+    setSelectedProduct(productsInfo);
+    console.log(productsInfo.orders);
     const productAvailability = await productsInfo.orders;
     setProductAvailability(productAvailability);
   };
@@ -89,6 +91,7 @@ const SearchBar = () => {
             onDateChange={handleDateChange}
             productAvailability={productAvailability}
             type="to"
+            orders={selectedProduct.orders}
           />
         </div>
       </div>

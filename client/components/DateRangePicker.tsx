@@ -19,6 +19,7 @@ interface DatePickerWithRangeProps
   date: DateRange | null;
   onDateChange: (dates: DateRange | null) => void;
   type: "from" | "to";
+  orders?: Array<{ shipStart: string; shipEnd: string }>;
 }
 
 export function DatePickerWithRange({
@@ -26,15 +27,15 @@ export function DatePickerWithRange({
   date,
   onDateChange,
   type,
+  orders = [],
 }: DatePickerWithRangeProps) {
-  const renderAvailability = (date) => {
-    // Lógica para verificar si una fecha está disponible
-    const isAvailable = productAvailability.some((availability) => {
-      // Define tu lógica para comparar la fecha actual con la disponibilidad
-      return availability.date === date; // Ejemplo básico, ajusta según tu API
-    });
-    return isAvailable ? "Disponible" : "No disponible";
-  };
+  // Crear un rango de fechas hardcodeado para pruebas
+  const disabledDates = [
+    {
+      from: new Date(2024, 2, 20), // 20 de marzo 2024
+      to: new Date(2024, 2, 25), // 25 de marzo 2024
+    },
+  ];
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -66,6 +67,7 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={onDateChange}
             numberOfMonths={2}
+            disabled={disabledDates}
           />
         </PopoverContent>
       </Popover>
