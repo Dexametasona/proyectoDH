@@ -1,20 +1,21 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { validateEmail, validatePassword } from "@/lib/utils";
-import { registerUser } from "@/lib/api_interface";
+import { signIn } from "@/services/authService";
+import { isAxiosError } from "axios";
+import { IApiRes } from "@/types/IApiRes";
 
 const RegisterUser = () => {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -42,24 +43,35 @@ const RegisterUser = () => {
     if (!password || !validatePassword(password)) {
       isValid = false;
       setError(
-        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one special character",
+        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one special character"
       );
     }
 
-    if (!isValid) return;
+    if (!isValid) {
+      setLoading(false)
+      return;
+    }
 
-    const success = await registerUser({
-      name,
-      lastname,
-      email,
-      password,
-      setLoading,
-    });
+    try {
+      setLoading(true);
+      await signIn({ name, lastname, email, password });
+      setMessage("Usuario registrado, verifique su correo.")
+    } catch (error: unknown) {
+      if(isAxiosError(error) && error.response){
+        const response = error.response.data as IApiRes<unknown>;
+        setError(response.message); 
+      }
+      else{
+        setError("Error inesperado, vuelve a intentarlo mas tarde.");
+      }
+      console.error("Error al registrarse", error);
 
-    if (success) {
-      router.push("/login");
-    } else {
-      setError("Sign-up failed. Please try again.");
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        setMessage(null);
+        setError(null)
+      }, 3000);
     }
   };
 
@@ -68,7 +80,7 @@ const RegisterUser = () => {
   return (
     <div className="overflow-hidden  flex flex-col items-center justify-center sm:w-full sm:px-4">
       <form
-        className="bg-white shadow-lg rounded-2xl px-6 py-8 w-full max-w-md sm:px-2 pt-6 pb-8 w-[480px] sm:w-full sm:max-w-sm"
+        className="bg-white shadow-lg rounded-2xl px-6 py-8 max-w-md sm:px-2 pt-6 pb-8 w-[480px] sm:w-full sm:max-w-sm"
         onSubmit={handleSubmit}
       >
         <h2 className="text-xl font-bold mb-6 text-primary">REGÍSTRATE</h2>
@@ -76,51 +88,50 @@ const RegisterUser = () => {
         <div className="mb-6">
           <p className="font-bold text-gray-700 mb-2">Información personal</p>
 
-          
-            <Input
-              className="rounded-full"
-              id="name"
-              type="text"
-              placeholder="Nombre"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            
-            <Input
-              className=" mt-4 rounded-full"
-              id="lastname"
-              type="text"
-              placeholder="Apellido"
-              value={lastname}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-       
+          <Input
+            className="rounded-full"
+            id="name"
+            type="text"
+            placeholder="Nombre"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <Input
+            className=" mt-4 rounded-full"
+            id="lastname"
+            type="text"
+            placeholder="Apellido"
+            value={lastname}
+            onChange={(e) => setLastName(e.target.value)}
+          />
         </div>
 
         <div className="mb-6">
-          <p  className="font-bold text-gray-700 mb-2">Usuario y contraseña</p>
+          <p className="font-bold text-gray-700 mb-2">Usuario y contraseña</p>
 
-            <Input
-              className="rounded-full"
-              id="email"
-              type="email"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+          <Input
+            className="rounded-full"
+            id="email"
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-
-            <Input
-              className="mt-4 rounded-full"
-              id="password"
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <Input
+            className="mt-4 rounded-full"
+            id="password"
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
         {error && <p className="text-error text-xs mb-4">{error}</p>}
+
+        {message && <p className="text-success text-md mb-4">{message}</p>}
 
         <div className="flex items-center justify-between">
           <Button

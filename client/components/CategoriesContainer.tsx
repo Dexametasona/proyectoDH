@@ -5,8 +5,7 @@ import ProductsCards from "./ProductsCards";
 const CategoriesContainer = ({
   name,
   cards,
-  verticalColumnMobile,
-  gap,
+  verticalColumnMobile
 }: CardsContainerProps) => {
   return (
     <section className="flex flex-col gap-4 px-2 mt-12 place-content-evenly ">
