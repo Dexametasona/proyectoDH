@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { navbarOptions } from "@/constants";
 import { useAuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 const Header = () => {
   const router = useRouter();
@@ -41,20 +42,23 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Image
-        width={54}
-        height={30}
-        src={"/assets/icons/logo-mobile.svg"}
-        alt={"logo"}
-        className="sm:hidden"
-      />
-      <Image
-        width={128}
-        height={48}
-        src={"/assets/icons/logo-desktop.svg"}
-        alt={"logo"}
-        className="hidden sm:block"
-      />
+      <Link href="/home" className="sm:hidden cursor-pointer">
+        <Image
+          width={54}
+          height={30}
+          src={"/assets/icons/logo-mobile.svg"}
+          alt={"logo"}
+        />
+      </Link>
+      <Link href="/home" className="hidden sm:block cursor-pointer">
+        <Image
+          width={128}
+          height={48}
+          src={"/assets/icons/logo-desktop.svg"}
+          alt={"logo"}
+        />
+      </Link>
+
       <div className="gap-8 md:flex hidden cursor-pointer text-white">
         {navbarOptions.map((option) => (
           <p
@@ -83,8 +87,9 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent sideOffset={10}>
                   <DropdownMenuItem
-                  className="hover:bg-slate-400 ease-in-out transition-all duration-200"
-                   onClick={() => logoutContext()}>
+                    className="hover:bg-slate-400 ease-in-out transition-all duration-200"
+                    onClick={() => logoutContext()}
+                  >
                     <p className="cursor-pointer">Cerrar sesión</p>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -101,13 +106,13 @@ const Header = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent sideOffset={10}>
                     <DropdownMenuItem
-                    className="hover:bg-slate-400 ease-in-out transition-all duration-300"
+                      className="hover:bg-slate-400 ease-in-out transition-all duration-300"
                       onClick={() => handleNavigation("/signup")}
                     >
                       <p className="cursor-pointer">Crear cuenta</p>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                    className="hover:bg-slate-400 ease-in-out transition-all duration-300"
+                      className="hover:bg-slate-400 ease-in-out transition-all duration-300"
                       onClick={() => handleNavigation("/login")}
                     >
                       <p className="cursor-pointer">Iniciar sesión</p>
