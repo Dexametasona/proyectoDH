@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/lib/axiosInstance";
 
 import { API_URL } from "@/constants/environments";
 const BASE_URL = API_URL+"/api/v1"
@@ -54,3 +54,28 @@ export const filterByName = async (name: string) => {
 };
 
 // export const selectDates = async (id) => {};
+
+export const createDate = async (
+  productId: number,
+  shipAddress: string,
+  shipEnd: string,
+  shipStart: string,
+  remarks: string,
+) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/dates`, {
+      productId,
+      shipAddress,
+      shipEnd,
+      shipStart,
+      remarks,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating date range:", error);
+    return null;
+  }
+};
+
+createDate(4, "Test", "2024-12-15", "2024-12-08", "comentarios");
