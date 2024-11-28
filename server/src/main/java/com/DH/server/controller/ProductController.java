@@ -5,6 +5,7 @@ import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
 import com.DH.server.model.dto.request.ProductFilters;
 import com.DH.server.model.dto.request.ProductReqDto;
+import com.DH.server.model.dto.response.ProductResDto;
 import com.DH.server.model.dto.response.ProductShortDto;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
@@ -66,6 +67,21 @@ public class ProductController {
     Page<ProductShortDto> productsResDto = products.map(productMapper::toShortResponse);
     return ResponseEntity.ok(
             new ApiResponseDto<>(this.productMapper.toCustomPage(productsResDto)));
+  }
+
+
+  @Operation(summary = "Get products", description = "Get full products with pagination and filters")
+  @GetMapping("/all")
+  public ResponseEntity<?> getFullProducts(
+          @Parameter(description = "Pagination and sorting")
+          @Nullable Pageable page,
+          @Parameter(description = "Filters")
+          @Nullable
+          @Valid ProductFilters filters) {
+    Page<Product> products = this.productService.getAllByFilters(page, filters);
+    Page<ProductResDto> productsResDto = products.map(productMapper::toResponse);
+    return ResponseEntity.ok(
+            new ApiResponseDto<>(this.productMapper.toFullCustomPage(productsResDto)));
   }
 
   @Operation(summary = "Get random products", description = "Get 20 random products")
