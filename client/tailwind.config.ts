@@ -20,6 +20,7 @@ const config: Config = {
         secondary: "var(--secondary)",
         "grey-subtext": "var(--color-grey-subtext)",
         "primary-light": "var(--primary-light)",
+        "primary-soft": "var(--primary-soft)",
         success: "var(--color-success)",
         error: "var(--color-error)",
         active: "var(--color-active)",

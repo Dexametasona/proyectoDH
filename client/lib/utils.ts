@@ -12,7 +12,7 @@ export const validateEmail = (email: string) => {
 };
 
 export const validatePassword = (password: string) => {
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+  const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*(\W|_))(?!.* ).{8,16}$/;
   return re.test(password);
 };
 

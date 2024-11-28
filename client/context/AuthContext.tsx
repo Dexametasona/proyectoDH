@@ -1,19 +1,26 @@
 "use client";
 
 import {
+  getAuhtData,
+  getAuthUser,
+  login,
+  logout,
+} from "@/services/authService";
+import { User } from "@/types";
+import { IAuthReq, IAuthRes } from "@/types/IAuth";
+import {
   ReactNode,
   useContext,
   createContext,
   useState,
   useEffect,
-  Dispatch,
-  SetStateAction,
 } from "react";
 
 interface AuthContextType {
-  isUser: boolean;
-  isAdmin: boolean;
-  setIsAdmin: Dispatch<SetStateAction<boolean>>;
+  user: User | null;
+  authData: IAuthRes | null;
+  loginContext: (credential: IAuthReq) => Promise<void>;
+  logoutContext:()=>void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,25 +28,51 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const [isUser, setIsUser] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [authData, setAuthData] = useState<IAuthRes | null>(null);
 
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    console.log(authToken);
-    if (!authToken) {
-      setIsUser(false);
-    } else {
-      setIsUser(true);
-    }
+    (async () => {
+      try {
+        const currentUser = await getAuthUser();
+        const currentAuthData = getAuhtData()
+        setUser(currentUser);
+        setAuthData(currentAuthData)
+        return;
+      } catch (error: unknown) {
+        console.error("Usuario no autenticado: ", error);
+        setUser(null);
+        setAuthData(null);
+      }
+    })();
   }, []);
+
+  const loginContext = async (credential: IAuthReq) => {
+    try {
+      const authData = await login(credential);
+      setAuthData(authData);
+      const currentUser = await getAuthUser();
+      setUser(currentUser);
+    } catch (error) {
+      console.error(error)
+      setAuthData(null);
+      setUser(null);
+      throw error;
+    }
+  };
+  const logoutContext = () => {
+    logout();
+    setUser(null)
+    setAuthData(null)
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        isUser,
-        isAdmin,
-        setIsAdmin,
+        user,
+        authData,
+        loginContext,
+        logoutContext
       }}
     >
       {children}
@@ -52,7 +85,7 @@ export const useAuthContext = () => {
 
   if (!context) {
     throw new Error(
-      "useAuthContext must be within an AuthContextProvider context",
+      "useAuthContext must be within an AuthContextProvider context"
     );
   }
 
