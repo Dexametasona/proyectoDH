@@ -1,3 +1,4 @@
+import axios from "axios";
 
 import { AuthenticateUserProps, RegisterUserProps } from "@/types";
 import axios from "@/lib/axiosInstance";
@@ -100,3 +101,5 @@ export const filterByName = async (name: string) => {
     return response;
   } catch (error) {}
 };
+
+// export const selectDates = async (id) => {};
