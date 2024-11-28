@@ -30,7 +30,6 @@ export function DatePickerWithRange({
   orders = [],
 }: DatePickerWithRangeProps) {
   const today = new Date();
-<<<<<<< HEAD
 
   const disabledRanges = orders.map((order) => ({
     from: parseISO(order.shipStart),
@@ -55,33 +54,6 @@ export function DatePickerWithRange({
         alert("El rango seleccionado incluye fechas no disponibles.");
       }
     };
-=======
-  const disabledDates = [
-    ...orders.map((order) => ({
-      from: new Date(order.shipStart),
-      to: new Date(order.shipEnd),
-    })),
-    { before: today },
-  ];
-  const handleSelect = (selectedDate: DateRange | undefined) => {
-    if (
-      selectedDate &&
-      !disabledDates.some(({ from, to, before }) => {
-        const startInvalid = before ? selectedDate.from < before : false;
-        const endInvalid = before ? selectedDate.to < before : false;
-
-        const withinRange =
-          from && to
-            ? selectedDate.from >= from && selectedDate.to <= to
-            : false;
-
-        return startInvalid || endInvalid || withinRange;
-      })
-    ) {
-      onDateChange(selectedDate);
-    }
-  };
->>>>>>> 6c9795be05702ec4a4a5fb62d803b04076eeb740
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
