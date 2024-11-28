@@ -1,8 +1,13 @@
 
+<<<<<<< HEAD
 import { AuthenticateUserProps, RegisterUserProps } from "@/types";
 import axios from "@/lib/axiosInstance";
 
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
+=======
+import { API_URL } from "@/constants/environments";
+const BASE_URL = API_URL+"/api/v1"
+>>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
@@ -41,55 +46,6 @@ export const getAllUsers = async () => {
   }
 };
 
-export const authenticateUser = async ({
-  email,
-  password,
-}: AuthenticateUserProps) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, {
-      email,
-      password,
-    });
-    if (response.status === 200) {
-      const { token } = response.data.data;
-      localStorage.setItem("authToken", token);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error:", error);
-    return false;
-  }
-};
-
-export const registerUser = async ({
-  name,
-  lastname,
-  email,
-  password,
-  setLoading,
-}: RegisterUserProps) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/auth/register`, {
-      name,
-      lastname,
-      email,
-      password,
-    });
-
-    if (response.status === 200 || response.status === 201) {
-      const { token } = response.data.data;
-      localStorage.setItem("authToken", token);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
 export const filterByName = async (name: string) => {
   try {
     const response = await axios.get(
@@ -98,5 +54,39 @@ export const filterByName = async (name: string) => {
 
     console.log(response);
     return response;
+<<<<<<< HEAD
   } catch (error) {}
 };
+=======
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+// export const selectDates = async (id) => {};
+
+export const createDate = async (
+  productId: number,
+  shipAddress: string,
+  shipEnd: string,
+  shipStart: string,
+  remarks: string,
+) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/dates`, {
+      productId,
+      shipAddress,
+      shipEnd,
+      shipStart,
+      remarks,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating date range:", error);
+    return null;
+  }
+};
+
+createDate(4, "Test", "2024-12-15", "2024-12-08", "comentarios");
+>>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f

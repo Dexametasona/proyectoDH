@@ -32,9 +32,9 @@ const ProductsCards = ({
           </p>
         </div>
       ) : (
-        <div className="bg-[var(--secondary)] rounded-t-lg shadow-lg p-4">
+        <div className="rounded-t-lg shadow-lg">
           <div
-            className="mt-2 text-center mb-4 bg-white p-3 rounded-t-lg shadow-md"
+            className="mt-2 text-center bg-white p-3 rounded-t-lg shadow-md"
             onClick={() => handleRedirect("product")}
           >
             <div className="flex justify-center item-center">
@@ -50,7 +50,7 @@ const ProductsCards = ({
 
             <div className="justify-items-start">
               <p className="text-text-color font-semibold"> {name} </p>
-              <p className="text-primary font-bold text-lg"> ${price}/hora </p>
+              <p className="text-primary font-bold text-lg"> ${price}/dia </p>
             </div>
           </div>
         </div>

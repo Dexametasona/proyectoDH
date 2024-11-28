@@ -1,0 +1,16 @@
+.fieldBox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 16px;
+  grid-row-gap: 8px;
+}
+.fieldPhoto {
+  grid-area: 2 / 2 / 6 / 3;
+  
+}
+.fieldCategory {
+  grid-area: 1 / 2 / 3 / 3;
+  display: flex;
+  flex-direction: column;
+}
