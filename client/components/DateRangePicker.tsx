@@ -30,25 +30,24 @@ export function DatePickerWithRange({
   orders = [],
 }: DatePickerWithRangeProps) {
   const today = new Date();
-  // Crear un rango de fechas hardcodeado para pruebas
   const disabledDates = [
     ...orders.map((order) => ({
       from: new Date(order.shipStart),
       to: new Date(order.shipEnd),
     })),
-    { before: today }, // Deshabilitar todas las fechas antes de hoy
+    { before: today },
   ];
   const handleSelect = (selectedDate: DateRange | undefined) => {
-    // Verificar que el rango no incluya fechas deshabilitadas
     if (
       selectedDate &&
       !disabledDates.some(({ from, to, before }) => {
         const startInvalid = before ? selectedDate.from < before : false;
         const endInvalid = before ? selectedDate.to < before : false;
 
-        const withinRange = from && to
-          ? selectedDate.from >= from && selectedDate.to <= to
-          : false;
+        const withinRange =
+          from && to
+            ? selectedDate.from >= from && selectedDate.to <= to
+            : false;
 
         return startInvalid || endInvalid || withinRange;
       })
@@ -75,7 +74,7 @@ export function DatePickerWithRange({
             ) : (
               <span className="text-disabled">dd/mm/aa</span>
             )}
-            <CalendarIcon />
+            <CalendarIcon className="absolute right-4 text-disabled" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
