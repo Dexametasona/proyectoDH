@@ -2,8 +2,6 @@ import axios from "axios";
 
 import { AuthenticateUserProps, RegisterUserProps } from "@/types";
 
-const BASE_URL = "http://localhost:8080/api/v1";
-
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
