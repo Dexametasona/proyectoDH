@@ -1,7 +1,10 @@
 package com.DH.server.model.dto;
 
+import com.DH.server.model.dto.response.FavoriteResDto;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter

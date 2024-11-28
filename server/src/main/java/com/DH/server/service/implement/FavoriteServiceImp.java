@@ -1,5 +1,6 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.model.dto.response.FavoriteResDto;
 import com.DH.server.model.entity.Favorite;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
@@ -10,8 +11,10 @@ import com.DH.server.service.interfaces.FavoriteService;
 import com.DH.server.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,28 +28,40 @@ public class FavoriteServiceImp implements FavoriteService {
         return favoriteRepository.findByUser(authUser);
     }
     @Override
-    public List<Favorite> addFavorite(UserEntity authUser, Long productId) {
+    public List<FavoriteResDto> addFavorite(UserEntity authUser, Long productId) {
         Product product = productService.getById(productId);
         if (product.getStatus() != ProductStatus.AVAILABLE) {
             throw new IllegalArgumentException("The product is not available and cannot be added to favorites.");
         } else if(!favoriteRepository.existsByUserAndProductId(authUser, productId)) {
             Favorite favorite = new Favorite();
-            authUser.setId(authUser.getId());
-            product.setId(productId);
             favorite.setUser(authUser);
             favorite.setProduct(product);
             favoriteRepository.save(favorite);
         } else {
             throw new IllegalArgumentException("The product is already in your favorites.");
         }
-        return getFavoritesByUser(authUser);
+        return favoriteRepository.findByUser(authUser).stream()
+                .map(fav -> new FavoriteResDto(
+                        fav.getProduct().getId(),
+                        fav.getProduct().getName(),
+                        fav.getProduct().getBrand(),
+                        fav.getProduct().getPrice()))
+                .collect(Collectors.toList());
     }
     @Override
-    public List<Favorite> removeFavorite(UserEntity authUser, Long productId) {
+    @Transactional
+    public List<FavoriteResDto> removeFavorite(UserEntity authUser, Long productId) {
+        Product product = productService.getById(productId);
         if (!favoriteRepository.existsByUserAndProductId(authUser, productId)) {
             throw new IllegalArgumentException("The product is not in your favorites.");
         }
         favoriteRepository.deleteByUserAndProductId(authUser, productId);
-        return getFavoritesByUser(authUser);
+        return favoriteRepository.findByUser(authUser).stream()
+                .map(fav -> new FavoriteResDto(
+                        fav.getProduct().getId(),
+                        fav.getProduct().getName(),
+                        fav.getProduct().getBrand(),
+                        fav.getProduct().getPrice()))
+                .collect(Collectors.toList());
     }
 }
