@@ -44,6 +44,12 @@ public abstract class ProductMapper {
   @Mapping(target = "isLast", source = "last")
   public abstract CustomPage<ProductShortDto> toCustomPage(Page<ProductShortDto> page);
 
+  @Mapping(target = "currentPage", source = "number")
+  @Mapping(target = "pageSize", source = "size")
+  @Mapping(target = "isFirst", source = "first")
+  @Mapping(target = "isLast", source = "last")
+  public abstract CustomPage<ProductResDto> toFullCustomPage(Page<ProductResDto> page);
+
   public ProductStatus map(Integer id){
     return ProductStatus.fromId(id);
   }
