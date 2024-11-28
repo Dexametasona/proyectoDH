@@ -1,368 +1,306 @@
-import React, { useEffect, useState } from 'react'
-import Swal from 'sweetalert2'
-
-const styles: Record<string, React.CSSProperties> = {
-    detail: {
-        margin: "1em",
-        border: "1px solid #EFF0F4",
-        padding: "1em",
-        backgroundColor: "#F7F8FA",
-        borderRadius: "0.5em",
-        fontWeight: "bold"
-    },
-    formContainer: {
-        margin: "16px",
-        padding: "25px",
-        border: "1px solid #EFF0F4",
-        borderRadius: "0.5em",
-        display: "flex",
-        flexDirection: "column",
-        gap: "25px"
-    },
-    columnsContainer: {
-        display: "flex",
-        justifyContent: "",
-        gap: "44px",
-        width: "100%"
-    },
-    column1: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        width: "100%"
-    },
-    inputContainer: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "3px"
-    },
-    inputContainerImage: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center"
-    },
-    input: {
-        fontSize: "12px",
-        border: "1px solid #EFF0F4",
-        padding: "12px",
-        borderRadius: "8px",
-        width: "100%"
-    },
-    labelChosen: {
-        display: 'flex',
-        alignItems: "center",
-        gap: "4px",
-        padding: '2px 8px',
-        backgroundColor: 'black',
-        color: 'white',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontSize: "12px"
-    },
-    btnGuardar: {
-        fontSize: "14px",
-        backgroundColor: "#AFAFAF",
-        color: "white",
-        padding: "0.5em 1em",
-        borderRadius: "5px",
-    },
-    imagesContainer: {
-        overflow: "scroll",
-        overflowX: "hidden",
-        border: "1px solid #EFF0F4",
-        borderRadius: "5px",
-        padding: "1em",
-        width: "100%",
-        height: "100%",
-        maxHeight: "232px",
-        display: "flex",
-        justifyContent: "left",
-        flexWrap: "wrap",
-        gap: "1em",
-    },
-    imageDiv: {
-        display: "flex",
-        alignItems: "end",
-        width: "125px",
-        borderRadius: "5px",
-    }
-}
+import { Button } from "@/components/ui/button";
+import ProductInput from "@/components/ui/ProductInput";
+import { IProductReq } from "@/types/IProduct";
+import React, { useEffect, useState } from "react";
+import style from "./addProduct.module.css";
+import Image from "next/image";
+import Swal from 'sweetalert2';
+import { getAllCategories } from "@/services/categoryService";
+import { ICategoryRes } from "@/types/ICategory";
+import {
+  validateProductBrand,
+  validateProductDescription,
+  validateProductIds,
+  validateProductName,
+  validateProductPhotos,
+  validateProductPrice,
+} from "@/lib/utils";
+import { createProduct } from "@/services/productService";
+import { useAuthContext } from "@/context/AuthContext";
+import { isAxiosError } from "axios";
+import { IApiRes } from "@/types/IApiRes";
 
 const AddProductForm = () => {
+  const emptyProduct: IProductReq = {
+    name: "",
+    description: "",
+    price: 0,
+    brand: "",
+    categoryId: 1,
+    tagId: 0,
+    photos: [],
+  };
+  const { authData } = useAuthContext();
+  const [product, setProduct] = useState(emptyProduct);
+  const [listCategory, setListCaterogy] = useState<ICategoryRes[]>([]);
+  const [validationErr, setValidationErr] = useState<string | null>(null);
+  const [responseErr, setResponseErr] = useState<string | null>(null);
 
-    interface Product {
-        nombre: string;
-        descripcion: string;
-        precio: number;
-        marca: string;
-        politicas: string;
-        categoria: string;
-        imagenes: File[];
+  useEffect(() => {
+    (async () => {
+      const response = await getAllCategories();
+      setListCaterogy(response);
+    })();
+  }, []);
+
+  const handleNombre = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProduct({ ...product, name: e.target.value });
+  };
+  const handleDescripcion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProduct({ ...product, description: e.target.value });
+  };
+  const handlePrecio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProduct({ ...product, price: parseFloat(e.target.value) || 0 });
+  };
+  const handleMarca = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProduct({ ...product, brand: e.target.value });
+  };
+  const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setProduct({ ...product, categoryId: Number(e.target.value) });
+  };
+  const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const eFiles = e.target.files;
+    if (eFiles && eFiles.length > 0) {
+      const selectedFiles = Array.from(eFiles); // Convierte FileList a un array
+      setProduct((prevDetail) => ({
+        ...prevDetail,
+        photos: [...prevDetail.photos, ...selectedFiles], // Agrega las nuevas imágenes a las existentes
+      }));
     }
+  };
+  const handleClearPhotos = () => {
+    setProduct({ ...product, photos: [] });
+  };
 
-    const dataProduct: Product = {
-        nombre: "",
-        descripcion: "",
-        precio: 0,
-        marca: "",
-        politicas: "",
-        categoria: "",
-        imagenes: []
+  const clearForm = () => {
+    setProduct(emptyProduct);
+  };
+  const clearMessage = ()=>{
+    setTimeout(() => {
+      setValidationErr(null)
+      setResponseErr(null)
+    }, 4000);
+  }
+
+  const showSuccessMessage = ()=>{
+    Swal.fire({
+      title: "!Guardado con Éxito¡",
+      text: "El producto ha sido guardado agregado al inventario exitosamente.",
+      confirmButtonText: "Aceptar",
+      icon: "success",
+      customClass: {
+        confirmButton: "bg-[#008000] px-40",
+        title: "text-[#008000]",
+        htmlContainer: "text-red-500"
+      }
+    })
+  }
+
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateProductName(product.name)) {
+      setValidationErr("El nombre debe tener entre 10 a 100 carácteres");
+      clearMessage()
+      return;
     }
+    if (!validateProductBrand(product.brand)) {
+      setValidationErr("La marca debe tener entre 10 a 100 caráctere");
+      clearMessage()
+      return;
+    }
+    if (!validateProductDescription(product.description)) {
+      setValidationErr("La descripcion no puede estar vacía");
+      clearMessage()
+      return;
+    }
+    if (!validateProductIds(product.categoryId)) {
+      setValidationErr("Id inválido");
+      clearMessage()
+      return;
+    }
+    if (!validateProductPhotos(product.photos)) {
+      setValidationErr("Mínimo entre 4 a 8 fotos");
+      clearMessage()
+      return;
+    }
+    if (!validateProductPrice(product.price)) {
+      setValidationErr("Precio inválido");
+      clearMessage()
+      return;
+    }
+    console.log("Producto enviado: ", product);
+    registerProduct();
+  };
 
-    const [productDetail, setProductDetail] = useState(dataProduct);
-    const [listCategory, setListCaterogy] = useState<Category[]>([]);
-    const [listProduct, setListProduct] = useState<Product1[]>([]);
-    const [registry, setRegistry] = useState({});
-    const [ready, setReady] = useState(false);
+  const registerProduct = async () => {
+    // Crear el FormData
+    const formData = new FormData();
 
-    const clearForm = () => {
-        setProductDetail({
-            nombre: "",
-            descripcion: "",
-            precio: 0,
-            marca: "",
-            politicas: "",
-            categoria: "",
-            imagenes: []
-        });
-    };
+    // Agregar los datos al FormData
+    formData.append("brand", product.brand);
+    formData.append("categoryId", product.categoryId.toString());
+    formData.append("description", product.description);
+    formData.append("name", product.name);
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // validaciones del nombre
-        const productExists = listProduct.find(product => product.name === productDetail.nombre);
-        if (productExists) {
-            alert("Ya existe un producto con este nombre. Por favor cambiarlo.");
-        } else {
-            let data = productDetail.nombre;
-            if (data.length < 10 || data.length > 100) {
-                alert("El nombre debe tener entre 10 a 100 caracteres")
-            } else {
-                let pictures = productDetail.imagenes;
-                if (pictures.length < 4 || pictures.length > 8) {
-                    alert("Debe seleccionar entre 4 y 8 fotos para registrar el producto.")
-                } else {
-                    setRegistry(productDetail.nombre);
-                    setReady(true);
-                }
-            }
+    product.photos.forEach((file: File) => {
+      formData.append("photos", file);
+    });
+
+    formData.append("price", String(product.price));
+    formData.append("tagId", "1");
+    if (!authData) {
+      console.error("Usuario no autenticado");
+      return;
+    }
+    try {
+      const response = await createProduct(authData, formData);
+      console.log("Producto registrado: ", response);
+      clearForm();
+      showSuccessMessage();
+    } catch (error) {
+      console.error(error);
+
+      if (isAxiosError(error) && error.response) {
+        const response = error.response.data as IApiRes<unknown>;
+        if (response.message === "Product: Product name is already in use") {
+          setResponseErr("El nombre del producto ya existe.");
         }
-        console.log(productDetail);
+        setResponseErr("Error interno al registrar el producto.");
+      } else {
+        setResponseErr("Error interno al registrar el producto.");
+      }
     }
-    const handleNombre = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProductDetail({ ...productDetail, nombre: e.target.value })
+    finally{
+      clearMessage();
     }
-    const handleDescripcion = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProductDetail({ ...productDetail, descripcion: e.target.value })
-    }
-    const handlePrecio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProductDetail({ ...productDetail, precio: parseFloat(e.target.value) });
-    }
-    const handleMarca = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProductDetail({ ...productDetail, marca: e.target.value })
-    }
-    const handlePoliticas = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setProductDetail({ ...productDetail, politicas: e.target.value })
-    }
-    const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProductDetail({ ...productDetail, categoria: e.target.value })
-    }
-    const handleClearPhotos = () => {
-        setProductDetail({ ...productDetail, imagenes: [] })
-    }
-    const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const eFiles = e.target.files;
-        if (eFiles && eFiles.length > 0) {
-            const selectedFiles = Array.from(eFiles); // Convierte FileList a un array
-            setProductDetail((prevDetail) => ({
-                ...prevDetail,
-                imagenes: [...prevDetail.imagenes, ...selectedFiles], // Agrega las nuevas imágenes a las existentes
-            }));
-        }
-    };
+  };
 
-    useEffect(() => {
-        if (registry !== "" || registry !== undefined || registry !== null) {
-            if (ready) {
-                registerProduct();
-            }
-        }
-    }, [ready]);
-
-    const registerProduct = () => {
-        // Crear el FormData
-        const formData = new FormData();
-
-        // Agregar los datos al FormData
-        formData.append("brand", productDetail.marca);
-        formData.append("categoryId", productDetail.categoria);
-        formData.append("description", productDetail.descripcion);
-        formData.append("name", productDetail.nombre);
-
-        productDetail.imagenes.forEach((file: File) => {
-            formData.append("photos", file);
-        });
-
-        formData.append("price", String(productDetail.precio));
-        formData.append("tagId", "1");
-
-        const url = "http://localhost:8080/api/v1/products";
-        const token = localStorage.getItem("authToken") || null;
-
-        // Enviar la solicitud
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}` || "",
-            },
-            body: formData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Respuesta del servidor:", data);
-                Swal.fire({
-                    title: "¡Guardado con Éxito!",
-                    text: "El producto ha sido guardado agregado al inventario exitosamente.",
-                    icon: "success",
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#008000",
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        clearForm();
-                    }
-                });
-
-            })
-            .catch((error) => {
-                console.error("Error al registrar el producto:", error);
-                alert("Ocurrió un error al registrar el producto. Inténtalo nuevamente.");
-            });
-    };
-
-    useEffect(() => {
-        const url = "http://localhost:8080/api/v1/products";
-        fetch(url)
-            .then(result => result.json())
-            .then(info => {
-                setListProduct(info.data.content);
-                console.log(info.data);
-
-            })
-            .catch(error => console.log(error));
-    }, []);
-
-    useEffect(() => {
-        const url = "http://localhost:8080/api/v1/category";
-        fetch(url)
-            .then(result => result.json())
-            .then(info => {
-                setListCaterogy(info.data)
-            })
-            .catch(error => console.log(error));
-    }, []);
-
-    return (
-        <div>
-            <div style={styles.detail}>
-                <span>Detalles del producto</span>
-            </div>
-            <form onSubmit={handleSubmit} style={styles.formContainer}>
-                <div>
-                    <p style={{ fontSize: "12px" }}>Completa los detalles del nuevo producto y al final guarda la información registrada</p>
-                </div>
-                <div style={styles.columnsContainer}>
-                    <div style={styles.column1}>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="nombre" style={{ fontSize: "13px" }}>Nombre</label>
-                            <input id='nombre' type="text" style={styles.input} placeholder="Ej.: AA0123K" onChange={handleNombre} required value={productDetail.nombre}/>
-                        </div>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="descripcion" style={{ fontSize: "13px" }}>Descripción</label>
-                            <input id='descripcion' type="text" style={styles.input} placeholder="Ej.: Juego de mesa" onChange={handleDescripcion} required value={productDetail.descripcion}/>
-                        </div>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="precio" style={{ fontSize: "13px" }}>Precio</label>
-                            <input id='precio' type="float" style={styles.input} placeholder="Ej.: $0.00" onChange={handlePrecio} required value={productDetail.precio || ""}/>
-                        </div>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="marca" style={{ fontSize: "13px" }}>Marca</label>
-                            <input id='marca' type="text" style={styles.input} placeholder="Ej.: Acme" onChange={handleMarca} required value={productDetail.marca}/>
-                        </div>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="politicas" style={{ fontSize: "13px" }}>Políticas de uso</label>
-                            <textarea
-                                id="politicas"
-                                rows={3}
-                                cols={40}
-                                placeholder="Ej.: Apto para mayores"
-                                style={styles.input}
-                                onChange={handlePoliticas}
-                                required 
-                                value={productDetail.politicas}/>
-                        </div>
-                    </div>
-                    <div style={styles.column1}>
-                        <div style={styles.inputContainer}>
-                            <label htmlFor="categoria" style={{ fontSize: "13px" }}>Categoría</label>
-                            <select
-                                id="miSelect"
-                                name="opciones"
-                                className="form-control"
-                                required
-                                value={productDetail.categoria || ''} // Sincroniza el valor
-                                onChange={handleCategoria}
-                                style={{
-                                    fontSize: "13px", padding: "12px", border: "1px solid #EFF0F4",
-                                    borderRadius: "0.5em",
-                                }}>
-                                <option value="" style={{ color: "#EFF0F4" }} disabled>Categoría...</option>
-                                {listCategory.map((category) => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.title}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div style={styles.inputContainerImage}>
-                            <label htmlFor="imagenes" style={{ fontSize: "13px" }}>Imágenes</label>
-                            <button onClick={handleClearPhotos}>Limpiar fotos</button>
-                            <div style={styles.labelChosen}>
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    multiple
-                                    style={{ display: 'none' }}
-                                    onChange={handleImagenes}
-                                />
-                                {/* Etiqueta personalizada */}
-                                <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
-                                    Subir Imagen
-                                </label>
-                                <img src={"/assets/icons/folder-check.svg"} alt="" />
-                            </div>
-                        </div>
-                        <div style={styles.imagesContainer}>
-                            {productDetail.imagenes.map((img, index) => (
-                                <div key={index} style={styles.imageDiv}>
-                                    <img src={URL.createObjectURL(img)} alt={`Imagen ${index + 1}`} style={styles.img} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-                <div style={{ textAlign: "end" }}>
-                    <button style={styles.btnGuardar}>Guardar</button>
-                </div>
-            </form>
+  return (
+    <div className="add_product_container h-full bg-white p-4 flex flex-col gap-2">
+      <div className="title-container p-6 flex justify-between">
+        <h2 className="font-bold text-xl">Agregar productos</h2>
+        <Button className="bg-black hover:opacity-70">Cancelar</Button>
+      </div>
+      <div className="subtitle-container bg-slate-100 p-4 shadow-sm">
+        <h2 className="font-bold text-xl">Detalles del producto</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="">
+        <div className="info-container mb-4">
+          <p className="text-disabled">
+            Completa los detalles del nuevo producto y al final guarda la
+            información registrada
+          </p>
         </div>
-    )
-}
+        <div className={`${style.fieldBox} inputs-container mb-4`}>
+          <ProductInput
+            fieldName="Nombre"
+            placeholder="Ej: Juego del calamar"
+            onChange={handleNombre}
+            value={product.name}
+          />
+          <ProductInput
+            fieldName="Descripcion"
+            placeholder="Ej: juego infantil"
+            onChange={handleDescripcion}
+            value={product.description}
+          />
+          <ProductInput
+            fieldName="Marca"
+            placeholder="Ej: LypSync"
+            onChange={handleMarca}
+            value={product.brand}
+          />
+          <ProductInput
+            fieldName="Precio"
+            type="float"
+            placeholder="Ej.: $0.00"
+            onChange={handlePrecio}
+            value={product.price.toString()}
+          />
+          <div className={`${style.fieldCategory} field_category`}>
+            <label htmlFor="categoria">Categoría: </label>
+            <select
+              id="miSelect"
+              name="opciones"
+              className="form-control border-2 border-disabled rounded-md p-2 opacity-70 focus:outline-primary focus:opacity-100"
+              required
+              value={product.categoryId} // Sincroniza el valor
+              onChange={handleCategoria}
+            >
+              <option value="" disabled>
+                Categoría...
+              </option>
+              {listCategory.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div
+            className={`${style.fieldPhoto} field_photos flex flex-col gap-4`}
+          >
+            <div className="photo-label-box flex gap-4 justify-between">
+              <p>Imágenes: </p>
+              <div className="actions flex gap-4">
+                <Button
+                  className="bg-black hover:opacity-70 transition-all duration-300 ease-in-out"
+                  onClick={handleClearPhotos}
+                >
+                  Limpiar fotos
+                </Button>
+                {/* Anade la imagenes */}
+                <label
+                  className="bg-black rounded-sm px-4 py-2 text-white text-sm flex gap-2 hover:opacity-70 transition-all duration-300 ease-in-out"
+                  htmlFor="fileInput"
+                >
+                  Subir Imagen
+                  <Image
+                    width={16}
+                    height={16}
+                    src={"/assets/icons/folder-up.png"}
+                    alt="folder-icon"
+                  />
+                </label>
+              </div>
+            </div>
+            <input
+              className="hidden"
+              type="file"
+              id="fileInput"
+              multiple
+              onChange={handleImagenes}
+            />
+            <div className="field_photos_preview border-2 border-disabled rounded-md p-2 opacity-70 grow focus:outline-primary focus:opacity-100 flex items-start gap-2">
+              {product.photos.map((img, index) => (
+                <div key={index} className="rounded-md overflow-hidden">
+                  <Image
+                    className="aspect-square object-cover"
+                    width={125}
+                    height={100}
+                    src={URL.createObjectURL(img)}
+                    alt={`Imagen ${index + 1}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="error_message text-error font-semibold">
+          {validationErr ? <p>{validationErr}</p> : null}
+          {validationErr ? <p>{responseErr}</p> : null}
+        </div>
+        <div className="text-end">
+          <Button
+            type="submit"
+            className="bg-black px-6 py-4 hover:opacity-70 transition-all duration-300 ease-in-out"
+          >
+            Guardar
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
-export default AddProductForm
+export default AddProductForm;

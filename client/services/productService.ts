@@ -1,14 +1,35 @@
 import axios from "@/lib/axiosInstance";
-import { Product } from "@/types";
 import { IApiRes } from "@/types/IApiRes";
+import { IAuthRes } from "@/types/IAuth";
 import { IPagination } from "@/types/IPagination";
-import { IProductParam } from "@/types/Iproduct";
+import { IProductParam, IProductRes, IProductShort } from "@/types/IProduct";
 
 export const getAllProducts = async (params: IProductParam) => {
   try {
-    const { data } = await axios.get<IApiRes<IPagination<Product>>>(
+    const { data } = await axios.get<IApiRes<IPagination<IProductShort>>>(
       `/products`,
       { params }
+    );
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return null;
+  }
+};
+
+export const getFullProducts = async (
+  params: IProductParam,
+  authdata: IAuthRes
+) => {
+  try {
+    const { data } = await axios.get<IApiRes<IPagination<IProductRes>>>(
+      `/products/all`,
+      {
+        params,
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      }
     );
     return data.data;
   } catch (error) {
@@ -22,3 +43,17 @@ export const getTopProducts = () =>
     size: 10,
     sort: "avgScore",
   });
+
+export const createProduct = async (authdata: IAuthRes, productData: FormData) => {
+  try {
+    const { data } = await axios.post<IApiRes<IProductRes>>(`/products`, productData, {
+      headers: {
+        Authorization: `Bearer ${authdata.token}`,
+      },
+    });
+    return data.data;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw error;
+  }
+};
