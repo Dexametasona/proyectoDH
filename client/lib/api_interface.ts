@@ -1,7 +1,8 @@
-import axios from "axios";
 
 import { AuthenticateUserProps, RegisterUserProps } from "@/types";
+import axios from "@/lib/axiosInstance";
 
+const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
@@ -99,5 +100,3 @@ export const filterByName = async (name: string) => {
     return response;
   } catch (error) {}
 };
-
-// export const selectDates = async (id) => {};

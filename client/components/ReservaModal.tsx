@@ -1,10 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
+import { DatePickerWithRange } from "./DateRangePicker";
+import { format } from "date-fns";
+import { createDate } from "@/lib/api_interface";
 
-const BookingModal = ({ isOpen, onClose }) => {
+const BookingModal = ({ isOpen, onClose, orders = [] }) => {
+  const [selectedDates, setSelectedDates] = useState({
+    from: null,
+    to: null,
+  });
+
+  const today = new Date();
+
+  // Procesar las órdenes como rangos deshabilitados
+  const disabledDates = orders.map((order) => ({
+    from: new Date(order.shipStart),
+    to: new Date(order.shipEnd),
+  }));
+
+  // Manejar el cambio de fechas seleccionadas
+  function handleDateChange(dates) {
+    const isOverlapping = disabledDates.some((range) =>
+      (dates.from >= range.from && dates.from <= range.to) ||
+      (dates.to >= range.from && dates.to <= range.to)
+    );
+
+    if (!isOverlapping) {
+      setSelectedDates(dates);
+    } else {
+      alert("Las fechas seleccionadas están reservadas.");
+    }
+  }
+
   if (!isOpen) return null;
-
+  console.log(disabledDates)
   return (
     <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
       <div className="bg-white w-full sm:w-96 sm:rounded-lg rounded-t-lg p-6 shadow-lg">
@@ -17,36 +47,34 @@ const BookingModal = ({ isOpen, onClose }) => {
             &times;
           </button>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Cantidad</label>
-          <div className="flex items-center border border-gray-300 rounded-md">
-            <button className="px-3 py-2 text-gray-600">-</button>
-            <input
-              type="number"
-              value={1}
-              className="w-full text-center py-2 outline-none"
-              readOnly
+        <div className="flex w-full gap-2 sm:gap-3">
+          <div className="mx-auto relative flex flex-col items-start w-full max-w-72 sm:gap-3">
+            <p className="text-primary">Desde</p>
+            <DatePickerWithRange
+              date={selectedDates}
+              onDateChange={handleDateChange}
+              disabledDates={disabledDates}
+              type="from"
             />
-            <button className="px-3 py-2 text-gray-600">+</button>
+          </div>
+
+          <div className="mx-auto relative flex flex-col items-start max-w-72 w-full sm:gap-3">
+            <p className="text-primary">Hasta</p>
+            <DatePickerWithRange
+              date={selectedDates}
+              onDateChange={handleDateChange}
+              disabledDates={disabledDates}
+              type="to"
+            />
           </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Inicio</label>
-          <input
-            type="date"
-            className="w-full border border-gray-300 rounded-md px-3 py-2"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Final</label>
-          <input
-            type="date"
-            className="w-full border border-gray-300 rounded-md px-3 py-2"
-          />
-        </div>
         <button
-          className="w-full bg-gray-400 text-white py-2 rounded-md cursor-not-allowed"
-          disabled
+          className={`w-full py-2 rounded-md ${selectedDates.from && selectedDates.to
+            ? "bg-primary text-white"
+            : "bg-gray-400 text-white cursor-not-allowed"
+            }`}
+          disabled={!selectedDates.from || !selectedDates.to}
+
         >
           Confirmar reserva
         </button>

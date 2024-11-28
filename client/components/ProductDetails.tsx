@@ -27,6 +27,7 @@ const ProductDetails = () => {
   const router = useRouter();
   const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
 
+
   const handleBackHome = () => {
     router.push("/home"); // Redirige al inicio
   };
@@ -42,6 +43,7 @@ const ProductDetails = () => {
         });
     }
   }, [id]);
+
 
   if (!product) return <p>Producto no encontrado</p>;
 
@@ -167,7 +169,7 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} />
+        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} />
       </div>
     </section>
   );

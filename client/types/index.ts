@@ -43,6 +43,7 @@ interface Tag {
   name: string;
 }
 
+
 export interface Product {
   id: number;
   name: string;
@@ -51,7 +52,9 @@ export interface Product {
   tag?: Tag;
   photoUrl: string;
 }
-
+export interface Order {
+  
+}
 export interface ProductById {
   id: string;
   name: string;
@@ -61,4 +64,5 @@ export interface ProductById {
   status?: string;
   category: Category;
   photos: Thumbnail[];
+  orders?: Order;
 }

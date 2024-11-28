@@ -47,6 +47,7 @@ const SearchBar = () => {
     
     setProductAvailability(reservedDates);
   };
+
   const handleDateChange = (dates) => {
     setSelectedDates(dates);
   };
