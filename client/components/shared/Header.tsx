@@ -122,13 +122,13 @@ const Header = () => {
               </div>
               <div className="hidden sm:flex gap-4">
                 <Button
-                  className="rounded-full text-sm border-white border"
+                  className="rounded-full text-sm border-white border hover:opacity-80"
                   onClick={() => handleNavigation("/signup")}
                 >
                   Crear cuenta
                 </Button>
                 <Button
-                  className="rounded-full text-sm "
+                  className="rounded-full text-sm hover:opacity-80"
                   variant={"secondary"}
                   onClick={() => handleNavigation("/login")}
                 >

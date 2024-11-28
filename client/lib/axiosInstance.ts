@@ -1,7 +1,8 @@
+import { API_URL } from "@/constants/environments";
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL:"https://proyectodh-13hj.onrender.com/api/v1"
-})
+  baseURL: API_URL+"/api/v1",
+});
 
 export default axiosInstance;
