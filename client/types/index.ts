@@ -1,7 +1,6 @@
 
 export interface CardsContainerProps {
   name: string;
-  cards: ProductCards[];
   verticalColumnMobile?: boolean;
   gap: string;
 }

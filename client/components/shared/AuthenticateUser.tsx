@@ -15,7 +15,7 @@ const AuthenticateUser = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  const { loginContext } = useAuthContext();
+  const { loginContext} = useAuthContext();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,8 +35,12 @@ const AuthenticateUser = () => {
 
     if (!isValid) return;
     try {
-      await loginContext({ email, password });
-      router.push("/home");
+      const response = await loginContext({ email, password });
+      if(response !== null && response.rol === 0){
+        router.push("/admin");
+      }else{
+        router.push("/home");
+      }
     } catch {
       setLoginError("Email o contraseña incorrecta");
       setTimeout(() => {
