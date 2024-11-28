@@ -1,24 +1,55 @@
 "use client";
-import { CalendarDays, Search } from "lucide-react";
-import { useState } from "react";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "./ui/button";
+import { filterByName, getProductById } from "@/lib/api_interface";
+import { DatePickerWithRange } from "./DateRangePicker";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
-  const [openFromCalendar, setOpenFromCalendar] = useState(false);
-  const [openToCalendar, setOpenToCalendar] = useState(false);
+  const [selectedDates, setSelectedDates] = useState({
+    from: null,
+    to: null,
+  });
+  const [productAvailability, setProductAvailability] = useState([]);
 
-  const handleOpenFromCalendar = () => {
-    setOpenFromCalendar(!openFromCalendar);
+  const [listOfProducts, setListOfProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState("");
+
+  useEffect(() => {
+    if (search.length >= 4) {
+      filterByName(search).then((result) => {
+        const products = result?.data.data;
+        setListOfProducts(products);
+      });
+      setSelectedProduct("");
+      setListOfProducts([]);
+    }
+
+    if (search.length === 0) {
+    }
+  }, [search]);
+
+  const handleSelectProduct = async ({ name, id }) => {
+    setSelectedProduct(name);
+    setSearch(name);
+    const productsInfo = await getProductById(id);
+    setSelectedProduct(productsInfo);
+    //const productAvailability = await productsInfo.orders;
+    setProductAvailability(productAvailability);
+
+    const reservedDates = productsInfo.orders.map((order) => ({
+      from: new Date(order.start_date),
+      to: new Date(order.end_date),
+    }));
+    
+    setProductAvailability(reservedDates);
   };
-
-  const handleOpenToCalendar = () => {
-    setOpenToCalendar(!openToCalendar);
+  const handleDateChange = (dates) => {
+    setSelectedDates(dates);
   };
-
   return (
     <div className="bg-secondary p-4 mx-4 rounded-xl flex flex-col items-center gap-2 sm:flex-row sm:items-end sm:gap-3 sm:mx-6">
       <div className="w-full flex flex-col gap-2 sm:gap-3">
@@ -40,36 +71,47 @@ const SearchBar = () => {
       <div className="flex w-full gap-2 sm:gap-3">
         <div className="mx-auto relative flex flex-col items-start w-full max-w-72 sm:gap-3">
           <p className="text-primary">Desde</p>
-          <div onClick={handleOpenFromCalendar} className="max-w-72 w-full">
-            <Input
-              placeholder="dd/mm/aaaa"
-              className="border-gray-300 rounded-full bg-white placeholder-disabled w-full"
-            />
-            <CalendarDays className="hidden sm:block absolute right-2 top-10 text-disabled" />
-          </div>
-          {openFromCalendar && (
-            <Calendar className="absolute bg-white top-20 z-50" />
-          )}
+          <DatePickerWithRange
+            date={selectedDates}
+            onDateChange={handleDateChange}
+            disabledDates={productAvailability}
+           // productAvailability={productAvailability}
+            type="from"
+          />
         </div>
 
         <div className="mx-auto relative flex flex-col items-start max-w-72 w-full sm:gap-3">
           <p className="text-primary">Hasta</p>
-          <div onClick={handleOpenToCalendar} className="max-w-72 w-full">
-            <Input
-              placeholder="dd/mm/aaaa"
-              className="border-gray-300 rounded-full bg-white placeholder-disabled"
-            />
-            <CalendarDays className="hidden sm:block absolute right-2 top-10 text-disabled" />
-          </div>
-          {openToCalendar && (
-            <Calendar className="absolute bg-white top-20 z-50" />
-          )}
+          <DatePickerWithRange
+            date={selectedDates}
+            onDateChange={handleDateChange}
+            disabledDates={productAvailability}
+           // productAvailability={productAvailability}
+            type="to"
+            orders={selectedProduct.orders}
+          />
         </div>
       </div>
 
       <Button className="rounded-full w-full sm:w-fit sm:text-lg py-3 px-4 sm:h-12">
         Buscar
       </Button>
+      {listOfProducts.length > 0 && selectedProduct === "" && (
+        <div className="relative">
+          <div className="absolute right-[-180px] sm:right-[-16px] bottom-[-8px] sm:top-4 z-10 rounded-2xl sm:rounded-b-2xl sm:border-b sm:border-x border-primary w-[calc(100vw-62px)] sm:w-[calc(100vw-62px)] bg-background ">
+            {listOfProducts.map(({ name, id }) => (
+              <div
+                key={id}
+                className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
+                onClick={() => handleSelectProduct({ name, id })}
+              >
+                <Search className="text-disabled" />
+                <p>{name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
