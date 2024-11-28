@@ -37,14 +37,19 @@ const SearchBar = () => {
     setSearch(name);
     const productsInfo = await getProductById(id);
     setSelectedProduct(productsInfo);
-    const productAvailability = await productsInfo.orders;
+    //const productAvailability = await productsInfo.orders;
     setProductAvailability(productAvailability);
-  };
 
+    const reservedDates = productsInfo.orders.map((order) => ({
+      from: new Date(order.start_date),
+      to: new Date(order.end_date),
+    }));
+    
+    setProductAvailability(reservedDates);
+  };
   const handleDateChange = (dates) => {
     setSelectedDates(dates);
   };
-
   return (
     <div className="bg-secondary p-4 mx-4 rounded-xl flex flex-col items-center gap-2 sm:flex-row sm:items-end sm:gap-3 sm:mx-6">
       <div className="w-full flex flex-col gap-2 sm:gap-3">
@@ -69,7 +74,8 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            productAvailability={productAvailability}
+            disabledDates={productAvailability}
+           // productAvailability={productAvailability}
             type="from"
           />
         </div>
@@ -79,7 +85,8 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            productAvailability={productAvailability}
+            disabledDates={productAvailability}
+           // productAvailability={productAvailability}
             type="to"
             orders={selectedProduct.orders}
           />

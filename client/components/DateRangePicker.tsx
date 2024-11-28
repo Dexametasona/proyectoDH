@@ -29,14 +29,33 @@ export function DatePickerWithRange({
   type,
   orders = [],
 }: DatePickerWithRangeProps) {
+  const today = new Date();
   // Crear un rango de fechas hardcodeado para pruebas
   const disabledDates = [
-    {
-      from: new Date(2024, 2, 20), // 20 de marzo 2024
-      to: new Date(2024, 2, 25), // 25 de marzo 2024
-    },
+    ...orders.map((order) => ({
+      from: new Date(order.shipStart),
+      to: new Date(order.shipEnd),
+    })),
+    { before: today }, // Deshabilitar todas las fechas antes de hoy
   ];
+  const handleSelect = (selectedDate: DateRange | undefined) => {
+    // Verificar que el rango no incluya fechas deshabilitadas
+    if (
+      selectedDate &&
+      !disabledDates.some(({ from, to, before }) => {
+        const startInvalid = before ? selectedDate.from < before : false;
+        const endInvalid = before ? selectedDate.to < before : false;
 
+        const withinRange = from && to
+          ? selectedDate.from >= from && selectedDate.to <= to
+          : false;
+
+        return startInvalid || endInvalid || withinRange;
+      })
+    ) {
+      onDateChange(selectedDate);
+    }
+  };
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -65,7 +84,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={onDateChange}
+            onSelect={handleSelect}
             numberOfMonths={2}
             disabled={disabledDates}
           />
