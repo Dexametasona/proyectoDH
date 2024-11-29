@@ -164,8 +164,9 @@ const AddProductForm = () => {
         const response = error.response.data as IApiRes<unknown>;
         if (response.message === "Product: Product name is already in use") {
           setResponseErr("El nombre del producto ya existe.");
+        }else{
+          setResponseErr("Error interno al registrar el producto.");
         }
-        setResponseErr("Error interno al registrar el producto.");
       } else {
         setResponseErr("Error interno al registrar el producto.");
       }
@@ -288,7 +289,7 @@ const AddProductForm = () => {
         </div>
         <div className="error_message text-error font-semibold">
           {validationErr ? <p>{validationErr}</p> : null}
-          {validationErr ? <p>{responseErr}</p> : null}
+          {responseErr ? <p>{responseErr}</p> : null}
         </div>
         <div className="text-end">
           <Button
