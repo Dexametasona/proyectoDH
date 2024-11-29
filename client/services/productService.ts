@@ -25,7 +25,7 @@ export const getFullProducts = async (
     const { data } = await axios.get<IApiRes<IPagination<IProductRes>>>(
       `/products/all`,
       {
-        params,
+        params: {...params, size: 10},
         headers: {
           Authorization: `Bearer ${authdata.token}`,
         },

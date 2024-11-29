@@ -4,7 +4,7 @@
 const page = () => {
 
   return (
-    <div className="admin_container bg-red-800 h-screen">
+    <div className="admin_container ">
       <p>soy users</p>
     </div>
   );
