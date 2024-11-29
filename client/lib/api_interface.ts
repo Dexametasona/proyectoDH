@@ -1,13 +1,7 @@
 
-<<<<<<< HEAD
-import { AuthenticateUserProps, RegisterUserProps } from "@/types";
 import axios from "@/lib/axiosInstance";
 
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
-=======
-import { API_URL } from "@/constants/environments";
-const BASE_URL = API_URL+"/api/v1"
->>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
@@ -54,10 +48,6 @@ export const filterByName = async (name: string) => {
 
     console.log(response);
     return response;
-<<<<<<< HEAD
-  } catch (error) {}
-};
-=======
   } catch (error) {
     console.log(error)
   }
@@ -89,4 +79,3 @@ export const createDate = async (
 };
 
 createDate(4, "Test", "2024-12-15", "2024-12-08", "comentarios");
->>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f

@@ -35,6 +35,7 @@ const BookingModal = ({ isOpen, onClose, orders = [] }) => {
 
   if (!isOpen) return null;
   console.log(disabledDates)
+  
   return (
     <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
       <div className="bg-white w-full sm:w-96 sm:rounded-lg rounded-t-lg p-6 shadow-lg">

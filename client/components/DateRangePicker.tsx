@@ -54,6 +54,8 @@ export function DatePickerWithRange({
         alert("El rango seleccionado incluye fechas no disponibles.");
       }
     };
+
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -88,7 +90,7 @@ export function DatePickerWithRange({
             numberOfMonths={2}
             disabled={[
               { before: today },
-              ...disabledRanges 
+              {from:new Date("2024-12-01"), to:new Date("2024-12-05")} 
                 // Agregamos los rangos deshabilitados
               
             ]}
