@@ -1,7 +1,7 @@
+
 import axios from "@/lib/axiosInstance";
 
-import { API_URL } from "@/constants/environments";
-const BASE_URL = API_URL+"/api/v1"
+const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
