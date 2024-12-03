@@ -609,3 +609,11 @@ VALUES
 (4, '2024-11-04 22:42:57.281862', 'prueba04@gmail.com', 0, 1, 'Enrique', 'Peña Nieto', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'USER'),
 (5, '2024-11-03 22:42:57.281862', 'prueba05@gmail.com', 0, 1, 'Tekito', 'Lacarie', '$2a$10$jWs63fJ29jiBqBD4FEwFS.MvJnN0/2FSlIk7ZnWDSIccV.yXDcVlO', 'USER');
 
+/* --------------------------------favorites */
+INSERT INTO `favorites`
+VALUES
+(1,1,1),
+(2,1,2),
+(3,1,3),
+(4,1,1)
+

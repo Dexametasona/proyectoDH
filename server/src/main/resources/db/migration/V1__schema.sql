@@ -97,3 +97,14 @@ CREATE TABLE `review` (
   CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
 );
+
+/* --------------------------------favorite */
+DROP TABLE IF EXISTS `favorites`;
+CREATE TABLE `favorites` (
+    `id` bigint AUTO_INCREMENT PRIMARY KEY,
+    `user_id` bigint NOT NULL,
+    `product_id` bigint NOT NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+);
+
