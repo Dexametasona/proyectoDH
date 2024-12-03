@@ -11,26 +11,26 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@radix-ui/react-popover";
+import { useAppContext } from "@/context/AppContext";
 
 const SearchBar = () => {
+  const { searchProductsList, setSearchProductsList } = useAppContext();
   const [search, setSearch] = useState("");
   const [selectedDates, setSelectedDates] = useState({
     from: null,
     to: null,
   });
   const [productAvailability, setProductAvailability] = useState([]);
-
-  const [listOfProducts, setListOfProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
   useEffect(() => {
     if (search.length >= 4) {
       filterByName(search).then((result) => {
         const products = result?.data.data;
-        setListOfProducts(products);
+        setSearchProductsList(products);
       });
       setSelectedProduct("");
-      setListOfProducts([]);
+      setSearchProductsList([]);
     }
 
     if (search.length === 0) {
@@ -74,9 +74,9 @@ const SearchBar = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </PopoverTrigger>
-            {listOfProducts.length > 0 && selectedProduct === "" && (
+            {searchProductsList.length > 0 && selectedProduct === "" && (
               <PopoverContent className="bg-white z-10 w-[calc(100vw-62px)] focus:none rounded-b-lg sm:ml-6 sm:mt-4">
-                {listOfProducts.map(({ name, id }) => (
+                {searchProductsList.map(({ name, id }) => (
                   <div
                     key={id}
                     className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
