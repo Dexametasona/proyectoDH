@@ -10,6 +10,7 @@ export const getAllProducts = async (params: IProductParam) => {
       `/products`,
       { params }
     );
+    console.log("Get products short: ",data.data)
     return data.data;
   } catch (error) {
     console.error("Error fetching products:", error);

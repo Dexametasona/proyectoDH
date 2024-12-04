@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AppContextProvider } from "@/context/AppContext";
-import Header from "@/components/shared/Header";
-import Footer from "@/components/shared/Footer";
 import { AuthContextProvider } from "@/context/AuthContext";
+import { LoaderContextProvider } from "@/context/loaderContext";
+import { MainComponent } from "@/components/shared/MainComponent";
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -28,20 +28,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthContextProvider>
-      <AppContextProvider>
-        <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}
-          >
-            <Header/>
-            <div className="containerLayout flex-grow bg-[--background-color] flex flex-col justify-center ">
-              {children}
-            </div>
-            <Footer />
-          </body>
-        </html>
-      </AppContextProvider>
-    </AuthContextProvider>
+    <LoaderContextProvider>
+      <AuthContextProvider>
+        <AppContextProvider>
+          <html lang="en">
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}
+            >
+              <MainComponent>
+                {children}
+              </MainComponent>
+            </body>
+          </html>
+        </AppContextProvider>
+      </AuthContextProvider>
+    </LoaderContextProvider>
   );
 }
