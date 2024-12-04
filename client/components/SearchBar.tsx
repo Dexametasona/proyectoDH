@@ -14,8 +14,10 @@ import {
 import { useAppContext } from "@/context/AppContext";
 
 const SearchBar = () => {
-  const { searchProductsList, setSearchProductsList } = useAppContext();
+  const { setResultsProductsList } = useAppContext();
+
   const [search, setSearch] = useState("");
+  const [searchProductsList, setSearchProductsList] = useState([]);
   const [selectedDates, setSelectedDates] = useState({
     from: null,
     to: null,
@@ -23,10 +25,22 @@ const SearchBar = () => {
   const [productAvailability, setProductAvailability] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
+  const setProductToList = async (products) => {
+    const productsInfoArray = await Promise.all(
+      products.map(async (product) => {
+        const productsInfo = await getProductById(product.id);
+        return productsInfo;
+      }),
+    );
+
+    setResultsProductsList(productsInfoArray);
+  };
+
   useEffect(() => {
     if (search.length >= 4) {
       filterByName(search).then((result) => {
         const products = result?.data.data;
+        setProductToList(products);
         setSearchProductsList(products);
       });
       setSelectedProduct("");
@@ -34,6 +48,7 @@ const SearchBar = () => {
     }
 
     if (search.length === 0) {
+      setResultsProductsList([]);
     }
   }, [search]);
 
@@ -42,7 +57,6 @@ const SearchBar = () => {
     setSearch(name);
     const productsInfo = await getProductById(id);
     setSelectedProduct(productsInfo);
-    console.log(productsInfo.orders);
 
     setProductAvailability(productAvailability);
 
@@ -57,6 +71,7 @@ const SearchBar = () => {
   const handleDateChange = (dates) => {
     setSelectedDates(dates);
   };
+
   return (
     <div className="bg-secondary p-4 mx-4 rounded-xl flex flex-col items-center gap-2 sm:flex-row sm:items-end sm:gap-3 sm:mx-6">
       <div className="w-full flex flex-col gap-2 sm:gap-3">
