@@ -44,7 +44,8 @@ public class FavoriteServiceImp implements FavoriteService {
                 .map(fav -> new FavoriteResDto(
                         fav.getProduct().getId(),
                         fav.getProduct().getName(),
-                        fav.getProduct().getBrand(),
+                        fav.getProduct().getCategory().getTitle(),
+                        fav.getProduct().getPhotos().getFirst().getUrl(),
                         fav.getProduct().getPrice()))
                 .collect(Collectors.toList());
     }
@@ -60,7 +61,8 @@ public class FavoriteServiceImp implements FavoriteService {
                 .map(fav -> new FavoriteResDto(
                         fav.getProduct().getId(),
                         fav.getProduct().getName(),
-                        fav.getProduct().getBrand(),
+                        fav.getProduct().getCategory().getTitle(),
+                        fav.getProduct().getPhotos().getFirst().getUrl(),
                         fav.getProduct().getPrice()))
                 .collect(Collectors.toList());
     }
