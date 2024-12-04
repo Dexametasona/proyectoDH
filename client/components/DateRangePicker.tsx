@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { addDays, format, isWithinInterval, parseISO } from "date-fns";
+import { format, isWithinInterval, parseISO } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
+import { DateRange, Matcher, Matcher } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ interface DatePickerWithRangeProps
   onDateChange: (dates: DateRange | null) => void;
   type: "from" | "to";
   orders?: Array<{ shipStart: string; shipEnd: string }>;
+  disabled: Matcher | Matcher[];
 }
 
 export function DatePickerWithRange({
@@ -28,6 +29,7 @@ export function DatePickerWithRange({
   onDateChange,
   type,
   orders = [],
+  disabled = [],
 }: DatePickerWithRangeProps) {
   const today = new Date();
 
@@ -35,26 +37,28 @@ export function DatePickerWithRange({
     from: parseISO(order.shipStart),
     to: parseISO(order.shipEnd),
   }));
-  
-    // Función para verificar si una fecha está dentro de algún rango deshabilitado
-    const isDateDisabled = (selectedRange: DateRange | undefined): boolean => {
-      if (!selectedRange) return false;
-  
-      return disabledRanges.some(({ from, to }) =>
-        isWithinInterval(selectedRange.from, { start: from, end: to }) ||
-        isWithinInterval(selectedRange.to, { start: from, end: to })
-      );
-    };
-  
-    // Manejar la selección de fechas y evitar las deshabilitadas
-    const handleSelect = (selectedDate: DateRange | undefined) => {
-      if (selectedDate && !isDateDisabled(selectedDate)) {
-        onDateChange(selectedDate);
-      } else if (selectedDate) {
-        alert("El rango seleccionado incluye fechas no disponibles.");
-      }
-    };
 
+  console.log(disabled);
+
+  // Función para verificar si una fecha está dentro de algún rango deshabilitado
+  const isDateDisabled = (selectedRange: DateRange | undefined): boolean => {
+    if (!selectedRange) return false;
+
+    return disabledRanges.some(
+      ({ from, to }) =>
+        isWithinInterval(selectedRange.from, { start: from, end: to }) ||
+        isWithinInterval(selectedRange.to, { start: from, end: to }),
+    );
+  };
+
+  // Manejar la selección de fechas y evitar las deshabilitadas
+  const handleSelect = (selectedDate: DateRange | undefined) => {
+    if (selectedDate && !isDateDisabled(selectedDate)) {
+      onDateChange(selectedDate);
+    } else if (selectedDate) {
+      alert("El rango seleccionado incluye fechas no disponibles.");
+    }
+  };
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -80,24 +84,17 @@ export function DatePickerWithRange({
         </PopoverTrigger>
         {disabledRanges != null ? (
           <PopoverContent className="w-auto p-0" align="start">
-          
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={handleSelect}
-            numberOfMonths={2}
-            disabled={[
-              { before: today },
-              {from:new Date("2024-12-01"), to:new Date("2024-12-05")} 
-                // Agregamos los rangos deshabilitados
-              
-            ]}
-          />
-        </PopoverContent>): null
-        }
-        
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={date?.from}
+              selected={date}
+              onSelect={handleSelect}
+              numberOfMonths={2}
+              disabled={disabled}
+            />
+          </PopoverContent>
+        ) : null}
       </Popover>
     </div>
   );

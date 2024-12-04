@@ -12,6 +12,7 @@ import {
   PopoverContent,
 } from "@radix-ui/react-popover";
 import { useAppContext } from "@/context/AppContext";
+import { getDateArray } from "@/lib/utils";
 
 const SearchBar = () => {
   const { setResultsProductsList } = useAppContext();
@@ -53,19 +54,14 @@ const SearchBar = () => {
   }, [search]);
 
   const handleSelectProduct = async ({ name, id }) => {
+    const productsInfo = await getProductById(id);
+    const unavailableDates = getDateArray(productsInfo.orders);
+
     setSelectedProduct(name);
     setSearch(name);
-    const productsInfo = await getProductById(id);
+
     setSelectedProduct(productsInfo);
-
-    setProductAvailability(productAvailability);
-
-    const reservedDates = productsInfo.orders.map((order) => ({
-      from: new Date(order.start_date),
-      to: new Date(order.end_date),
-    }));
-
-    setProductAvailability(reservedDates);
+    setProductAvailability(unavailableDates);
   };
 
   const handleDateChange = (dates) => {
@@ -113,7 +109,7 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            disabledDates={productAvailability}
+            disabled={productAvailability}
             type="from"
             className="w-full"
           />
@@ -124,7 +120,7 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            disabledDates={productAvailability}
+            disabled={productAvailability}
             type="to"
             orders={selectedProduct.orders}
             className="w-full"
