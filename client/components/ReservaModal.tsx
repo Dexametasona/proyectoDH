@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { DatePickerWithRange } from "./DateRangePicker";
 import { format } from "date-fns";
 import { createDate } from "@/lib/api_interface";
+import { InlineDatePickerWithRange } from "./CalendarModal";
 
 const BookingModal = ({ isOpen, onClose, orders = [] }) => {
   const [selectedDates, setSelectedDates] = useState({
@@ -37,10 +38,10 @@ const BookingModal = ({ isOpen, onClose, orders = [] }) => {
   console.log(disabledDates)
   
   return (
-    <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
-      <div className="bg-white w-full sm:w-96 sm:rounded-lg rounded-t-lg p-6 shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Detalles de la reserva</h2>
+    <div className="container1 fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
+      <div className="container1.1 bg-white w-full sm:w-[90%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
+        <div className="container1.1.1 flex justify-between items-center mb-4 ">
+          <h2 className="text-lg font-semibold">Seleccionar fechas</h2>
           <button
             className="text-gray-500 hover:text-gray-700"
             onClick={onClose}
@@ -48,36 +49,24 @@ const BookingModal = ({ isOpen, onClose, orders = [] }) => {
             &times;
           </button>
         </div>
-        <div className="flex w-full gap-2 sm:gap-3">
-          <div className="mx-auto relative flex flex-col items-start w-full max-w-72 sm:gap-3">
-            <p className="text-primary">Desde</p>
-            <DatePickerWithRange
+        <div className="container1.1.2 flex w-full gap-2 sm:gap-3">
+          <div className="container1.1.2.1 mx-auto relative flex flex-col items-center w-full justify-center">
+            <InlineDatePickerWithRange
               date={selectedDates}
               onDateChange={handleDateChange}
               disabledDates={disabledDates}
-              type="from"
-            />
-          </div>
-
-          <div className="mx-auto relative flex flex-col items-start max-w-72 w-full sm:gap-3">
-            <p className="text-primary">Hasta</p>
-            <DatePickerWithRange
-              date={selectedDates}
-              onDateChange={handleDateChange}
-              disabledDates={disabledDates}
-              type="to"
             />
           </div>
         </div>
         <button
           className={`w-full py-2 rounded-md ${selectedDates.from && selectedDates.to
-            ? "bg-primary text-white"
+            ? "bg-secondary text-white"
             : "bg-gray-400 text-white cursor-not-allowed"
             }`}
           disabled={!selectedDates.from || !selectedDates.to}
 
         >
-          Confirmar reserva
+          Continuar reserva
         </button>
       </div>
     </div>
