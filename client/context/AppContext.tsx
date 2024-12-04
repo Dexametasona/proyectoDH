@@ -16,6 +16,10 @@ interface AppContextType {
   adminMenuSelected: string | null;
   setAdminMenuSelected: Dispatch<SetStateAction<string>>;
   handleMenuChange: (menuLabel: string) => void;
+  searchProductsList: object[];
+  setSearchProductsList: Dispatch<SetStateAction<object[] | null>>;
+  resultsProductsList: object[];
+  setResultsProductsList: Dispatch<SetStateAction<object[] | null>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -25,6 +29,8 @@ export const AppContextProvider: React.FC<{
 }> = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(0);
   const [adminMenuSelected, setAdminMenuSelected] = useState("dashboard");
+  const [searchProductsList, setSearchProductsList] = useState([]);
+  const [resultsProductsList, setResultsProductsList] = useState([]);
 
   const handleMenuChange = (menuLabel: string) => {
     setAdminMenuSelected(menuLabel);
@@ -51,6 +57,10 @@ export const AppContextProvider: React.FC<{
         adminMenuSelected,
         setAdminMenuSelected,
         handleMenuChange,
+        searchProductsList,
+        setSearchProductsList,
+        resultsProductsList,
+        setResultsProductsList,
       }}
     >
       {children}
