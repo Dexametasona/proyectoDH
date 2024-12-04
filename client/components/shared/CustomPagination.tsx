@@ -5,6 +5,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useEffect, useState } from "react";
 
 const CustomPagination = ({
   currentPage,
@@ -15,7 +16,19 @@ const CustomPagination = ({
   setCurrentPage: (page: number) => void;
   totalPages: number;
 }) => {
-  const maxPageNum = 5; 
+  const [maxPageNum, setMaxPageNum] = useState(2)
+   
+  useEffect(()=>{
+    const screenWidth = window.screen.width;
+    if(screenWidth >= 640){
+      setMaxPageNum(5);
+      return;
+    }
+    if(screenWidth >= 1000){
+      setMaxPageNum(10);
+      return;
+    }
+  },[])
   const pageNumLimit = Math.floor(maxPageNum / 2); // Páginas alrededor de la actual
 
   // Cálculo de las páginas visibles
@@ -24,10 +37,7 @@ const CustomPagination = ({
     (_, i) => {
       const offset = Math.max(
         0,
-        Math.min(
-          currentPage - 1 - pageNumLimit,
-          totalPages - maxPageNum
-        )
+        Math.min(currentPage - 1 - pageNumLimit, totalPages - maxPageNum)
       );
       return i + 1 + offset;
     }
@@ -43,7 +53,7 @@ const CustomPagination = ({
 
   const renderPages = () => {
     const pages = activePages.map((page) => (
-      <PaginationItem key={page} active={currentPage === page}>
+      <PaginationItem key={page} active={(currentPage === page)+''}>
         <button
           onClick={() => setCurrentPage(page)}
           className={`px-4 py-2 rounded ${
@@ -87,7 +97,7 @@ const CustomPagination = ({
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <Pagination>
         <PaginationContent>
           <PaginationItem>

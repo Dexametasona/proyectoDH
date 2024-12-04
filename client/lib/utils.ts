@@ -19,31 +19,39 @@ export const validatePassword = (password: string) => {
 export const logout = async () => {
   localStorage.clear();
 };
-export const validateProductName = (name:string)=>{
-  if(name === null) return false;
+export const validateProductName = (name: string) => {
+  if (name === null) return false;
   name = name.trim();
-  return name.length >=10 && name.length <=100;
-}
+  return name.length >= 10 && name.length <= 100;
+};
 
-export const validateProductDescription = (text:string)=>{
-  if(text === null) return false;
-  return text.trim().length >0;
-}
+export const validateProductDescription = (text: string) => {
+  if (text === null) return false;
+  return text.trim().length > 0;
+};
 
-export const validateProductPrice = (value:number)=>{
-  if(value === null) return false;
-  return value>=1;
-}
-export const validateProductBrand = (text:string)=>{
-  if(text === null) return false;
-  text = text.trim();
-  return text.length >=2 && text.length <=50;
-}
-export const validateProductPhotos = (files:File[])=>{
-  if(files === null) return false;
-  return files.length >=4 && files.length <=8;
-}
-export const validateProductIds = (value:number)=>{
-  if(value === null) return false;
+export const validateProductPrice = (value: number) => {
+  if (value === null) return false;
   return value >= 1;
-}
+};
+export const validateProductBrand = (text: string) => {
+  if (text === null) return false;
+  text = text.trim();
+  return text.length >= 2 && text.length <= 50;
+};
+export const validateProductPhotos = (files: File[]) => {
+  if (files === null) return false;
+  return files.length >= 4 && files.length <= 8;
+};
+export const validateProductIds = (value: number) => {
+  if (value === null) return false;
+  return value >= 1;
+};
+export const validateSearchNameProduct = (text: string) => {
+  if (text == null) return true;
+  text = text.trim();
+  if(text.length===0) return true;
+  if (text.length < 4) return false;
+  const pattern = /^[a-zA-Z\s]+$/;
+  return pattern.test(text);
+};

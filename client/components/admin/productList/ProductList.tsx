@@ -28,15 +28,18 @@ const ProductList = () => {
     available: "bg-green-100 text-green-500",
   };
 
-  const setPagination = async(index:number)=>{
+  const setPagination = async (index: number) => {
     try {
       if (authData === null) {
         setProducts(null);
         return;
       }
-      const productsPagination = await getFullProducts({
-        page: index-1
-      }, authData);
+      const productsPagination = await getFullProducts(
+        {
+          page: index - 1,
+        },
+        authData
+      );
       if (productsPagination?.content) {
         setProducts(productsPagination);
         return;
@@ -46,8 +49,8 @@ const ProductList = () => {
       console.error(error);
       setProducts(null);
     }
-  }
-  
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -80,7 +83,10 @@ const ProductList = () => {
         <h2 className="text-lg font-bold text-gray-800">
           Listado de Productos
         </h2>
-        <Button className="bg-success" onClick={handleClickAdd}>
+        <Button
+          className="bg-success hover:opacity-70 transition-all ease-in-out duration-300"
+          onClick={handleClickAdd}
+        >
           Agregar
         </Button>
       </div>
@@ -100,24 +106,26 @@ const ProductList = () => {
           <TableBody>
             {products?.content.map((product) => {
               return (
-                <TableRow key={product.id}>
+                <TableRow key={product.id} className="">
                   <TableCell>{product.id}</TableCell>
-                  <TableCell className="flex items-center gap-2">
-                    <Image
-                      src={
-                        product.photos.at(1)?.url ||
-                        "/path/to/default/image.png"
-                      }
-                      width={56}
-                      height={56}
-                      alt="product image"
-                      className="rounded-full aspect-square w-10"
-                    />
-                    {product.name}
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={
+                          product.photos.at(1)?.url ||
+                          "/path/to/default/image.png"
+                        }
+                        width={56}
+                        height={56}
+                        alt="product image"
+                        className="rounded-full aspect-square w-10"
+                      />
+                      <span>{product.name}</span>
+                    </div>
                   </TableCell>
                   <TableCell>${product.price}/día</TableCell>
                   <TableCell>{product.category.title}</TableCell>
-                  <TableCell>{product.description}</TableCell>
+                  <TableCell className="">{product.description}</TableCell>
                   <TableCell>
                     <span
                       className={`rounded-lg px-2 m-1 py-1 ${
@@ -129,9 +137,9 @@ const ProductList = () => {
                       {product.status === 0 ? "Disponible" : "En mantenimiento"}
                     </span>
                   </TableCell>
-                  <TableCell className="flex justify-evenly">
+                  <TableCell className="text-center min-w-40">
                     <Button
-                      className="bg-black hover:opacity-70"
+                      className="bg-black mx-1 hover:opacity-70"
                       variant="destructive"
                     >
                       <Image
@@ -141,7 +149,7 @@ const ProductList = () => {
                         height={16}
                       />
                     </Button>
-                    <Button className="bg-red-600 hover:opacity-70">
+                    <Button className="bg-red-600 mx-1 hover:opacity-70">
                       <Image
                         src="/assets/icons/edit.png"
                         alt="trash-icon"
@@ -157,8 +165,8 @@ const ProductList = () => {
         </Table>
         {products ? (
           <CustomPagination
-            currentPage={products.currentPage +1}
-            setCurrentPage={(num)=>setPagination(num)}
+            currentPage={products.currentPage + 1}
+            setCurrentPage={(num) => setPagination(num)}
             totalPages={products.totalPages}
           />
         ) : (

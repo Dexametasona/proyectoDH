@@ -10,6 +10,7 @@ export const getAllProducts = async (params: IProductParam) => {
       `/products`,
       { params }
     );
+    console.log("Get products short: ",data.data)
     return data.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -25,7 +26,7 @@ export const getFullProducts = async (
     const { data } = await axios.get<IApiRes<IPagination<IProductRes>>>(
       `/products/all`,
       {
-        params,
+        params: {...params, size: 10},
         headers: {
           Authorization: `Bearer ${authdata.token}`,
         },
