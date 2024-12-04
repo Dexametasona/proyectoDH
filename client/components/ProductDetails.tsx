@@ -17,7 +17,10 @@ import {
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
+
 import { useAppContext } from "@/context/AppContext";
+import BookingModal from "./ReservaModal";
+
 
 const ProductDetails = () => {
   const { setResultsProductsList } = useAppContext();
@@ -27,6 +30,8 @@ const ProductDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
+  const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
+
 
   const handleBackHome = () => {
     setResultsProductsList([]);
@@ -46,6 +51,7 @@ const ProductDetails = () => {
     }
   }, [id]);
 
+
   if (!product) return <p>Producto no encontrado</p>;
 
   const openModal = (index: string | SetStateAction<number>) => {
@@ -54,6 +60,14 @@ const ProductDetails = () => {
   };
 
   const closeModal = () => setIsModalOpen(false);
+
+  const openReservaModal = () => {
+    setIsReservaModalOpen(true);
+  };
+
+  const closeReservaModal = () => {
+    setIsReservaModalOpen(false);
+  };
 
   return (
     <section className="w-full">
@@ -95,7 +109,7 @@ const ProductDetails = () => {
           <div className="text-center mb-5 mt-5 px-2">
             <h1 className="text-2xl font-bold text-primary">{product.name}</h1>
           </div>
-          <div className="flex flex-col gap-4 px-2 md:grid md:grid-cols-2 border-y border-primary-light">
+          <div className="flex flex-col gap-4 p-2 mt-2 md:grid md:grid-cols-2 border-y border-primary-light">
             <div className="flex flex-col gap-2 mb-2">
               <div className="flex items-center gap-2">
                 <DollarSignIcon className="text-grey-subtext" />
@@ -126,7 +140,7 @@ const ProductDetails = () => {
               </div>
             </div>
             {/* Características solo visual */}
-            <div className="flex md:flex-col gap-4 align-items lg:flex-row">
+            <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
               <div className="flex content-center flex-wrap gap-2">
                 <TruckIcon className="text-primary" /> Incluye transporte
               </div>
@@ -139,22 +153,20 @@ const ProductDetails = () => {
             </div>
           </div>
           {/* Descripción */}
-          <div className="mb-4 px-2">
+          <div className="mb-4 p-2">
             <h2 className="text-xl font-semibold text-primary">Descripción</h2>
             <p>{product.description}</p>
           </div>
 
-          <div className="flex justify-center items-center p-2">
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row justify-center sm:justify-evenly gap-2 items-center p-2">
               <a
                 href="#"
-                className="text-secondary mr-12 underline"
+                className="text-secondary underline"
                 onClick={() => openModal(0)}
               >
                 Ver más
               </a>
-            </div>
-            <Button className="bg-secondary">Reservar</Button>
+            <Button className="bg-secondary w-full sm:w-60 rounded-full" onClick={openReservaModal}>Reservar</Button>
           </div>
           <GalleryModal
             images={product.photos}
@@ -163,6 +175,8 @@ const ProductDetails = () => {
             initialIndex={initialIndex}
           />
         </div>
+        {/* Modal de reserva */}
+        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} />
       </div>
     </section>
   );

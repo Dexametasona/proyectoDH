@@ -9,13 +9,13 @@ const Footer = () => {
   const { authData } = useAuthContext();
   if(authData !== null && authData.rol === 0 ) return (<></>)
   return (
-    <div className="h-24 w-full bg-primary flex justify-between items-center pt-6 px-6 pb-12 sm:pb-6 text-white">
+    <div className="h-24 w-full bg-primary flex flex-wrap justify-between items-center p-6 text-white">
       <div className="flex gap-3">
         {socialMedia.map(({ icon: Icon, name }) => (
           <Icon key={name} className="text-white w-6 h-6" />
         ))}
       </div>
-      <p>© 2024 - Game Yard</p>
+      <p className="order-2 w-full text-center sm:-order-none sm:w-auto">© 2024 - Game Yard</p>
       <Image
         width={54}
         height={30}

@@ -1,9 +1,7 @@
+
 import axios from "@/lib/axiosInstance";
 
-import { AuthenticateUserProps, RegisterUserProps } from "@/types";
-
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
-
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
@@ -42,55 +40,6 @@ export const getAllUsers = async () => {
   }
 };
 
-export const authenticateUser = async ({
-  email,
-  password,
-}: AuthenticateUserProps) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, {
-      email,
-      password,
-    });
-    if (response.status === 200) {
-      const { token } = response.data.data;
-      localStorage.setItem("authToken", token);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error:", error);
-    return false;
-  }
-};
-
-export const registerUser = async ({
-  name,
-  lastname,
-  email,
-  password,
-  setLoading,
-}: RegisterUserProps) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/auth/register`, {
-      name,
-      lastname,
-      email,
-      password,
-    });
-
-    if (response.status === 200 || response.status === 201) {
-      const { token } = response.data.data;
-      localStorage.setItem("authToken", token);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
 export const filterByName = async (name: string) => {
   try {
     const response = await axios.get(
@@ -99,7 +48,9 @@ export const filterByName = async (name: string) => {
 
     console.log(response);
     return response;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 // export const selectDates = async (id) => {};

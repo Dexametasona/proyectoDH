@@ -1,6 +1,5 @@
 export interface CardsContainerProps {
   name: string;
-  cards: ProductCards[];
   verticalColumnMobile?: boolean;
   gap: string;
 }
@@ -42,6 +41,7 @@ interface Tag {
   name: string;
 }
 
+
 export interface Product {
   id: number;
   name: string;
@@ -50,7 +50,9 @@ export interface Product {
   tag?: Tag;
   photoUrl: string;
 }
-
+export interface Order {
+  
+}
 export interface ProductById {
   id: string;
   name: string;
@@ -60,4 +62,9 @@ export interface ProductById {
   status?: string;
   category: Category;
   photos: Thumbnail[];
+<<<<<<< HEAD
+  orders?: Order;
 }
+=======
+}
+>>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f

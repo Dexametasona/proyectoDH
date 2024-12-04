@@ -9,6 +9,7 @@ import { getAllProducts } from "@/lib/api_interface";
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
 import ResultsCards from "@/components/ResultsCards";
+import { getTopProducts } from "@/services/productService";
 
 const RecommendationsContainer = ({
   name,
@@ -17,15 +18,19 @@ const RecommendationsContainer = ({
   const { resultsProductsList } = useAppContext();
 
   const [products, setProducts] = useState<Product[]>([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const fetchedProducts = await getAllProducts();
-      setProducts(fetchedProducts);
+      const fetchedProducts = await getTopProducts();
+      if(fetchedProducts){
+        setProducts(fetchedProducts.content)
+        return;
+      }
+      setProducts([]);
     };
-
     fetchProducts();
   }, []);
 
@@ -88,6 +93,7 @@ const RecommendationsContainer = ({
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       ></CustomPagination>
+
     </section>
   );
 };
