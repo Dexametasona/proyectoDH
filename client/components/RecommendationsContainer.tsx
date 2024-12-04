@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 
 import { CardsContainerProps, Product } from "@/types";
 import ProductsCards from "./ProductsCards";
-import { getAllProducts } from "@/lib/api_interface";
 
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
@@ -25,18 +24,14 @@ const RecommendationsContainer = ({
   useEffect(() => {
     const fetchProducts = async () => {
       const fetchedProducts = await getTopProducts();
-      if(fetchedProducts){
-        setProducts(fetchedProducts.content)
+      if (fetchedProducts) {
+        setProducts(fetchedProducts.content);
         return;
       }
       setProducts([]);
     };
     fetchProducts();
   }, []);
-
-  useEffect(() => {
-    console.log(resultsProductsList);
-  }, [resultsProductsList]);
 
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
@@ -93,7 +88,6 @@ const RecommendationsContainer = ({
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       ></CustomPagination>
-
     </section>
   );
 };

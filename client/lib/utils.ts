@@ -50,8 +50,22 @@ export const validateProductIds = (value: number) => {
 export const validateSearchNameProduct = (text: string) => {
   if (text == null) return true;
   text = text.trim();
-  if(text.length===0) return true;
+  if (text.length === 0) return true;
   if (text.length < 4) return false;
   const pattern = /^[a-zA-Z\s]+$/;
   return pattern.test(text);
+};
+
+export const getDateArray = (array) => {
+  return array.flatMap((item) => {
+    const shipStart = new Date(item.shipStart);
+    const shipEnd = new Date(item.shipEnd);
+    const dates = [];
+
+    for (let d = shipStart; d <= shipEnd; d.setDate(d.getDate() + 1)) {
+      dates.push(new Date(d));
+    }
+
+    return dates;
+  });
 };
