@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { InlineDatePickerWithRange } from "./CalendarModal";
+import { DateCalendar } from "./CalendarModal";
 import { useRouter } from "next/navigation";
 
 
@@ -51,7 +51,7 @@ const BookingModal = ({ isOpen, onClose, orders = [], product }) => {
         </div>
         <div className="container1.1.2 flex w-full gap-2 sm:gap-3">
           <div className="container1.1.2.1 mx-auto relative flex flex-col items-center w-full justify-center">
-            <InlineDatePickerWithRange
+            <DateCalendar
               date={selectedDates}
               onDateChange={handleDateChange}
               disabledDates={disabledDates}

@@ -14,7 +14,7 @@ interface DatePickerWithRangeProps {
     product: undefined;
 }
 
-export function InlineDatePickerWithRange({
+export function DateCalendar({
     date,
     onDateChange,
     orders = [],
