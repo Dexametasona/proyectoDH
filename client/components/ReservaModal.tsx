@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { DatePickerWithRange } from "./DateRangePicker";
-import { format } from "date-fns";
-import { createDate } from "@/lib/api_interface";
 import { InlineDatePickerWithRange } from "./CalendarModal";
+import { useRouter } from "next/navigation";
 
-const BookingModal = ({ isOpen, onClose, orders = [] }) => {
+
+const BookingModal = ({ isOpen, onClose, orders = [], isAuthenticated }) => {
   const [selectedDates, setSelectedDates] = useState({
     from: null,
     to: null,
   });
 
-  const today = new Date();
+  const router = useRouter();
+
+  const [showLoginPrompt, setShowLoginPrompt] = useState(!isAuthenticated);
 
   // Procesar las órdenes como rangos deshabilitados
   const disabledDates = orders.map((order) => ({
@@ -33,13 +34,17 @@ const BookingModal = ({ isOpen, onClose, orders = [] }) => {
       alert("Las fechas seleccionadas están reservadas.");
     }
   }
+  
+  const handleNavigation = (path: string) => {
+    router.push(`${path}`);
+  };
 
   if (!isOpen) return null;
-  console.log(disabledDates)
-  
+
+
   return (
     <div className="container1 fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
-      <div className="container1.1 bg-white w-full sm:w-[90%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
+      <div className="container1.1 bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
         <div className="container1.1.1 flex justify-between items-center mb-4 ">
           <h2 className="text-lg font-semibold">Seleccionar fechas</h2>
           <button
@@ -49,25 +54,45 @@ const BookingModal = ({ isOpen, onClose, orders = [] }) => {
             &times;
           </button>
         </div>
-        <div className="container1.1.2 flex w-full gap-2 sm:gap-3">
-          <div className="container1.1.2.1 mx-auto relative flex flex-col items-center w-full justify-center">
-            <InlineDatePickerWithRange
-              date={selectedDates}
-              onDateChange={handleDateChange}
-              disabledDates={disabledDates}
-            />
+        {showLoginPrompt ? (
+          <div className="flex flex-col place-content-center gap-2  h-60 text-center ">
+            <h3 className="text-lg font-semibold mb-4">
+              Identifícate para reservar
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Ingresa a tu cuenta y reserva todos los artículos que necesites
+              para tu fiesta.
+            </p>
+            <button className="bg-primary text-white px-4 py-2 rounded w-full mb-2" onClick={() => handleNavigation("/login")}>
+              Iniciar sesión
+            </button>
+            <button className="bg-secondary text-white px-4 py-2 rounded w-full" onClick={() => handleNavigation("/signup")}>
+              Crear cuenta
+            </button>
           </div>
-        </div>
-        <button
-          className={`w-full py-2 rounded-md ${selectedDates.from && selectedDates.to
-            ? "bg-secondary text-white"
-            : "bg-gray-400 text-white cursor-not-allowed"
-            }`}
-          disabled={!selectedDates.from || !selectedDates.to}
+        ) : (
+          <>
+            <div className="container1.1.2 flex w-full gap-2 sm:gap-3">
+              <div className="container1.1.2.1 mx-auto relative flex flex-col items-center w-full justify-center">
+                <InlineDatePickerWithRange
+                  date={selectedDates}
+                  onDateChange={handleDateChange}
+                  disabledDates={disabledDates}
+                />
+              </div>
+            </div>
+            <button
+              className={`w-full py-2 rounded-md ${selectedDates.from && selectedDates.to
+                ? "bg-secondary text-white"
+                : "bg-gray-400 text-white cursor-not-allowed"
+                }`}
+              disabled={!selectedDates.from || !selectedDates.to}
 
-        >
-          Continuar reserva
-        </button>
+            >
+              Continuar reserva
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import {
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
 import BookingModal from "./ReservaModal";
+import { useAuthContext } from "@/context/AuthContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const ProductDetails = () => {
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
   const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
-
+  const { authData } = useAuthContext();
 
   const handleBackHome = () => {
     router.push("/home"); // Redirige al inicio
@@ -169,7 +170,7 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} />
+        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} isAuthenticated={authData?.isAuthenticated} />
       </div>
     </section>
   );
