@@ -17,10 +17,15 @@ import {
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
+
+import { useAppContext } from "@/context/AppContext";
 import BookingModal from "./ReservaModal";
 import { useAuthContext } from "@/context/AuthContext";
 
+
 const ProductDetails = () => {
+  const { setResultsProductsList } = useAppContext();
+
   const { id } = useParams();
   const [product, setProduct] = useState<ProductById | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,8 +35,10 @@ const ProductDetails = () => {
   const { authData } = useAuthContext();
 
   const handleBackHome = () => {
-    router.push("/home"); // Redirige al inicio
+    setResultsProductsList([]);
+    router.push("/home");
   };
+
   useEffect(() => {
     if (id) {
       getProductById(id)
@@ -66,7 +73,7 @@ const ProductDetails = () => {
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md ">
-        <div className="flex rounded hover:bg-primary-light m-1 p-1">
+        <div className="flex rounded hover:bg-primary-light m-1 p-1 cursor-pointer">
           <ChevronLeft onClick={handleBackHome} /> Atrás
         </div>
       </div>
