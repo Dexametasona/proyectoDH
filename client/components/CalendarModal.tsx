@@ -1,41 +1,36 @@
 "use client";
 
 import React, { useState } from "react";
-import { addDays, format, isWithinInterval, parseISO } from "date-fns";
-import { DateRange } from "react-day-picker";
+import {format, isWithinInterval, parseISO } from "date-fns";
+import { DateRange, Matcher } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
+import { getDateArray } from "@/lib/utils";
 
 interface DatePickerWithRangeProps {
     date: DateRange | null;
     onDateChange: (dates: DateRange | null) => void;
     orders?: Array<{ shipStart: string; shipEnd: string }>;
+    disabled: Matcher | Matcher[];
+    product: undefined;
 }
 
 export function InlineDatePickerWithRange({
     date,
     onDateChange,
     orders = [],
+    disabled = [],
+    product
 }: DatePickerWithRangeProps) {
     const today = new Date();
 
-    // Configurar rangos deshabilitados basados en los pedidos
-    const disabledRanges = orders.map((order) => ({
-        from: parseISO(order.shipStart),
-        to: parseISO(order.shipEnd),
-    }));
 
-    // Verificar si un rango seleccionado incluye fechas deshabilitadas
-    const isDateDisabled = (selectedRange: DateRange | undefined): boolean => {
-        if (!selectedRange) return false;
-        return disabledRanges.some(({ from, to }) =>
-            isWithinInterval(selectedRange.from, { start: from, end: to }) ||
-            isWithinInterval(selectedRange.to, { start: from, end: to })
-        );
-    };
-
+    const unavailableDates = getDateArray(product.orders);
+    console.log({ before: today });
+    console.log(unavailableDates);
+ 
     // Manejar selección de fechas
     const handleSelect = (selectedDate: DateRange | undefined) => {
-        if (selectedDate && !isDateDisabled(selectedDate)) {
+        if (selectedDate) {
             onDateChange(selectedDate);
         } else if (selectedDate) {
             alert("El rango seleccionado incluye fechas no disponibles.");
@@ -100,7 +95,7 @@ export function InlineDatePickerWithRange({
                     numberOfMonths={numberOfMonths}
                     disabled={[
                         { before: today },
-                        ...disabledRanges, // Rangos dinámicos deshabilitados
+                        ...unavailableDates, // Rangos dinámicos deshabilitados
                     ]}
                 />
             </div>
