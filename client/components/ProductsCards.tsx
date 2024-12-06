@@ -5,13 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Product } from "@/types";
 
-const ProductsCards = ({
-  id,
-  bgImage,
-  photoUrl,
-  name,
-  price,
-}: Product) => {
+const ProductsCards = ({ id, bgImage, photoUrl, name, price }: Product) => {
   const router = useRouter();
 
   const handleRedirect = (page: string) => {

@@ -1,4 +1,3 @@
-
 export interface CardsContainerProps {
   name: string;
   verticalColumnMobile?: boolean;
@@ -16,12 +15,12 @@ export interface GalleryModalProps {
 }
 
 export interface ProductCards {
-  id: string;
+  id: number;
   bgImage?: string;
   cardImage?: string;
   name: string;
   brand?: string;
-  price?: number;
+  price?: number | undefined;
   status?: string;
   description?: string;
   thumbnails?: Thumbnail[];

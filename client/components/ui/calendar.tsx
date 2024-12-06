@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Caption, DayPicker } from "react-day-picker";
-import { es } from "date-fns/locale";
+import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -16,7 +15,6 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  // Array con las iniciales en mayúscula
   const weekdaysShort = ["D", "L", "M", "M", "J", "V", "S"];
 
   const [month, setMonth] = React.useState(new Date());
@@ -61,7 +59,7 @@ function Calendar({
         day_today: "bg-accent text-accent-foreground",
         day_outside:
           "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
-        day_disabled: "text-muted-foreground opacity-50",
+        day_disabled: "text-white opacity-50 bg-disabled",
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",

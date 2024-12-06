@@ -11,52 +11,63 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@radix-ui/react-popover";
+import { useAppContext } from "@/context/AppContext";
+import { getDateArray } from "@/lib/utils";
 
 const SearchBar = () => {
+  const { setResultsProductsList } = useAppContext();
+
   const [search, setSearch] = useState("");
+  const [searchProductsList, setSearchProductsList] = useState([]);
   const [selectedDates, setSelectedDates] = useState({
     from: null,
     to: null,
   });
   const [productAvailability, setProductAvailability] = useState([]);
-
-  const [listOfProducts, setListOfProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
+
+  const setProductToList = async (products) => {
+    const productsInfoArray = await Promise.all(
+      products.map(async (product) => {
+        const productsInfo = await getProductById(product.id);
+        return productsInfo;
+      }),
+    );
+
+    setResultsProductsList(productsInfoArray);
+  };
 
   useEffect(() => {
     if (search.length >= 4) {
       filterByName(search).then((result) => {
         const products = result?.data.data;
-        setListOfProducts(products);
+        setProductToList(products);
+        setSearchProductsList(products);
       });
       setSelectedProduct("");
-      setListOfProducts([]);
+      setSearchProductsList([]);
     }
 
     if (search.length === 0) {
+      setResultsProductsList([]);
     }
   }, [search]);
 
   const handleSelectProduct = async ({ name, id }) => {
+    const productsInfo = await getProductById(id);
+    const unavailableDates = getDateArray(productsInfo.orders);
+
     setSelectedProduct(name);
     setSearch(name);
-    const productsInfo = await getProductById(id);
+
     setSelectedProduct(productsInfo);
-    console.log(productsInfo.orders);
-
-    setProductAvailability(productAvailability);
-
-    const reservedDates = productsInfo.orders.map((order) => ({
-      from: new Date(order.start_date),
-      to: new Date(order.end_date),
-    }));
-
-    setProductAvailability(reservedDates);
+    setProductAvailability(unavailableDates);
   };
 
   const handleDateChange = (dates) => {
     setSelectedDates(dates);
   };
+
   return (
     <div className="bg-secondary p-4 mx-4 rounded-xl flex flex-col items-center gap-2 sm:flex-row sm:items-end sm:gap-3 sm:mx-6">
       <div className="w-full flex flex-col gap-2 sm:gap-3">
@@ -74,9 +85,9 @@ const SearchBar = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </PopoverTrigger>
-            {listOfProducts.length > 0 && selectedProduct === "" && (
+            {searchProductsList.length > 0 && selectedProduct === "" && (
               <PopoverContent className="bg-white z-10 w-[calc(100vw-62px)] focus:none rounded-b-lg sm:ml-6 sm:mt-4">
-                {listOfProducts.map(({ name, id }) => (
+                {searchProductsList.map(({ name, id }) => (
                   <div
                     key={id}
                     className="flex gap-4 px-4 py-2 border-t border-grey-subtext cursor-pointer"
@@ -98,7 +109,7 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            disabledDates={productAvailability}
+            disabled={productAvailability}
             type="from"
             className="w-full"
           />
@@ -109,7 +120,7 @@ const SearchBar = () => {
           <DatePickerWithRange
             date={selectedDates}
             onDateChange={handleDateChange}
-            disabledDates={productAvailability}
+            disabled={productAvailability}
             type="to"
             orders={selectedProduct.orders}
             className="w-full"

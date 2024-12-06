@@ -85,4 +85,18 @@ export const showGuardAuthAlert = ({success}:IAlertActions) => {
     },
     willClose:success
   })
+}
+
+export const getDateArray = (array) => {
+  return array.flatMap((item) => {
+    const shipStart = new Date(item.shipStart);
+    const shipEnd = new Date(item.shipEnd);
+    const dates = [];
+
+    for (let d = shipStart; d <= shipEnd; d.setDate(d.getDate() + 1)) {
+      dates.push(new Date(d));
+    }
+
+    return dates;
+  });
 };
