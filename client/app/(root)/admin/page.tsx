@@ -1,6 +1,7 @@
 "use client";
 
 import Dashboard from "@/components/admin/dashboard/Dashboard";
+import isAdminGuard from "@/guards/adminGuard";
 
 
 const page = () => {
@@ -12,4 +13,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default isAdminGuard(page) ;

@@ -18,6 +18,7 @@ import {
 interface AuthContextType {
   user: User | null;
   authData: IAuthRes | null;
+  loading:boolean,
   loginContext: (credential: IAuthReq) => Promise<IAuthRes>;
   logoutContext:()=>void
 }
@@ -29,7 +30,7 @@ export const AuthContextProvider: React.FC<{
 }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authData, setAuthData] = useState<IAuthRes | null>(null);
-
+  const [loading, setloading] = useState(true)
   useEffect(() => {
     (async () => {
       try {
@@ -42,6 +43,9 @@ export const AuthContextProvider: React.FC<{
         console.error("Usuario no autenticado: ", error);
         setUser(null);
         setAuthData(null);
+      }
+      finally{
+        setloading(false);
       }
     })();
   }, []);
@@ -72,6 +76,7 @@ export const AuthContextProvider: React.FC<{
       value={{
         user,
         authData,
+        loading,
         loginContext,
         logoutContext
       }}
