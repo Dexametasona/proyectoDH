@@ -18,8 +18,8 @@ export const navbarOptions = [
     link: "/catalog",
   },
   {
-    name: "Eventos",
-    link: "/events",
+    name: "Favoritos",
+    link: "/favorites",
   },
   {
     name: "Contacto",

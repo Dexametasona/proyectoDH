@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import Swal from "sweetalert2";
+import { IAlertActions } from "@/types/IAlertActions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -50,8 +52,37 @@ export const validateProductIds = (value: number) => {
 export const validateSearchNameProduct = (text: string) => {
   if (text == null) return true;
   text = text.trim();
-  if(text.length===0) return true;
+  if (text.length === 0) return true;
   if (text.length < 4) return false;
   const pattern = /^[a-zA-Z\s]+$/;
   return pattern.test(text);
+};
+export const showGuardAdminAlert = ({success}:IAlertActions) => {
+  Swal.fire({
+    title: "Acceso denegado",
+    html: "Necesitas permisos de administrador <br/> Rediriendo al inicio de sesión.",
+    icon: "warning",
+    iconColor: "#FF9E00",
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+    willClose:success
+  })
+};
+
+export const showGuardAuthAlert = ({success}:IAlertActions) => {
+  Swal.fire({
+    title: "Acceso denegado",
+    html: "Necesitas iniciar sesión",
+    icon: "warning",
+    iconColor: "#FF9E00",
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+    willClose:success
+  })
 };
