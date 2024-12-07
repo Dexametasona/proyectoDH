@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProductService extends GenericService<Product> {
-  Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId);
+  Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId, List<Long> characteristicsId);
 
 
   Product updateById(Long id,
@@ -17,7 +17,8 @@ public interface ProductService extends GenericService<Product> {
                      List<Long> deletePhotoUrls,
                      List<MultipartFile> photos,
                      Integer categoryId,
-                     Integer tagId);
+                     Integer tagId,
+                     List<Long> characteristicsId);
 
   Page<Product> getAll(Pageable page);
   List<Product> getRandom();

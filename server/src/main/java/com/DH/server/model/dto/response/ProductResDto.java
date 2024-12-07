@@ -1,5 +1,7 @@
 package com.DH.server.model.dto.response;
 
+import com.DH.server.model.entity.Characteristics;
+
 import java.util.List;
 
 public record ProductResDto(
@@ -13,6 +15,7 @@ public record ProductResDto(
         TagResDto tag,
         List<PhotoResDto> photos,
         List<OrderShortDto> orders,
-        Double avgScore
+        Double avgScore,
+        List<CharacteristicResDto> characteristics
 ) {
 }
