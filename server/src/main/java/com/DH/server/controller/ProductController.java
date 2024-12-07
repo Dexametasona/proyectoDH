@@ -49,7 +49,8 @@ public class ProductController {
             newProduct,
             request.photos(),
             request.categoryId(),
-            request.tagId());
+            request.tagId(),
+            request.characteristic());
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(new ApiResponseDto<>(this.productMapper.toResponse(newProduct)));
@@ -130,7 +131,8 @@ public class ProductController {
             deletePhotoId,
             request.photos(),
             request.categoryId(),
-            request.tagId());
+            request.tagId(),
+            request.characteristic());
     return ResponseEntity
             .ok(new ApiResponseDto<>(this.productMapper.toResponse(product)));
   }
