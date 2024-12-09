@@ -3,8 +3,10 @@ package com.DH.server.controller;
 import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.request.LoginReq;
+import com.DH.server.model.dto.request.OrderReqDto;
 import com.DH.server.model.dto.request.UserReqDto;
 import com.DH.server.model.dto.response.UserResDto;
+import com.DH.server.model.entity.Order;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
 import com.DH.server.service.interfaces.AuthService;
@@ -89,5 +91,17 @@ public class AuthController {
           @RequestParam String email){
     this.authService.resendEmailToken(email);
     return ResponseEntity.ok(new ApiResponseDto<>("Email send successfully"));
+  }
+  @PostMapping("/order-confirmation")
+  @Operation(summary = "Confirm a product reservation", description = "Send reservation confirmation email")
+  public ResponseEntity<?> OrderConfirmation(
+          @Parameter(description = "Reservation request", required = true)
+          @Validated
+          @RequestBody
+          OrderReqDto reqDto){
+    UserEntity authUser = this.authService.getAuthUser();
+    Order order = new Order();
+    this.authService.sendOrderConfirmation(authUser, order);
+    return ResponseEntity.ok(new ApiResponseDto<>("Send Order confirmation mail"));
   }
 }
