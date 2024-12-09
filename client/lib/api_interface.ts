@@ -1,4 +1,3 @@
-
 import { useAuthContext } from "@/context/AuthContext";
 import axios from "@/lib/axiosInstance";
 import { IApiRes } from "@/types/IApiRes";
@@ -48,17 +47,14 @@ export const getAllUsers = async () => {
 
 export const filterByName = async (name: string) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/products/autocomplete/${name}`,
-    );
+    const response = await axios.get(`${BASE_URL}/products/autocomplete/${name}`);
 
     console.log(response);
     return response;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
-
 
 // export const createOrder = async (
 //   productId: number,
@@ -66,7 +62,7 @@ export const filterByName = async (name: string) => {
 //   shipEnd: string,
 //   shipStart: string,
 //   remarks: string
-  
+
 // ) => {
 //   try {
 //     const response = await axios.post(`${BASE_URL}/orders`, {
@@ -88,13 +84,11 @@ export const filterByName = async (name: string) => {
 // };
 
 export const createOrder = async (authData: IAuthRes, reservationData: any) => {
-  
   try {
-    const { data } = await axios.post<IApiRes<IProductRes>>(`/orders`, reservationData, {
+    const { data } = await axios.post<IApiRes<IProductRes>>(`/order`, reservationData, {
       headers: {
         Authorization: `Bearer ${authData?.token}`,
       },
-      
     });
     console.log(data);
     console.log("Datos enviados:", reservationData);

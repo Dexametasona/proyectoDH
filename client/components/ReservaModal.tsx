@@ -13,11 +13,11 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
     to: null,
   });
   const [step, setStep] = useState("selectDates");
-  const { user} = useAuthContext();
+  const { user } = useAuthContext();
   const [shipAddress, setShipAddress] = useState("");
   const [remarks, setRemarks] = useState("");
   const [addressError, setAddressError] = useState<string | null>(null);
-
+  const { authData } = useAuthContext();
 
   // Procesar las órdenes como rangos deshabilitados
   const disabledDates = orders.map((order) => ({
@@ -27,9 +27,9 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
 
   // Manejar el cambio de fechas seleccionadas
   function handleDateChange(dates) {
-    const isOverlapping = disabledDates.some((range) =>
-      (dates.from >= range.from && dates.from <= range.to) ||
-      (dates.to >= range.from && dates.to <= range.to)
+    const isOverlapping = disabledDates.some(
+      (range) =>
+        (dates.from >= range.from && dates.from <= range.to) || (dates.to >= range.from && dates.to <= range.to)
     );
 
     if (!isOverlapping) {
@@ -41,11 +41,9 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
 
   if (!isOpen) return null;
   console.log(product);
-  
+
   const dateDetails = {
-    startDate: selectedDates.from
-      ? selectedDates.from.toLocaleDateString()
-      : "",
+    startDate: selectedDates.from ? selectedDates.from.toLocaleDateString() : "",
     endDate: selectedDates.to ? selectedDates.to.toLocaleDateString() : "",
   };
 
@@ -67,9 +65,14 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       return;
     }
 
-    console.log(reservationData)
+    console.log(reservationData);
 
-    const result = await createOrder(reservationData);
+    if (!authData) {
+      console.error("Usuario no autenticado");
+      return;
+    }
+
+    const result = await createOrder(authData, reservationData);
 
     if (result) {
       alert("¡Reserva realizada con éxito!");
@@ -84,14 +87,9 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       <div className="container1.1 bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
         <div className="container1.1.1 flex justify-between items-center mb-4 ">
           <h2 className="text-xl font-semibold">
-            {step === "selectDates"
-              ? "Seleccionar fechas"
-              : "Detalles de la reserva"}
+            {step === "selectDates" ? "Seleccionar fechas" : "Detalles de la reserva"}
           </h2>
-          <button
-            className="text-gray-500 hover:text-gray-700"
-            onClick={onClose}
-          >
+          <button className="text-gray-500 hover:text-gray-700" onClick={onClose}>
             &times;
           </button>
         </div>
@@ -109,10 +107,11 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               </div>
             </div>
             <button
-              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to
-                ? "bg-secondary text-white"
-                : "bg-gray-400 text-white cursor-not-allowed"
-                }`}
+              className={`w-full py-2 rounded-full ${
+                selectedDates.from && selectedDates.to
+                  ? "bg-secondary text-white"
+                  : "bg-gray-400 text-white cursor-not-allowed"
+              }`}
               disabled={!selectedDates.from || !selectedDates.to}
               onClick={() => setStep("reservationSummary")}
             >
@@ -149,48 +148,53 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               <p>Hasta:</p>
               <p className="col-span-2">{dateDetails.endDate}</p>
               <p>Dirección:</p>
+              <input
+                className="border border-inherit col-span-2 p-1 rounded-sm"
+                type="text"
+                name="address"
+                id="address"
+                placeholder="Escribe tu dirección"
+                value={shipAddress}
+                onChange={(e) => setShipAddress(e.target.value)}
+              />
               {!addressError ? (
-                <><input
-                  className="border border-inherit col-span-2 p-1 rounded-sm"
-                  type="text"
-                  name="address"
-                  id="address"
-                  placeholder="Escribe tu dirección"
-                  value={shipAddress}
-                  onChange={(e) => setShipAddress(e.target.value)}
-                /></>
-              ) : (<div className="p-4 text-white border-l-red-500 border-2 bg-black mb-4 rounded-sm shadow-sm">
-                <p>{addressError}</p>
-              </div>
+                <></>
+              ) : (
+                <div className="p-4 text-white border-l-red-500 border-2 bg-black mb-4 rounded-sm shadow-sm">
+                  <p>{addressError}</p>
+                </div>
               )}
-              < p > Comentario:</p>
-            <input
-              className="border border-inherit col-span-2 p-1 rounded-sm"
-              type="text"
-              name="remarks"
-              id="remarks"
-              placeholder="Deja un comentario"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)} />
-          </div>
-        <div className="flex justify-between mt-4">
-          <button
-            onClick={() => setStep("selectDates")}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full"
-          >
-            Volver
-          </button>
-          <button
-            onClick={() => {handleReserve()}}
-            className="bg-secondary text-white px-4 py-2 rounded-full"
-          >
-            Confirmar reserva
-          </button>
-        </div>
-      </>
+              <p> Comentario:</p>
+              <input
+                className="border border-inherit col-span-2 p-1 rounded-sm"
+                type="text"
+                name="remarks"
+                id="remarks"
+                placeholder="Deja un comentario"
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => setStep("selectDates")}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full"
+              >
+                Volver
+              </button>
+              <button
+                onClick={() => {
+                  handleReserve();
+                }}
+                className="bg-secondary text-white px-4 py-2 rounded-full"
+              >
+                Confirmar reserva
+              </button>
+            </div>
+          </>
         )}
+      </div>
     </div>
-    </div >
   );
 };
 
