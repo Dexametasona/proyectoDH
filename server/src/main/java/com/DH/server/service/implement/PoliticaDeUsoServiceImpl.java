@@ -13,7 +13,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PoliticaDeUsoServiceImpl implements PoliticaDeUsoService{
 
+    
     private final PoliticaDeUsoRepository politicaDeUsoRepository;
+
+    @Override
+    public List<PoliticaDeUso> getByProductoId(Long productoId) {
+        return politicaDeUsoRepository.findByProductoId(productoId); 
+    }
 
     @Override
     public PoliticaDeUso create(PoliticaDeUso politica) {

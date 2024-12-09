@@ -10,4 +10,5 @@ public interface PoliticaDeUsoService {
     List<PoliticaDeUso> getAll();
     PoliticaDeUso update(Long id, PoliticaDeUso politica);
     void delete(Long id);
+    List<PoliticaDeUso> getByProductoId(Long productoId);
 }

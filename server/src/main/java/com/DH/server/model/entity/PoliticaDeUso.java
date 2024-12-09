@@ -22,4 +22,8 @@ public class PoliticaDeUso {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String contenido;
 
+    @ManyToOne
+    @JoinColumn(name = "producto_id", nullable = false)
+    private Product producto;
+
 }

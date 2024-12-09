@@ -1,11 +1,14 @@
 package com.DH.server.controller;
 
 import com.DH.server.model.dto.ApiResponseDto;
+import com.DH.server.model.dto.request.PoliticaDeUsoReqDto;
+import com.DH.server.model.dto.response.PoliticaDeUsoResDto;
 import com.DH.server.model.entity.PoliticaDeUso;
+import com.DH.server.model.entity.Product; 
 import com.DH.server.service.interfaces.PoliticaDeUsoService;
+import com.DH.server.service.interfaces.ProductService; 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,51 +22,44 @@ import java.util.List;
 @RequestMapping("${api.base}/politicas")
 @Tag(name = "Políticas de Uso", description = "Controlador para gestionar las políticas de uso")
 public class PoliticaDeUsoController {
-    
+
     private final PoliticaDeUsoService politicaDeUsoService;
+    private final ProductService productService; 
 
     @PostMapping
     @Operation(summary = "Crear Política de Uso", description = "Crea una nueva política de uso.")
-    @ApiResponse(responseCode = "201", description = "Política de uso creada exitosamente.")
-    @ApiResponse(responseCode = "400", description = "Solicitud inválida.")
-    public ResponseEntity<ApiResponseDto<PoliticaDeUso>> create(@RequestBody PoliticaDeUso politica) {
+    public ResponseEntity<ApiResponseDto<PoliticaDeUsoResDto>> create(@RequestBody PoliticaDeUsoReqDto politicaReqDto) {
+        PoliticaDeUso politica = new PoliticaDeUso();
+        politica.setNombre(politicaReqDto.nombre());
+        politica.setDescripcion(politicaReqDto.descripcion());
+        politica.setContenido(politicaReqDto.contenido());
+
+        Product producto = productService.getById(politicaReqDto.productoId());
+        politica.setProducto(producto); 
+
         PoliticaDeUso createdPolitica = politicaDeUsoService.create(politica);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponseDto<>(createdPolitica));
+        PoliticaDeUsoResDto responseDto = new PoliticaDeUsoResDto(
+                createdPolitica.getId(),
+                createdPolitica.getNombre(),
+                createdPolitica.getDescripcion(),
+                createdPolitica.getContenido()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponseDto<>(responseDto));
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtener Política de Uso por ID", description = "Obtiene una política de uso específica por su ID.")
-    @ApiResponse(responseCode = "200", description = "Política de uso encontrada.")
-    @ApiResponse(responseCode = "404", description = "Política de uso no encontrada.")
-    public ResponseEntity<ApiResponseDto<PoliticaDeUso>> getById(@Parameter(description = "ID de la política de uso", required = true)@PathVariable Long id) {
-        PoliticaDeUso politica = politicaDeUsoService.getById(id);
-        return ResponseEntity.ok(new ApiResponseDto<>(politica));
-    }
-
-    @GetMapping
-    @Operation(summary = "Obtener todas las Políticas de Uso", description = "Obtiene una lista de todas las políticas de uso.")
-    @ApiResponse(responseCode = "200", description = "Lista de políticas de uso.")
-    public ResponseEntity<ApiResponseDto<List<PoliticaDeUso>>> getAll() {
-        List<PoliticaDeUso> politicas = politicaDeUsoService.getAll();
-        return ResponseEntity.ok(new ApiResponseDto<>(politicas));
-    }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Actualizar Política de Uso", description = "Actualiza una política de uso existente.")
-    @ApiResponse(responseCode = "200", description = "Política de uso actualizada.")
-    @ApiResponse(responseCode = "404", description = "Política de uso no encontrada.")
-    public ResponseEntity<ApiResponseDto<PoliticaDeUso>> update(@Parameter(description = "ID de la política de uso", required = true)@PathVariable Long id, @RequestBody PoliticaDeUso politica) {
-        PoliticaDeUso updatedPolitica = politicaDeUsoService.update(id, politica);
-        return ResponseEntity.ok(new ApiResponseDto<>(updatedPolitica));
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar Política de Uso", description = "Elimina una política de uso existente por su ID.")
-    @ApiResponse(responseCode = "200", description = "Política de uso eliminada con éxito.")
-    @ApiResponse(responseCode = "404", description = "Política de uso no encontrada.")
-    public ResponseEntity<ApiResponseDto<String>> delete(@Parameter(description = "ID de la política de uso", required = true) @PathVariable Long id) {
-        politicaDeUsoService.delete(id);
-        return ResponseEntity.ok(new ApiResponseDto<>("Política de uso eliminada con éxito, id: " + id));
+    @GetMapping("/producto/{productoId}")
+    @Operation(summary = "Obtener políticas de uso por producto", description = "Obtiene una lista de políticas de uso asociadas a un producto.")
+    public ResponseEntity<ApiResponseDto<List<PoliticaDeUsoResDto>>> getPoliticasByProducto(
+            @Parameter(description = "ID del producto", required = true) @PathVariable Long productoId) {
+        List<PoliticaDeUso> politicas = politicaDeUsoService.getByProductoId(productoId);
+        List<PoliticaDeUsoResDto> responseDtos = politicas.stream()
+                .map(politica -> new PoliticaDeUsoResDto(
+                        politica.getId(),
+                        politica.getNombre(),
+                        politica.getDescripcion(),
+                        politica.getContenido()))
+                .toList();
+        return ResponseEntity.ok(new ApiResponseDto<>(responseDtos));
     }
 
 }
