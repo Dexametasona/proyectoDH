@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {format, isWithinInterval, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { DateRange, Matcher } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { getDateArray } from "@/lib/utils";
@@ -25,16 +25,14 @@ export function DateCalendar({
 
 
     const unavailableDates = getDateArray(product.orders);
-    console.log({ before: today });
-    console.log(unavailableDates);
- 
+
     // Manejar selección de fechas
     const handleSelect = (selectedDate: DateRange | undefined) => {
-        if (selectedDate) {
-            onDateChange(selectedDate);
-        } else if (selectedDate) {
-            alert("El rango seleccionado incluye fechas no disponibles.");
-        }
+           if (selectedDate) {
+                onDateChange(selectedDate);
+            }  else if (selectedDate) {
+                alert("El rango seleccionado incluye fechas no disponibles.");
+            }
     };
 
 
@@ -56,6 +54,8 @@ export function DateCalendar({
             window.removeEventListener("resize", updateNumberOfMonths);
         };
     }, []);
+
+    
 
     return (
         <div className="container-calendar1 bg-white shadow-md rounded-lg mb-4 p-4">
