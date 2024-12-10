@@ -1,7 +1,12 @@
-
+import { useAuthContext } from "@/context/AuthContext";
 import axios from "@/lib/axiosInstance";
+import { IApiRes } from "@/types/IApiRes";
+import { IAuthRes } from "@/types/IAuth";
+import { IProductRes } from "@/types/IProduct";
+
 
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
+
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products`);
@@ -23,11 +28,6 @@ export const getProductById = async (id: string | string[]) => {
   }
 };
 
-// export const getProductById = async ({ id }: number) => {
-//   try {
-//     const response = await axios.get(`${BASE_URL}/products/${id}`);
-//   } catch (error) {}
-// };
 
 export const getAllUsers = async () => {
   try {
@@ -42,40 +42,27 @@ export const getAllUsers = async () => {
 
 export const filterByName = async (name: string) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/products/autocomplete/${name}`,
-    );
+    const response = await axios.get(`${BASE_URL}/products/autocomplete/${name}`);
 
     console.log(response);
     return response;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-// export const selectDates = async (id) => {};
-
-export const createDate = async (
-  productId: number,
-  shipAddress: string,
-  shipEnd: string,
-  shipStart: string,
-  remarks: string,
-) => {
+export const createOrder = async (authData: IAuthRes, reservationData: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}/dates`, {
-      productId,
-      shipAddress,
-      shipEnd,
-      shipStart,
-      remarks,
+    const { data } = await axios.post<IApiRes<IProductRes>>(`/order`, reservationData, {
+      headers: {
+        Authorization: `Bearer ${authData?.token}`,
+      },
     });
-
-    return response.data;
+    console.log(data);
+    console.log("Datos enviados:", reservationData);
+    return data.data;
   } catch (error) {
-    console.error("Error creating date range:", error);
-    return null;
+    console.error("Error creating order:", error);
+    throw error;
   }
 };
-
-createDate(4, "Test", "2024-12-15", "2024-12-08", "comentarios");

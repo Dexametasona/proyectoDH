@@ -38,7 +38,6 @@ export function DatePickerWithRange({
     to: parseISO(order.shipEnd),
   }));
 
-  console.log(disabled);
 
   // Función para verificar si una fecha está dentro de algún rango deshabilitado
   const isDateDisabled = (selectedRange: DateRange | undefined): boolean => {
