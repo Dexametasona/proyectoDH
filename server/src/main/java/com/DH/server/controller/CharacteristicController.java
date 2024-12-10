@@ -10,6 +10,7 @@ import com.DH.server.model.mapper.CharacteristicMapper;
 import com.DH.server.service.interfaces.CharacteristicsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.base}/characteristic")
+@Tag(name="Characteristic", description = "Characteristic Controller")
 public class CharacteristicController {
 
     private final CharacteristicsService characteristicsService;
@@ -47,9 +49,9 @@ public class CharacteristicController {
     @PutMapping(value = "/{id}",consumes = "application/json")
     public ResponseEntity<?> update(
             @Parameter(description = "characteristic id", required = true)
+            @PathVariable Long id,
             @Validated (OnUpdate.class)
-            @RequestBody CharacteristicReqDto request,
-            @PathVariable Long id){
+        @RequestBody CharacteristicReqDto request){
 
         var newCharacteristic=this.characteristicMapper.toEntity(request);
         newCharacteristic=this.characteristicsService.updateById(id,newCharacteristic);
