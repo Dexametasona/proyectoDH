@@ -17,9 +17,9 @@ import {
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
-
 import { useAppContext } from "@/context/AppContext";
-import BookingModal from "./ReservaModal";
+import ShowModal from "./ShowModal";
+
 
 
 const ProductDetails = () => {
@@ -31,25 +31,25 @@ const ProductDetails = () => {
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
   const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
-
+  
 
   const handleBackHome = () => {
     setResultsProductsList([]);
     router.push("/home");
   };
 
-  useEffect(() => {
-    if (id) {
-      getProductById(id)
-        .then((foundProduct) => {
-          setProduct(foundProduct);
-        })
-        .catch((error) => {
-          console.error("Error fetching product:", error);
-          setProduct(null);
-        });
-    }
-  }, [id]);
+    useEffect(() => {
+      if (id) {
+        getProductById(id)
+          .then((foundProduct) => {
+            setProduct(foundProduct);
+          })
+          .catch((error) => {
+            console.error("Error fetching product:", error);
+            setProduct(null);
+          });
+      }
+    }, [id]);
 
 
   if (!product) return <p>Producto no encontrado</p>;
@@ -68,7 +68,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-
+  
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md ">
@@ -159,13 +159,13 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row justify-center sm:justify-evenly gap-2 items-center p-2">
-              <a
-                href="#"
-                className="text-secondary underline"
-                onClick={() => openModal(0)}
-              >
-                Ver más
-              </a>
+            <a
+              href="#"
+              className="text-secondary underline"
+              onClick={() => openModal(0)}
+            >
+              Ver más
+            </a>
             <Button className="bg-secondary w-full sm:w-60 rounded-full" onClick={openReservaModal}>Reservar</Button>
           </div>
           <GalleryModal
@@ -176,7 +176,7 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-        <BookingModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} />
+      <ShowModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} product={product}/>
       </div>
     </section>
   );

@@ -62,9 +62,5 @@ export interface ProductById {
   status?: string;
   category: Category;
   photos: Thumbnail[];
-<<<<<<< HEAD
   orders?: Order;
 }
-=======
-}
->>>>>>> 1e7f9820f73ee74e8bfd80537e42ced15584388f
