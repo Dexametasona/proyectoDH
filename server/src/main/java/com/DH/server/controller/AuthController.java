@@ -101,6 +101,10 @@ public class AuthController {
           OrderReqDto reqDto){
     UserEntity authUser = this.authService.getAuthUser();
     Order order = new Order();
+    order.setShipStart(reqDto.shipStart());
+    order.setShipEnd(reqDto.shipEnd());
+    order.setShipAddress(reqDto.shipAddress());
+    order.setRemarks(reqDto.remarks());
     this.authService.sendOrderConfirmation(authUser, order);
     return ResponseEntity.ok(new ApiResponseDto<>("Send Order confirmation mail"));
   }
