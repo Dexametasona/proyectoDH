@@ -6,6 +6,7 @@ import com.DH.server.model.dto.EmailDTO;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.response.AuthRes;
 import com.DH.server.model.entity.Order;
+import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.enums.Role;
 import com.DH.server.model.mapper.UserMapper;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,19 +125,23 @@ public class AuthServiceImpl implements AuthService {
   }
 
   public void sendOrderConfirmation(UserEntity account, Order order){
-    String tokenUrl = domain+"/"+apiBase+"/auth/verify?token="+account.getTokenEmail();
+//    String tokenUrl = domain+"/"+apiBase+"/auth/verify?token="+account.getTokenEmail();
     Map<String, String> variables = new HashMap<>();
     variables.put("username", account.getName()+" "+account.getLastname());
     variables.put("email", account.getEmail());
     variables.put("OrderNumber", String.valueOf(order.getId()));
-    variables.put("CreationDate", String.valueOf(order.getCreatedAt()));
-    variables.put("DeliveryDate", String.valueOf(order.getShipEnd()));
+
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    variables.put("CreationDate", order.getCreatedAt().format(dateTimeFormatter));
+    variables.put("DeliveryDate", order.getShipEnd().format(dateFormatter));
     variables.put("ShipAdress", order.getShipAddress());
-    variables.put("Product", String.valueOf(order.getProduct()));
-    variables.put("Amount", String.valueOf(order.getAmount()));
+    Product product = order.getProduct();
+    variables.put("Product", product.getName());
+    variables.put("Amount", String.format("%.2f", order.getAmount()));
     EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación de reservas", variables);
     try {
-      this.emailService.sendMailOrder(email, "emailOrder");
+      this.emailService.sendMail(email, "emailOrder");
     } catch (MessagingException e) {
       throw new EmailException("Fail to send email to: "+account.getEmail());
     }
