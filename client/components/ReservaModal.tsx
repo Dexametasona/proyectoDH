@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { DateCalendar } from "./CalendarModal";
 import { useAuthContext } from "@/context/AuthContext";
 import { createOrder } from "@/lib/api_interface";
+import ErrorModal from "./ErrorModal";
+import { getErrorMessage } from "@/lib/utils";
 
 
 
@@ -18,6 +20,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [remarks, setRemarks] = useState("");
   const [addressError, setAddressError] = useState<string | null>(null);
   const { authData } = useAuthContext();
+  const [errorMessage, setErrorMessage] = useState(null);
 
 
   // Procesar las órdenes como rangos deshabilitados
@@ -41,7 +44,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   }
 
   if (!isOpen) return null;
-  
+
 
   const dateDetails = {
     startDate: selectedDates.from ? selectedDates.from.toLocaleDateString() : "",
@@ -66,27 +69,26 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       return;
     }
 
-    console.log(reservationData);
+
 
     if (!authData) {
-      console.error("Usuario no autenticado");
       return;
     }
 
     try {
       const result = await createOrder(authData, reservationData);
 
-      if (result) {
-        setStep("confirmation"); // Mostrar el modal de confirmación
-      } else {
-        alert("Hubo un error al confirmar la reserva. Inténtalo de nuevo.");
+      if (!result) {
+        throw new Error("Error desconocido");
+        
       }
+      setStep("confirmation"); // Mostrar el modal de confirmación
     } catch (error) {
-      console.error("Error al procesar la reserva:", error);
-      alert("Hubo un error al procesar la reserva.");
+      const errorMessage = getErrorMessage(error);
+      setErrorMessage(errorMessage);
     }
   };
-
+  const closeErrorModal = () => setErrorMessage(null);
   return (
     <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
       <div className=" bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
@@ -98,7 +100,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
             &times;
           </button>
         </div>
-        
+
         {step === "selectDates" ? (
           <>
             {/* Selección de Fechas */}
@@ -113,18 +115,17 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               </div>
             </div>
             <button
-              className={`w-full py-2 rounded-full ${
-                selectedDates.from && selectedDates.to
+              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to
                   ? "bg-secondary text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
-              }`}
+                }`}
               disabled={!selectedDates.from || !selectedDates.to}
               onClick={() => setStep("reservationSummary")}
             >
               Continuar reserva
             </button>
           </>
-        ) : step === "reservationSummary" ?(
+        ) : step === "reservationSummary" ? (
           <>
             {/* Resumen de la Reserva */}
             <div>
@@ -181,6 +182,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
                 onChange={(e) => setRemarks(e.target.value)}
               />
             </div>
+            <ErrorModal message={errorMessage} onClose={closeErrorModal} />
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => setStep("selectDates")}
@@ -196,23 +198,24 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               >
                 Confirmar reserva
               </button>
+              
             </div>
           </>
-        ): step === "confirmation" ? (
+        ) : step === "confirmation" ? (
           <div className="flex flex-col items-center gap-4">
-          <div className="text-color-success text-4xl">✔</div>
-          <h3 className="text-lg font-semibold">Confirma tu reserva</h3>
-          <p className="text-sm text-gray-600">
-            Revisa tu correo electrónico y termina con el proceso de reserva.
-          </p>
-          <button
-            onClick={onClose}
-            className="bg-secondary text-white px-4 py-2 rounded-full w-full"
-          >
-            Entendido
-          </button>
-        </div>
-      ) : null}
+            <div className="text-color-success text-4xl">✔</div>
+            <h3 className="text-lg font-semibold">Confirma tu reserva</h3>
+            <p className="text-sm text-gray-600">
+              Revisa tu correo electrónico y termina con el proceso de reserva.
+            </p>
+            <button
+              onClick={onClose}
+              className="bg-secondary text-white px-4 py-2 rounded-full w-full"
+            >
+              Entendido
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
