@@ -1,15 +1,12 @@
 "use client";
 import LoginModal from "@/components/LoginModal";
 import { useAuthContext } from "@/context/AuthContext";
-import { showGuardAuthAlert } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 type GenericComponentProps = Record<string, unknown>;
 
 const isAuthReserve = <P extends GenericComponentProps>(WrappedComponent: React.ComponentType<P>) => {
     const UserGuard = (props: P) => {
         const { authData } = useAuthContext();
-        const router = useRouter();
         const [showModal, setShowModal] = useState(false);
 
         useEffect(() => {
@@ -20,8 +17,9 @@ const isAuthReserve = <P extends GenericComponentProps>(WrappedComponent: React.
             }
         }, [authData]);
 
+        
         if (showModal) {
-            return <LoginModal />;
+            return <LoginModal/>;
         }
 
         return <WrappedComponent {...props} />;

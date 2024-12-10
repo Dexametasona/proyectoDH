@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { DateCalendar } from "./CalendarModal";
-import isAuthReserve from "@/guards/authGuardReserve";
 import { useAuthContext } from "@/context/AuthContext";
 import { createOrder } from "@/lib/api_interface";
-import { IAuthRes } from "@/types/IAuth";
+
+
 
 const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [selectedDates, setSelectedDates] = useState({
@@ -18,6 +18,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [remarks, setRemarks] = useState("");
   const [addressError, setAddressError] = useState<string | null>(null);
   const { authData } = useAuthContext();
+
 
   // Procesar las órdenes como rangos deshabilitados
   const disabledDates = orders.map((order) => ({
@@ -40,7 +41,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   }
 
   if (!isOpen) return null;
-  console.log(product);
+  
 
   const dateDetails = {
     startDate: selectedDates.from ? selectedDates.from.toLocaleDateString() : "",
@@ -72,32 +73,37 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       return;
     }
 
-    const result = await createOrder(authData, reservationData);
+    try {
+      const result = await createOrder(authData, reservationData);
 
-    if (result) {
-      alert("¡Reserva realizada con éxito!");
-      onClose();
-    } else {
-      alert("Hubo un error al confirmar la reserva. Inténtalo de nuevo.");
+      if (result) {
+        setStep("confirmation"); // Mostrar el modal de confirmación
+      } else {
+        alert("Hubo un error al confirmar la reserva. Inténtalo de nuevo.");
+      }
+    } catch (error) {
+      console.error("Error al procesar la reserva:", error);
+      alert("Hubo un error al procesar la reserva.");
     }
   };
 
   return (
-    <div className="container1 fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
-      <div className="container1.1 bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
-        <div className="container1.1.1 flex justify-between items-center mb-4 ">
+    <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
+      <div className=" bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
+        <div className="flex justify-between items-center mb-4 ">
           <h2 className="text-xl font-semibold">
-            {step === "selectDates" ? "Seleccionar fechas" : "Detalles de la reserva"}
+            {step === "selectDates" ? "Seleccionar fechas" : step === "reservationSummary" ? "Detalles de la reserva" : "Confirmación de la reserva"}
           </h2>
           <button className="text-gray-500 hover:text-gray-700" onClick={onClose}>
             &times;
           </button>
         </div>
+        
         {step === "selectDates" ? (
           <>
             {/* Selección de Fechas */}
-            <div className="container1.1.2 flex w-full gap-2 sm:gap-3">
-              <div className="container1.1.2.1 mx-auto relative flex flex-col items-center w-full justify-center">
+            <div className=" flex w-full gap-2 sm:gap-3">
+              <div className="mx-auto relative flex flex-col items-center w-full justify-center">
                 <DateCalendar
                   date={selectedDates}
                   onDateChange={handleDateChange}
@@ -118,7 +124,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               Continuar reserva
             </button>
           </>
-        ) : (
+        ) : step === "reservationSummary" ?(
           <>
             {/* Resumen de la Reserva */}
             <div>
@@ -192,7 +198,21 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               </button>
             </div>
           </>
-        )}
+        ): step === "confirmation" ? (
+          <div className="flex flex-col items-center gap-4">
+          <div className="text-color-success text-4xl">✔</div>
+          <h3 className="text-lg font-semibold">Confirma tu reserva</h3>
+          <p className="text-sm text-gray-600">
+            Revisa tu correo electrónico y termina con el proceso de reserva.
+          </p>
+          <button
+            onClick={onClose}
+            className="bg-secondary text-white px-4 py-2 rounded-full w-full"
+          >
+            Entendido
+          </button>
+        </div>
+      ) : null}
       </div>
     </div>
   );

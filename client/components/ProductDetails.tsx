@@ -18,7 +18,7 @@ import {
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/context/AppContext";
-import ReservaModal from "./ReservaModal";
+import ShowModal from "./ShowModal";
 
 
 
@@ -176,7 +176,7 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-      <ReservaModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} product={product}/>
+      <ShowModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} product={product}/>
       </div>
     </section>
   );
