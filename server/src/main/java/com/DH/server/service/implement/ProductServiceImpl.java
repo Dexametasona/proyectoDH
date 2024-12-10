@@ -5,9 +5,11 @@ import com.DH.server.exception.OrderException;
 import com.DH.server.exception.ProductException;
 import com.DH.server.exception.TagException;
 import com.DH.server.model.dto.request.ProductFilters;
+import com.DH.server.model.entity.Characteristics;
 import com.DH.server.model.entity.Photo;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.mapper.ProductMapper;
+import com.DH.server.persistance.CharacteristicsRepository;
 import com.DH.server.persistance.ProductRepository;
 import com.DH.server.persistance.ReviewRepository;
 import com.DH.server.service.interfaces.*;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +38,8 @@ public class ProductServiceImpl implements ProductService {
   private final TagService tagService;
   private final PhotoService photoService;
 
+  private final CharacteristicsRepository characteristicsRepository;
+
   private final ReviewRepository reviewRepository;
 
 
@@ -45,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Transactional
   @Override
-  public Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId) {
+  public Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId, List<Long> characteristicsId) {
 
     Optional<Product> currentProduct =  this.productRepository.findByName(entity.getName());
     if(currentProduct.isPresent()) throw new ProductException("Product name is already in use");
@@ -66,6 +71,19 @@ public class ProductServiceImpl implements ProductService {
     } catch (TagException e){
       log.info("tag not present");
     }
+
+    if (characteristicsId != null && !characteristicsId.isEmpty()) {
+
+      List<Characteristics> productCharacteristics=new ArrayList<>();
+
+      characteristicsId.forEach(characteristic -> {
+        Optional<Characteristics> characteristics = this.characteristicsRepository.findById(characteristic);
+        characteristics.ifPresent(productCharacteristics::add);
+      } );
+
+      entity.setCharacteristics(productCharacteristics);
+    }
+
     return this.productRepository.save(entity);
   }
 
@@ -90,7 +108,8 @@ public class ProductServiceImpl implements ProductService {
                             List<Long> deletePhoto,
                             List<MultipartFile> photos,
                             Integer categoryId,
-                            Integer tagId) {
+                            Integer tagId,
+                            List<Long> characteristicsId ) {
 
     Product previousProduct = this.getById(id);
 
@@ -131,6 +150,20 @@ public class ProductServiceImpl implements ProductService {
     if (tagId != null) {
       previousProduct.setTag(tagService.getById(tagId.longValue()));
     }
+
+
+    if (characteristicsId != null && !characteristicsId.isEmpty()) {
+
+      List<Characteristics> productCharacteristics=new ArrayList<>();
+
+      characteristicsId.forEach(characteristic -> {
+        Characteristics characteristics = this.characteristicsRepository.findById(characteristic).orElseThrow(()->new ProductException("Characteristic with ID"+characteristic+"was not found"));
+        productCharacteristics.add(characteristics);
+      } );
+
+      previousProduct.setCharacteristics(productCharacteristics);
+    }
+
     return this.productRepository.save(previousProduct);
   }
 

@@ -21,6 +21,7 @@ public abstract class ProductMapper {
 
   @Mapping(target = "status", source = "status")
   @Mapping(target = "photos", source = "photos")
+  @Mapping(target = "characteristics", source = "characteristics")
   public abstract ProductResDto toResponse(Product entity);
 
   @Mapping(target = "status", source = "entity.status")
