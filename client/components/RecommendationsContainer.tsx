@@ -5,6 +5,13 @@ import React, { useEffect, useState } from "react";
 import { CardsContainerProps, Product } from "@/types";
 import ProductsCards from "./ProductsCards";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
 import ResultsCards from "@/components/ResultsCards";

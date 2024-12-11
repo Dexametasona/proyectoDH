@@ -6,6 +6,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { createOrder } from "@/lib/api_interface";
 import ErrorModal from "./ErrorModal";
 import { getErrorMessage } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 
 
@@ -22,8 +23,12 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [addressError, setAddressError] = useState<string | null>(null);
   const { authData } = useAuthContext();
   const [errorMessage, setErrorMessage] = useState(null);
+  
+  const router = useRouter();
 
-
+  const handleNavigation = (path: string) => {
+    router.push(`${path}`);
+  };
   // Procesar las órdenes como rangos deshabilitados
   const disabledDates = orders.map((order) => ({
     from: new Date(order.shipStart),
@@ -211,7 +216,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               Revisa tu correo electrónico y termina con el proceso de reserva.
             </p>
             <button
-              onClick={onClose}
+              onClick={() => handleNavigation("/home")}
               className="bg-secondary text-white px-4 py-2 rounded-full w-full"
             >
               Entendido
