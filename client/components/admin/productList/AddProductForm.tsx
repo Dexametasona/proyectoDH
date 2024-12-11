@@ -4,7 +4,7 @@ import { IProductReq } from "@/types/IProduct";
 import React, { useEffect, useState } from "react";
 import style from "./addProduct.module.css";
 import Image from "next/image";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { getAllCategories } from "@/services/categoryService";
 import { ICategoryRes } from "@/types/ICategory";
 import {
@@ -60,8 +60,12 @@ const AddProductForm = () => {
   };
   const handleImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
     const eFiles = e.target.files;
+    const validFormats = ["image/jpeg", "image/png"];
+
     if (eFiles && eFiles.length > 0) {
-      const selectedFiles = Array.from(eFiles); // Convierte FileList a un array
+      const selectedFiles = Array.from(eFiles).filter((file) =>
+        validFormats.includes(file.type)
+      );
       setProduct((prevDetail) => ({
         ...prevDetail,
         photos: [...prevDetail.photos, ...selectedFiles], // Agrega las nuevas imágenes a las existentes
@@ -75,14 +79,14 @@ const AddProductForm = () => {
   const clearForm = () => {
     setProduct(emptyProduct);
   };
-  const clearMessage = ()=>{
+  const clearMessage = () => {
     setTimeout(() => {
-      setValidationErr(null)
-      setResponseErr(null)
+      setValidationErr(null);
+      setResponseErr(null);
     }, 4000);
-  }
+  };
 
-  const showSuccessMessage = ()=>{
+  const showSuccessMessage = () => {
     Swal.fire({
       title: "!Guardado con Éxito¡",
       text: "El producto ha sido guardado agregado al inventario exitosamente.",
@@ -91,41 +95,41 @@ const AddProductForm = () => {
       customClass: {
         confirmButton: "bg-[#008000] px-40",
         title: "text-[#008000]",
-        htmlContainer: "text-red-500"
-      }
-    })
-  }
+        htmlContainer: "text-red-500",
+      },
+    });
+  };
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateProductName(product.name)) {
       setValidationErr("El nombre debe tener entre 10 a 100 carácteres");
-      clearMessage()
+      clearMessage();
       return;
     }
     if (!validateProductBrand(product.brand)) {
       setValidationErr("La marca debe tener entre 10 a 100 caráctere");
-      clearMessage()
+      clearMessage();
       return;
     }
     if (!validateProductDescription(product.description)) {
       setValidationErr("La descripcion no puede estar vacía");
-      clearMessage()
+      clearMessage();
       return;
     }
     if (!validateProductIds(product.categoryId)) {
       setValidationErr("Id inválido");
-      clearMessage()
+      clearMessage();
       return;
     }
     if (!validateProductPhotos(product.photos)) {
       setValidationErr("Mínimo entre 4 a 8 fotos");
-      clearMessage()
+      clearMessage();
       return;
     }
     if (!validateProductPrice(product.price)) {
       setValidationErr("Precio inválido");
-      clearMessage()
+      clearMessage();
       return;
     }
     console.log("Producto enviado: ", product);
@@ -164,14 +168,13 @@ const AddProductForm = () => {
         const response = error.response.data as IApiRes<unknown>;
         if (response.message === "Product: Product name is already in use") {
           setResponseErr("El nombre del producto ya existe.");
-        }else{
+        } else {
           setResponseErr("Error interno al registrar el producto.");
         }
       } else {
         setResponseErr("Error interno al registrar el producto.");
       }
-    }
-    finally{
+    } finally {
       clearMessage();
     }
   };
@@ -242,7 +245,7 @@ const AddProductForm = () => {
             className={`${style.fieldPhoto} field_photos flex flex-col gap-4`}
           >
             <div className="photo-label-box flex gap-4 justify-between">
-              <p>Imágenes: </p>
+              <p>Imágenes: Solo jpg/png</p>
               <div className="actions flex gap-4">
                 <Button
                   className="bg-black hover:opacity-70 transition-all duration-300 ease-in-out"
