@@ -1,4 +1,3 @@
-import { useAuthContext } from "@/context/AuthContext";
 import axios from "@/lib/axiosInstance";
 import { IApiRes } from "@/types/IApiRes";
 import { IAuthRes } from "@/types/IAuth";
