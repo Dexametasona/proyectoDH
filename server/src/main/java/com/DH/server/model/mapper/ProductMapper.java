@@ -15,7 +15,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class, OrderMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class, OrderMapper.class, CharacteristicMapper.class})
 public abstract class ProductMapper {
   public abstract Product toEntity(ProductReqDto request);
 
@@ -54,7 +54,6 @@ public abstract class ProductMapper {
   public ProductStatus map(Integer id){
     return ProductStatus.fromId(id);
   }
-
   public int map(ProductStatus status){
     return status.getId();
   }
