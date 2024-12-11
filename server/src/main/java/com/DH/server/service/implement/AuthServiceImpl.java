@@ -125,7 +125,6 @@ public class AuthServiceImpl implements AuthService {
   }
 
   public void sendOrderConfirmation(UserEntity account, Order order){
-//    String tokenUrl = domain+"/"+apiBase+"/auth/verify?token="+account.getTokenEmail();
     Map<String, String> variables = new HashMap<>();
     variables.put("username", account.getName()+" "+account.getLastname());
     variables.put("email", account.getEmail());
