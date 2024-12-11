@@ -11,6 +11,15 @@ import ResultsCards from "@/components/ResultsCards";
 import { getTopProducts } from "@/services/productService";
 import { IProductShort } from "@/types/IProduct";
 
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
 const RecommendationsContainer = ({
   name,
   verticalColumnMobile,
@@ -90,6 +99,7 @@ const RecommendationsContainer = ({
         totalPages={totalPages}
       ></CustomPagination>
     </section>
+    
   );
 };
 
