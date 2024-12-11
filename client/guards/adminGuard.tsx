@@ -3,7 +3,8 @@ import { useAuthContext } from "@/context/AuthContext";
 import { showGuardAdminAlert, showGuardAuthAlert } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-type GenericComponentProps = Record<string, unknown>;
+type GenericComponentProps = Record<string, never>;
+
 const isAdminGuard = <P extends GenericComponentProps>(WrappedComponent: React.ComponentType<P>) => {
   const AuthGuard = (props: P) => {
     const { authData } = useAuthContext();
