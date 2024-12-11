@@ -1,7 +1,7 @@
 import AuthenticateUser from "@/components/shared/AuthenticateUser";
 
-const page = () => {
+const Page = () => {
   return <AuthenticateUser />;
 };
 
-export default page;
+export default Page;
