@@ -16,7 +16,7 @@ import { IPagination } from "@/types/IPagination";
 import { IProductParam, IProductShort } from "@/types/IProduct";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const paginationEmpty: IPagination<IProductShort> = {
@@ -36,10 +36,10 @@ const Page = () => {
     useState<IPagination<IProductShort>>(paginationEmpty);
   const { authData, loading } = useAuthContext();
 
-  const handleParamsChange = async (params: Record<string, string>) => {
+  const handleParamsChange = useCallback(async (params: Record<string, string>) => {
     const response = await getAllProducts({ ...params, size: 10 });
     setProducts(response ?? paginationEmpty);
-  };
+  }, [])
 
   // useEffect(() => {
   //   const params = Object.fromEntries(searchParams.entries()) as IProductParam;
