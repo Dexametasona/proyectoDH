@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { format } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { DateRange, Matcher } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { getDateArray } from "@/lib/utils";
@@ -21,10 +21,10 @@ export function DateCalendar({
     disabled = [],
     product
 }: DatePickerWithRangeProps) {
-    const today = new Date();
+    const today = startOfDay(new Date());
 
 
-    const unavailableDates = getDateArray(product.orders);
+    const unavailableDates = getDateArray(product.orders).map(date => startOfDay(new Date(date)));
 
     // Manejar selección de fechas
     const handleSelect = (selectedDate: DateRange | undefined) => {

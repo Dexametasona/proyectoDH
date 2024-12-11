@@ -9,6 +9,7 @@ import { getErrorMessage } from "@/lib/utils";
 
 
 
+
 const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [selectedDates, setSelectedDates] = useState({
     from: null,
@@ -51,6 +52,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
     endDate: selectedDates.to ? selectedDates.to.toLocaleDateString() : "",
   };
 
+  
   const handleReserve = async () => {
     if (!selectedDates.from || !selectedDates.to) {
       alert("Por favor selecciona un rango de fechas.");
@@ -167,7 +169,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               {!addressError ? (
                 <></>
               ) : (
-                <div className="p-4 text-white border-l-red-500 border-2 bg-black mb-4 rounded-sm shadow-sm">
+                <div className="p-2 text-white border-l-red-500 border-2 bg-red-200 mb-2 rounded-sm shadow-sm col-span-3">
                   <p>{addressError}</p>
                 </div>
               )}
