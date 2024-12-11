@@ -5,6 +5,8 @@ import com.DH.server.exception.UserException;
 import com.DH.server.model.dto.EmailDTO;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.response.AuthRes;
+import com.DH.server.model.entity.Order;
+import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.enums.Role;
 import com.DH.server.model.mapper.UserMapper;
@@ -25,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,5 +122,28 @@ public class AuthServiceImpl implements AuthService {
     currentUser.setTokenEmail(jwtutils.generateEmailToken(currentUser));
     var updateUser = userService.create(currentUser);
     this.sendAccountVerification(updateUser);
+  }
+
+  public void sendOrderConfirmation(UserEntity account, Order order){
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", account.getName()+" "+account.getLastname());
+    variables.put("email", account.getEmail());
+    variables.put("OrderNumber", String.valueOf(order.getId()));
+
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    variables.put("CreationDate", order.getCreatedAt().format(dateTimeFormatter));
+    variables.put("DeliveryDate", order.getShipEnd().format(dateFormatter));
+    variables.put("ShipAdress", order.getShipAddress());
+    Product product = order.getProduct();
+    variables.put("Product", product.getName());
+    variables.put("Amount", String.format("%.2f", order.getAmount()));
+    EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación de reservas", variables);
+    try {
+      this.emailService.sendMail(email, "emailOrder");
+    } catch (MessagingException e) {
+      throw new EmailException("Fail to send email to: "+account.getEmail());
+    }
+    
   }
 }
