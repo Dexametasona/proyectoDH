@@ -21,7 +21,10 @@ export function DateCalendar({
     disabled = [],
     product
 }: DatePickerWithRangeProps) {
-    const today = startOfDay(new Date());
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    console.log(today)
 
 
     const unavailableDates = getDateArray(product.orders).map(date => startOfDay(new Date(date)));
@@ -95,6 +98,7 @@ export function DateCalendar({
                     numberOfMonths={numberOfMonths}
                     disabled={[
                         { before: today },
+                        today,
                         ...unavailableDates, // Rangos dinámicos deshabilitados
                     ]}
                 />
