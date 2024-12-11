@@ -53,7 +53,7 @@ public class Product {
   @JoinTable(
           name = "product_characteristics",
           joinColumns = @JoinColumn(name = "product_id"),
-          inverseJoinColumns = @JoinColumn(name = "characteristic_id")
+          inverseJoinColumns = @JoinColumn(name = "characteristics_id")
   )
   private List<Characteristics> characteristics=new ArrayList<>();
 

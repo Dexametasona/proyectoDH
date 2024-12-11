@@ -1,3 +1,4 @@
+
 /* --------------------------------category */
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -106,5 +107,28 @@ CREATE TABLE `favorites` (
     `product_id` bigint NOT NULL,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
     FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+);
+
+/* --------------------------------category */
+DROP TABLE IF EXISTS `characteristics`;
+CREATE TABLE `characteristics` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` text DEFAULT NULL,
+  `type` enum('TRANSPORTE_FACIL','APTO_INTERIOR','APTO_EXTERIOR','RESIST_AGUA','FACIL_MONTAR',
+  'LIGERO_PORT','DURABILIDAD','CONEX_ELECTR','NIÑOS','ADULTOS','TODAS_EDADES','BODAS_EVENTOS',
+  'COLORES','ACCESORIOS','COMPACTO','COMPETITIVO','ACT_INTERACTIVO','SUPERVISION','NO_ENSAMBLAJE','LIMPIEZA_MANTENIMIENTO') NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+
+/* --------------------------------product_characteristics */
+DROP TABLE IF EXISTS `product_characteristics`;
+CREATE TABLE `product_characteristics` (
+    `id` bigint AUTO_INCREMENT PRIMARY KEY,
+    `product_id` bigint NOT NULL,
+    `characteristics_id` bigint NOT NULL,
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`),
+    FOREIGN KEY (`characteristics_id`) REFERENCES `characteristics`(`id`)
 );
 
