@@ -7,8 +7,10 @@ import com.DH.server.model.dto.request.OrderFilters;
 import com.DH.server.model.dto.request.OrderReqDto;
 import com.DH.server.model.dto.response.OrderResDto;
 import com.DH.server.model.entity.Order;
+import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.OrderMapper;
+import com.DH.server.service.implement.ProductServiceImpl;
 import com.DH.server.service.interfaces.AuthService;
 import com.DH.server.service.interfaces.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 
 @RestController
@@ -35,17 +41,22 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
     private final AuthService authService;
+    private final ProductServiceImpl productService;
 
-    @Operation(summary = "Create order",description = "order created" )
+    @Operation(summary = "Create order and send confirmation email",description = "order created and email sended" )
     @PostMapping
     public ResponseEntity<?> create(@RequestBody
                                     @Validated(OnCreate.class)
-                                    OrderReqDto request){
+                                    OrderReqDto request) throws BadRequestException {
         var order=this.orderMapper.toEntity(request);
         order=this.orderService.create(order, request.productId());
+
+        UserEntity authUser = this.authService.getAuthUser();
+        this.orderService.sendOrderConfirmation(authUser, order);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponseDto<>(this.orderMapper.toResponse(order)));
+
     }
 
     @Operation(summary = "Get all Orders ", description = "Get all orders, only for ADMIN")
@@ -109,5 +120,27 @@ public class OrderController {
                                     @PathVariable Long id){
         this.orderService.deleteById(id);
         return ResponseEntity.ok(new ApiResponseDto<>("Tag delete successfully, id: "+id));
+    }
+    @PostMapping("/confirmation")
+    @Operation(summary = "Confirm a product reservation", description = "Send reservation confirmation email")
+        public ResponseEntity<?> OrderConfirmation(
+            @Parameter(description = "Reservation request", required = true)
+            @Validated
+            @RequestBody
+            OrderReqDto reqDto){
+        long productId = reqDto.productId();
+        Product product = this.productService.getById(productId);
+        UserEntity authUser = this.authService.getAuthUser();
+        Order order = new Order();
+        order.setCreatedAt(LocalDateTime.now());
+        order.setShipStart(reqDto.shipStart());
+        order.setShipEnd(reqDto.shipEnd());
+        order.setShipAddress(reqDto.shipAddress());
+        order.setRemarks(reqDto.remarks());
+        order.setProduct(product);
+        order.setAmount(product.getPrice() * ChronoUnit.DAYS.between(reqDto.shipStart(), reqDto.shipEnd()));
+        order = this.orderService.create(order);
+        this.orderService.sendOrderConfirmation(authUser, order);
+        return ResponseEntity.ok(new ApiResponseDto<>("Send Order confirmation mail"));
     }
 }

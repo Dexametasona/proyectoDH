@@ -3,15 +3,11 @@ package com.DH.server.controller;
 import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.request.LoginReq;
-import com.DH.server.model.dto.request.OrderReqDto;
 import com.DH.server.model.dto.request.UserReqDto;
 import com.DH.server.model.dto.response.UserResDto;
-import com.DH.server.model.entity.Order;
-import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.mapper.UserMapper;
 import com.DH.server.service.interfaces.AuthService;
-import com.DH.server.service.implement.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -35,7 +31,6 @@ import java.time.LocalDateTime;
 public class AuthController {
   private final AuthService authService;
   private final UserMapper userMapper;
-  private final ProductServiceImpl productService;
 
   @Value("${api.redirectUrlEmailVerify}")
   private String redirectUrl;
@@ -95,25 +90,5 @@ public class AuthController {
           @RequestParam String email){
     this.authService.resendEmailToken(email);
     return ResponseEntity.ok(new ApiResponseDto<>("Email send successfully"));
-  }
-  @PostMapping("/order-confirmation")
-  @Operation(summary = "Confirm a product reservation", description = "Send reservation confirmation email")
-  public ResponseEntity<?> OrderConfirmation(
-          @Parameter(description = "Reservation request", required = true)
-          @Validated
-          @RequestBody
-          OrderReqDto reqDto){
-    long productId = reqDto.productId();
-    Product product = this.productService.getById(productId);
-    UserEntity authUser = this.authService.getAuthUser();
-    Order order = new Order();
-    order.setCreatedAt(LocalDateTime.now());
-    order.setShipStart(reqDto.shipStart());
-    order.setShipEnd(reqDto.shipEnd());
-    order.setShipAddress(reqDto.shipAddress());
-    order.setRemarks(reqDto.remarks());
-    order.setProduct(product);
-    this.authService.sendOrderConfirmation(authUser, order);
-    return ResponseEntity.ok(new ApiResponseDto<>("Send Order confirmation mail"));
   }
 }

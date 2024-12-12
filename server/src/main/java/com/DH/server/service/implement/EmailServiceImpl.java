@@ -35,21 +35,4 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Fail to send email: " + e.getMessage(), e);
         }
     }
-
-//    @Override
-//    public void sendMailOrder(EmailDTO emailDTO, String template) throws MessagingException {
-//        try {
-//            MimeMessage message = javaMailSender.createMimeMessage();
-//            MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-//            helper.setTo(emailDTO.recipient());
-//            helper.setSubject(emailDTO.subject());
-//            Context context = new Context();
-//            emailDTO.variables().forEach(context::setVariable);
-//            String contentHTML = templateEngine.process(template, context);
-//            helper.setText(contentHTML, true);
-//            javaMailSender.send(message);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Fail to send email: " + e.getMessage(), e);
-//        }
-//    }
 }

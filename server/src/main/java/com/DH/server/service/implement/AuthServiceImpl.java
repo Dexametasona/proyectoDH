@@ -123,27 +123,4 @@ public class AuthServiceImpl implements AuthService {
     var updateUser = userService.create(currentUser);
     this.sendAccountVerification(updateUser);
   }
-
-  public void sendOrderConfirmation(UserEntity account, Order order){
-    Map<String, String> variables = new HashMap<>();
-    variables.put("username", account.getName()+" "+account.getLastname());
-    variables.put("email", account.getEmail());
-    variables.put("OrderNumber", String.valueOf(order.getId()));
-
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    variables.put("CreationDate", order.getCreatedAt().format(dateTimeFormatter));
-    variables.put("DeliveryDate", order.getShipEnd().format(dateFormatter));
-    variables.put("ShipAdress", order.getShipAddress());
-    Product product = order.getProduct();
-    variables.put("Product", product.getName());
-    variables.put("Amount", String.format("%.2f", order.getAmount()));
-    EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación de reservas", variables);
-    try {
-      this.emailService.sendMail(email, "emailOrder");
-    } catch (MessagingException e) {
-      throw new EmailException("Fail to send email to: "+account.getEmail());
-    }
-    
-  }
 }
