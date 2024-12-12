@@ -80,7 +80,7 @@ const Header = () => {
           alt={"logo"}
          /> 
          {/* </div> */}
-        <p className="text-white text-lg md:block hidden ">FUN STARTS HERE</p>
+        <p className="text-white font-semibold  md:block hidden pl-3 ">FUN STARTS HERE</p>
         </div>
       </Link>
       
