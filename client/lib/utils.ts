@@ -88,8 +88,8 @@ export const showGuardAuthAlert = ({ success }: IAlertActions) => {
   });
 };
 
-export const getDateArray = (array) => {
-  return array.flatMap((item) => {
+export const getDateArray = (array:any) => {
+  return array.flatMap((item:any) => {
     const shipStart = new Date(item.shipStart);
     const shipEnd = new Date(item.shipEnd);
     const dates = [];
@@ -120,3 +120,14 @@ export const getCharTypeFromId = (id: number) => {
       return { name: "Otros", icon: Lightbulb };
   }
 };
+export function getErrorMessage(error:any) {
+  const status = error.response?.status;
+  switch (status) {
+    case 400: return error.response?.data?.message || "Los datos enviados no son válidos.";
+    case 401: return error.response?.data?.message ||"Necesitas iniciar sesión para realizar esta acción.";
+    case 403: return error.response?.data?.message ||"No tienes permiso para realizar esta acción.";
+    case 404: return error.response?.data?.message ||"El recurso solicitado no fue encontrado.";
+    case 500: return error.response?.data?.message ||"Ocurrió un error en el servidor. Inténtalo más tarde.";
+    default: return error.response?.data?.message || "Ocurrió un error inesperado. Inténtalo de nuevo.";
+  }
+}
