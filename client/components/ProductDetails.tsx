@@ -20,8 +20,6 @@ import { Button } from "./ui/button";
 import { useAppContext } from "@/context/AppContext";
 import ShowModal from "./ShowModal";
 
-
-
 const ProductDetails = () => {
   const { setResultsProductsList } = useAppContext();
 
@@ -31,26 +29,24 @@ const ProductDetails = () => {
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
   const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
-  
 
   const handleBackHome = () => {
     setResultsProductsList([]);
     router.push("/home");
   };
 
-    useEffect(() => {
-      if (id) {
-        getProductById(id)
-          .then((foundProduct) => {
-            setProduct(foundProduct);
-          })
-          .catch((error) => {
-            console.error("Error fetching product:", error);
-            setProduct(null);
-          });
-      }
-    }, [id]);
-
+  useEffect(() => {
+    if (id) {
+      getProductById(id)
+        .then((foundProduct) => {
+          setProduct(foundProduct);
+        })
+        .catch((error) => {
+          console.error("Error fetching product:", error);
+          setProduct(null);
+        });
+    }
+  }, [id]);
 
   if (!product) return <p>Producto no encontrado</p>;
 
@@ -68,7 +64,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  
+
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md  ">
@@ -78,14 +74,14 @@ const ProductDetails = () => {
       </div>
 
       <div className="container-layout mx-auto sm:mx-20 lg:mx-auto bg-white lg:bg-transparent lg:border lg:border-primary-light rounded-lg shadow-lg ">
-        <div className="container-images px-2 flex flex-col items-center  md:flex-row justify-center">
+        <div className="container-images px-2 flex flex-col items-center  md:flex-row justify-center md:items-stretch">
           <div className="container-img-main flex grow mb-4 md:w-1/2 md:mb-0 shadow-md">
             <Image
               src={product.photos.length ? product.photos[0].url : ""}
               alt={product.name}
               width={800}
               height={800}
-              className="w-full   h-auto rounded-lg object-cover"
+              className="w-full h-auto rounded-lg object-cover"
             />
           </div>
 
@@ -98,7 +94,7 @@ const ProductDetails = () => {
                   alt={`Thumbnail ${thumb.id}`}
                   width={100}
                   height={100}
-                  className="min-w-16 shadow-md md:w-full lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
+                  className="min-w-16 shadow-md md:w-full md:aspect-square lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
                   onClick={() => openModal(thumb.id)}
                 />
               ))}
@@ -166,7 +162,12 @@ const ProductDetails = () => {
             >
               Ver más
             </a>
-            <Button className="bg-secondary w-full sm:w-60 rounded-full" onClick={openReservaModal}>Reservar</Button>
+            <Button
+              className="bg-secondary w-full sm:w-60 rounded-full"
+              onClick={openReservaModal}
+            >
+              Reservar
+            </Button>
           </div>
           <GalleryModal
             images={product.photos}
@@ -176,7 +177,12 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-      <ShowModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} product={product}/>
+        <ShowModal
+          isOpen={isReservaModalOpen}
+          onClose={closeReservaModal}
+          orders={product.orders}
+          product={product}
+        />
       </div>
     </section>
   );

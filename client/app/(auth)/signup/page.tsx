@@ -2,8 +2,8 @@
 
 import RegisterUser from "@/components/shared/RegisterUser";
 
-const page = () => {
+const Page = () => {
   return <RegisterUser />;
 };
 
-export default page;
+export default Page;

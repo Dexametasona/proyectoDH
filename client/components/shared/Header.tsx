@@ -14,10 +14,29 @@ import { Button } from "@/components/ui/button";
 import { navbarOptions } from "@/constants";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const Header = () => {
   const router = useRouter();
   const { user, logoutContext, authData } = useAuthContext();
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Cerrar sesión",
+      icon: "question",
+      text: "Esta seguro de cerrar sesión?",
+      confirmButtonText: "Aceptar",
+      showCancelButton:true,
+      customClass: {
+        confirmButton: "bg-[#008000]",
+        title: "text-[#008000]",
+      },
+    }).then(response=>{
+      if(response.isConfirmed){
+        logoutContext();
+      }
+    })
+  };
 
   const handleNavigation = (path: string) => {
     router.push(`${path}`);
@@ -95,7 +114,7 @@ const Header = () => {
                 <DropdownMenuContent sideOffset={10}>
                   <DropdownMenuItem
                     className="hover:bg-slate-400 ease-in-out transition-all duration-200"
-                    onClick={() => logoutContext()}
+                    onClick={() => handleLogout()}
                   >
                     <p className="cursor-pointer">Cerrar sesión</p>
                   </DropdownMenuItem>
