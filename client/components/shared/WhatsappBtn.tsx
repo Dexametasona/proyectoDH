@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 
 const WhatsappBtn = () => {
@@ -13,7 +14,7 @@ const WhatsappBtn = () => {
 
   return (
     <button className="whatsapp-button" onClick={handleWhatsAppClick}>
-      <img src="assets\icons\whatsapp-logo.png" alt="Logo whatsapp" />
+      <Image className="w-full" width={30} height={30} src="/assets/icons/whatsapp-logo.png" alt="Logo whatsapp" />
     </button>
   );
 };

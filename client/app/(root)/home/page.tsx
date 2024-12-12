@@ -4,6 +4,7 @@ import CategoryContainer from "@/components/CategoriesContainer";
 import Hero from "@/components/home/Hero";
 import SearchBar from "@/components/SearchBar";
 import RecommendationsContainer from "@/components/RecommendationsContainer";
+import WhatsappBtn from "@/components/shared/WhatsappBtn";
 
 const page = () => {
   return (
@@ -19,6 +20,7 @@ const page = () => {
         name={"Recomendaciones"}
         gap="4"
       />
+      <WhatsappBtn/>
     </>
   );
 };

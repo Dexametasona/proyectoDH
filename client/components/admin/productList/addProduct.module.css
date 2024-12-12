@@ -1,7 +1,7 @@
 .fieldBox {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: repeat(6, auto);
   grid-column-gap: 16px;
   grid-row-gap: 8px;
 }
@@ -10,7 +10,7 @@
   
 }
 .fieldCategory {
-  grid-area: 1 / 2 / 3 / 3;
+  grid-area: 1 / 2 / 2 / 3;
   display: flex;
   flex-direction: column;
 }

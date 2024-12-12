@@ -9,9 +9,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log('Se ejecuto el effect')
     if(loading) return;
-    console.log('se ejecuto cuando el loading termino')
     if (authData === null) {
       showGuardAuthAlert({success: () => router.push('/login')});
       return;
