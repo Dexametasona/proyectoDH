@@ -33,6 +33,7 @@ const AddProductForm = () => {
     tagId: 0,
     photos: [],
     characteristic: [],
+    orders:[]
   };
   const { authData } = useAuthContext();
   const [product, setProduct] = useState(emptyProduct);
