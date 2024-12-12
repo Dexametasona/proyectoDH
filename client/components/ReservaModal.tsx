@@ -22,8 +22,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const [remarks, setRemarks] = useState("");
   const [addressError, setAddressError] = useState<string | null>(null);
   const { authData } = useAuthContext();
-  const [errorMessage, setErrorMessage] = useState(null);
-  
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
   const handleNavigation = (path: string) => {
@@ -37,17 +36,27 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
 
   // Manejar el cambio de fechas seleccionadas
   function handleDateChange(dates) {
-    const isOverlapping = disabledDates.some(
-      (range) =>
-        (dates.from >= range.from && dates.from <= range.to) || (dates.to >= range.from && dates.to <= range.to)
-    );
+    if (!dates.from && !dates.to) {
+      setSelectedDates({ from: null, to: null });
+      setErrorMessage(null);  // Resetea el mensaje de error si se deseleccionan las fechas
+      return;
+    }
+    const isOverlapping = disabledDates.some((range) => {
+      const fromInRange = dates.from >= range.from && dates.from <= range.to;
+      const toInRange = dates.to >= range.from && dates.to <= range.to;
+      const rangeInSelected = range.from >= dates.from && range.to <= dates.to;
 
-    if (!isOverlapping) {
-      setSelectedDates(dates);
+      return fromInRange || toInRange || rangeInSelected;
+    });
+    if (isOverlapping) {
+      setErrorMessage("Las fechas seleccionadas están reservadas.");
+      setSelectedDates({ from: null, to: null });
     } else {
-      alert("Las fechas seleccionadas están reservadas.");
+      setErrorMessage(null);  // Resetea el mensaje de error si no hay solapamiento
+      setSelectedDates(dates);  // Asigna las fechas seleccionadas
     }
   }
+
 
   if (!isOpen) return null;
 
@@ -57,10 +66,11 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
     endDate: selectedDates.to ? selectedDates.to.toLocaleDateString() : "",
   };
 
-  
+
   const handleReserve = async () => {
+
     if (!selectedDates.from || !selectedDates.to) {
-      alert("Por favor selecciona un rango de fechas.");
+      setErrorMessage("Por favor selecciona un rango de fechas.");
       return;
     }
 
@@ -71,12 +81,11 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       shipEnd: selectedDates.to.toISOString().split("T")[0],
       remarks,
     };
+
     if (!shipAddress.trim()) {
       setAddressError("Por favor, ingresa una dirección");
       return;
     }
-
-
 
     if (!authData) {
       return;
@@ -87,7 +96,6 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
 
       if (!result) {
         throw new Error("Error desconocido");
-        
       }
       setStep("confirmation"); // Mostrar el modal de confirmación
     } catch (error) {
@@ -96,7 +104,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
     }
   };
   const closeErrorModal = () => setErrorMessage(null);
-  
+
   return (
     <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
       <div className=" bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
@@ -122,13 +130,20 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
                 />
               </div>
             </div>
+
             <button
-              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to
-                  ? "bg-secondary text-white"
-                  : "bg-gray-400 text-white cursor-not-allowed"
+              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to && !errorMessage
+                ? "bg-secondary text-white"
+                : "bg-gray-400 text-white cursor-not-allowed"
                 }`}
-              disabled={!selectedDates.from || !selectedDates.to}
-              onClick={() => setStep("reservationSummary")}
+              disabled={!selectedDates.from || !selectedDates.to || errorMessage}
+              onClick={() => {
+                if (errorMessage) {
+                  alert(errorMessage);  // Mostrar el mensaje de error si las fechas están reservadas
+                } else {
+                  setStep("reservationSummary");
+                }
+              }}
             >
               Continuar reserva
             </button>
@@ -172,9 +187,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
                 value={shipAddress}
                 onChange={(e) => setShipAddress(e.target.value)}
               />
-              {!addressError ? (
-                <></>
-              ) : (
+              {addressError && (
                 <div className="p-2 text-white border-l-red-500 border-2 bg-red-200 mb-2 rounded-sm shadow-sm col-span-3">
                   <p>{addressError}</p>
                 </div>
@@ -206,7 +219,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
               >
                 Confirmar reserva
               </button>
-              
+
             </div>
           </>
         ) : step === "confirmation" ? (
