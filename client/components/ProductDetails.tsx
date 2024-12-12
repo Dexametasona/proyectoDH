@@ -65,6 +65,7 @@ const ProductDetails = () => {
     setIsReservaModalOpen(false);
   };
 
+ 
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md  ">

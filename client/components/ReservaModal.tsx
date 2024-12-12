@@ -96,6 +96,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
     }
   };
   const closeErrorModal = () => setErrorMessage(null);
+  
   return (
     <div className="fixed inset-0 flex items-end sm:items-center sm:justify-center bottom-0 bg-black bg-opacity-50 z-50">
       <div className=" bg-white w-full sm:w-[75%] sm:max-w-[720px] sm:rounded-lg rounded-t-lg p-4 sm:p-6 shadow-lg">
