@@ -8,13 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getFullProducts } from "@/services/productService";
+import { useCallback, useEffect, useState } from "react";
+import { deleteProduct, getFullProducts } from "@/services/productService";
 import { IProductRes } from "@/types/IProduct";
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import CustomPagination from "@/components/shared/CustomPagination";
 import { IPagination } from "@/types/IPagination";
+import Swal from "sweetalert2";
 
 const ProductList = () => {
   const [products, setProducts] = useState<IPagination<IProductRes> | null>(
@@ -51,30 +52,58 @@ const ProductList = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        if (authData === null) {
-          setProducts(null);
-          return;
-        }
-        const productsPagination = await getFullProducts({}, authData);
-        if (productsPagination?.content) {
-          setProducts(productsPagination);
-          return;
-        }
+  const fetchProducts = useCallback(async () => {
+    try {
+      if (authData === null) {
         setProducts(null);
-      } catch (error: unknown) {
-        console.error(error);
-        setProducts(null);
+        return;
       }
-    };
-
-    fetchProducts();
+      const productsPagination = await getFullProducts({}, authData);
+      if (productsPagination?.content) {
+        setProducts(productsPagination);
+        return;
+      }
+      setProducts(null);
+    } catch (error: unknown) {
+      console.error(error);
+      setProducts(null);
+    }
   }, [authData]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [authData, fetchProducts]);
 
   const handleClickAdd = () => {
     router.push("/admin/addProduct");
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const res = await Swal.fire({
+        icon: "warning",
+        title: "Eliminar prodcuto",
+        text: "Seguro que deseas eliminar este producto? Esta operación es irreversible.",
+        showCancelButton: true,
+        showConfirmButton: true,
+      });
+      if (res.isConfirmed) {
+        await deleteProduct(authData!, id);
+        Swal.fire({
+          icon: "info",
+          title: "Producto eliminado",
+          showConfirmButton: true,
+        });
+        fetchProducts()
+      }
+    } catch (error) {
+      console.error("Error al elminar elproducto", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al eliminar",
+        showConfirmButton: true,
+      });
+    }
   };
 
   return (
@@ -139,6 +168,8 @@ const ProductList = () => {
                   </TableCell>
                   <TableCell className="text-center min-w-40">
                     <Button
+                      type="button"
+                      onClick={() => handleDeleteProduct(product.id)}
                       className="bg-black mx-1 hover:opacity-70"
                       variant="destructive"
                     >

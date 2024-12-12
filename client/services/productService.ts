@@ -58,3 +58,17 @@ export const createProduct = async (authdata: IAuthRes, productData: FormData) =
     throw error;
   }
 };
+
+export const deleteProduct = async (authdata: IAuthRes, productId:number) => {
+  try {
+    const { data } = await axios.delete<IApiRes<string>>(`/products/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${authdata.token}`,
+      },
+    });
+    return data.data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+};
