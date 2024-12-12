@@ -49,6 +49,14 @@ public class Product {
   private List<Review> review = new ArrayList<>();
 
 
+  @ManyToMany
+  @JoinTable(
+          name = "product_characteristics",
+          joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "characteristics_id")
+  )
+  private List<Characteristics> characteristics=new ArrayList<>();
+
   @PrePersist
   public void onCreate(){
     this.status = ProductStatus.AVAILABLE;

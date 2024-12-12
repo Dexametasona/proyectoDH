@@ -45,6 +45,8 @@ public class SecurityConfig {
                             "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.GET,"api/v1/category/**").permitAll()
                     .requestMatchers("api/v1/category/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"api/v1/characteristic/**").permitAll()
+                    .requestMatchers("api/v1/characteristic/**").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/tag/**").permitAll()
                     .requestMatchers( HttpMethod.GET, "api/v1/products/all").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/products/**").permitAll()

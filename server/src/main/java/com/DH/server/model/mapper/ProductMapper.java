@@ -15,12 +15,13 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class, OrderMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, TagMapper.class, OrderMapper.class, CharacteristicMapper.class})
 public abstract class ProductMapper {
   public abstract Product toEntity(ProductReqDto request);
 
   @Mapping(target = "status", source = "status")
   @Mapping(target = "photos", source = "photos")
+  @Mapping(target = "characteristics", source = "characteristics")
   public abstract ProductResDto toResponse(Product entity);
 
   @Mapping(target = "status", source = "entity.status")
@@ -53,7 +54,6 @@ public abstract class ProductMapper {
   public ProductStatus map(Integer id){
     return ProductStatus.fromId(id);
   }
-
   public int map(ProductStatus status){
     return status.getId();
   }

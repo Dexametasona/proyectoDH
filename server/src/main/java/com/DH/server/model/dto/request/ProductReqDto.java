@@ -3,6 +3,7 @@ package com.DH.server.model.dto.request;
 
 import com.DH.server.model.dto.OnCreate;
 import com.DH.server.model.dto.OnUpdate;
+import com.DH.server.model.entity.Characteristics;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +30,9 @@ public record ProductReqDto(
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
         Integer categoryId,
         @Min(value = 0, groups = {OnCreate.class, OnUpdate.class})
-        Integer tagId
+        Integer tagId,
+
+        @NotNull(groups = {OnCreate.class})
+        List<Long> characteristic
 ) {
 }
