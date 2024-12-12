@@ -3,6 +3,7 @@ import axios from "@/lib/axiosInstance";
 import { IApiRes } from "@/types/IApiRes";
 import { IAuthRes } from "@/types/IAuth";
 import { IProductRes } from "@/types/IProduct";
+import { IUserRes } from "@/types/IUser";
 
 
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
