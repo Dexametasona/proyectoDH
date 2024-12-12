@@ -64,9 +64,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  const checkAvailability = (status : any) => {
-    return Number(status) === 0; 
-  };
+  
  
   return (
     <section className="w-full">
@@ -123,7 +121,7 @@ const ProductDetails = () => {
               </div>
               {/* Status */}
               <div className="flex items-center gap-2">
-                {checkAvailability(product.status) ? (
+                {product.status ? (
                   <>
                     <Check className="text-success" />
                     <span className="text-[var(--color-active)] font-bold">
