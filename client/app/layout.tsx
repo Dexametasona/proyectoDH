@@ -5,6 +5,7 @@ import { AppContextProvider } from "@/context/AppContext";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { LoaderContextProvider } from "@/context/loaderContext";
 import { MainComponent } from "@/components/shared/MainComponent";
+import WhatsappBtn from "@/components/shared/WhatsappBtn";
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -32,10 +33,9 @@ export default function RootLayout({
       <AuthContextProvider>
         <AppContextProvider>
           <html lang="en">
-            <body
-              className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}
-            >
+            <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}>
               <MainComponent>
+                <WhatsappBtn />
                 {children}
               </MainComponent>
             </body>
