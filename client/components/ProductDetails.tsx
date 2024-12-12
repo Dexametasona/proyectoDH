@@ -67,7 +67,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  
+  console.log(initialIndex)
  
   return (
     <section className="w-full">
@@ -91,7 +91,7 @@ const ProductDetails = () => {
 
           {product.photos && product.photos.length > 0 && (
             <div className="container-img-gallery flex gap-2 w-full justify-evenly md:w-1/2 md:grid md:grid-cols-2 md:pl-4">
-              {product.photos.map((thumb) => (
+              {product.photos.map((thumb, index) => (
                 <Image
                   key={thumb.id}
                   src={thumb.url}
@@ -99,7 +99,8 @@ const ProductDetails = () => {
                   width={100}
                   height={100}
                   className="min-w-16 shadow-md md:w-full md:aspect-square lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
-                  onClick={() => openModal(thumb.id)}
+                  onClick={() => openModal(index)}
+                  
                 />
               ))}
             </div>
@@ -139,7 +140,7 @@ const ProductDetails = () => {
                 )}
               </div>
             </div>
-            {/* Características solo visual */}
+            {/* Características*/}
             <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
               {product.characteristics.map(char=>(
               <div key={char.id} className="flex content-center flex-wrap gap-2">
