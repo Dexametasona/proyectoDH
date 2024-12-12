@@ -8,18 +8,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getFullProducts } from "@/services/productService";
-import { IProductRes } from "@/types/IProduct";
+import { useCallback, useEffect, useState } from "react";
+import {
+  deleteProduct,
+  getFullProducts,
+  updateProduct,
+} from "@/services/productService";
+import { IProductReq, IProductRes } from "@/types/IProduct";
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import CustomPagination from "@/components/shared/CustomPagination";
 import { IPagination } from "@/types/IPagination";
+import Swal from "sweetalert2";
+import { ICategoryRes } from "@/types/ICategory";
+import { getAllCategories } from "@/services/categoryService";
+import ProductEditModal from "./ProducEditModal";
 
 const ProductList = () => {
+  const emptyProduct: IProductRes = {
+    name: "",
+    description: "",
+    price: 0,
+    brand: "",
+    category: {
+      description: "",
+      id: 0,
+      photo_Url: "",
+      title: "",
+    },
+    photos: [],
+    orders: [],
+    characteristics: [],
+    id: 0,
+    status: 0,
+  };
   const [products, setProducts] = useState<IPagination<IProductRes> | null>(
     null
   );
+  const [categories, setCategories] = useState<ICategoryRes[]>([]);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [productTarget, setProductTarget] = useState<IProductRes>(emptyProduct);
   const { authData } = useAuthContext();
   const router = useRouter();
 
@@ -51,30 +79,90 @@ const ProductList = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        if (authData === null) {
-          setProducts(null);
-          return;
-        }
-        const productsPagination = await getFullProducts({}, authData);
-        if (productsPagination?.content) {
-          setProducts(productsPagination);
-          return;
-        }
+  const fetchProducts = useCallback(async () => {
+    try {
+      if (authData === null) {
         setProducts(null);
-      } catch (error: unknown) {
-        console.error(error);
-        setProducts(null);
+        return;
       }
-    };
-
-    fetchProducts();
+      const productsPagination = await getFullProducts({}, authData);
+      if (productsPagination?.content) {
+        setProducts(productsPagination);
+        return;
+      }
+      setProducts(null);
+    } catch (error: unknown) {
+      console.error(error);
+      setProducts(null);
+    }
   }, [authData]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [authData, fetchProducts]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getAllCategories();
+        setCategories(response);
+      } catch (error) {
+        console.error("Error al obtener las categorias, ", error);
+        setCategories([]);
+      }
+    })();
+  }, []);
 
   const handleClickAdd = () => {
     router.push("/admin/addProduct");
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const res = await Swal.fire({
+        icon: "warning",
+        title: "Eliminar prodcuto",
+        text: "Seguro que deseas eliminar este producto? Esta operación es irreversible.",
+        showCancelButton: true,
+        showConfirmButton: true,
+      });
+      if (res.isConfirmed) {
+        await deleteProduct(authData!, id);
+        Swal.fire({
+          icon: "info",
+          title: "Producto eliminado",
+          showConfirmButton: true,
+        });
+        fetchProducts();
+      }
+    } catch (error) {
+      console.error("Error al elminar elproducto", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al eliminar",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const handleUpdateProduct = async (
+    productId: number,
+    data: Partial<IProductReq>
+  ) => {
+    const formData = new FormData();
+    formData.append("categoryId", data.categoryId!.toString());
+    try {
+      await updateProduct(authData!, formData, productId);
+      setIsShowModal(false)
+      fetchProducts();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleShowModal = (target: IProductRes) => {
+    setIsShowModal(true);
+    setProductTarget(target);
   };
 
   return (
@@ -139,6 +227,8 @@ const ProductList = () => {
                   </TableCell>
                   <TableCell className="text-center min-w-40">
                     <Button
+                      type="button"
+                      onClick={() => handleDeleteProduct(product.id)}
                       className="bg-black mx-1 hover:opacity-70"
                       variant="destructive"
                     >
@@ -149,7 +239,10 @@ const ProductList = () => {
                         height={16}
                       />
                     </Button>
-                    <Button className="bg-red-600 mx-1 hover:opacity-70">
+                    <Button
+                      className="bg-red-600 mx-1 hover:opacity-70"
+                      onClick={() => handleShowModal(product)}
+                    >
                       <Image
                         src="/assets/icons/edit.png"
                         alt="trash-icon"
@@ -173,6 +266,14 @@ const ProductList = () => {
           <></>
         )}
       </div>
+      {isShowModal ? (
+        <ProductEditModal
+          updateProduct={handleUpdateProduct}
+          categories={categories}
+          product={productTarget}
+          showModal={setIsShowModal}
+        />
+      ) : null}
     </section>
   );
 };

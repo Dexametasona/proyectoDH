@@ -3,7 +3,6 @@
 import { useParams, useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
-import { ProductById } from "@/types";
 import GalleryModal from "@/components/modal/GalleryModal";
 import {
   Check,
@@ -11,20 +10,19 @@ import {
   DollarSignIcon,
   CrownIcon,
   ChevronLeft,
-  TruckIcon,
-  UmbrellaIcon,
-  AirVent,
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/context/AppContext";
 import ShowModal from "./ShowModal";
+import { IProductRes } from "@/types/IProduct";
+import { getCharTypeFromId } from "@/lib/utils";
 
 const ProductDetails = () => {
   const { setResultsProductsList } = useAppContext();
 
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductById | null>(null);
+  const [product, setProduct] = useState<IProductRes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
@@ -33,6 +31,11 @@ const ProductDetails = () => {
   const handleBackHome = () => {
     setResultsProductsList([]);
     router.push("/home");
+  };
+
+  const idTypeToIcon = (id:number) => {
+    const { icon: Icon } = getCharTypeFromId(id);
+    return (<Icon className="text-primary"/>);
   };
 
   useEffect(() => {
@@ -121,7 +124,7 @@ const ProductDetails = () => {
               </div>
               {/* Status */}
               <div className="flex items-center gap-2">
-                {product.status ? (
+                {product.status === 0? (
                   <>
                     <Check className="text-success" />
                     <span className="text-[var(--color-active)] font-bold">
@@ -138,15 +141,13 @@ const ProductDetails = () => {
             </div>
             {/* Características solo visual */}
             <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
-              <div className="flex content-center flex-wrap gap-2">
-                <TruckIcon className="text-primary" /> Incluye transporte
+              {product.characteristics.map(char=>(
+              <div key={char.id} className="flex content-center flex-wrap gap-2">
+                 {idTypeToIcon(char.type)}
+                <span>{char.description}</span>
               </div>
-              <div className="flex flex-wrap content-center gap-2">
-                <AirVent className="text-primary" /> Incluye inflador
-              </div>
-              <div className="flex flex-wrap content-center gap-2">
-                <UmbrellaIcon className="text-primary" /> Impermeable
-              </div>
+
+              ))}
             </div>
           </div>
           {/* Descripción */}
