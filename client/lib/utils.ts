@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Swal from "sweetalert2";
 import { IAlertActions } from "@/types/IAlertActions";
+import { BaggageClaim, Lightbulb, MapPinned, Palette, Shield, UserCheck, Wrench } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,7 +58,7 @@ export const validateSearchNameProduct = (text: string) => {
   const pattern = /^[a-zA-Z\s]+$/;
   return pattern.test(text);
 };
-export const showGuardAdminAlert = ({success}:IAlertActions) => {
+export const showGuardAdminAlert = ({ success }: IAlertActions) => {
   Swal.fire({
     title: "Acceso denegado",
     html: "Necesitas permisos de administrador <br/> Rediriendo al inicio de sesión.",
@@ -68,11 +69,11 @@ export const showGuardAdminAlert = ({success}:IAlertActions) => {
     didOpen: () => {
       Swal.showLoading();
     },
-    willClose:success
-  })
+    willClose: success,
+  });
 };
 
-export const showGuardAuthAlert = ({success}:IAlertActions) => {
+export const showGuardAuthAlert = ({ success }: IAlertActions) => {
   Swal.fire({
     title: "Acceso denegado",
     html: "Necesitas iniciar sesión",
@@ -83,9 +84,9 @@ export const showGuardAuthAlert = ({success}:IAlertActions) => {
     didOpen: () => {
       Swal.showLoading();
     },
-    willClose:success
-  })
-}
+    willClose: success,
+  });
+};
 
 export const getDateArray = (array) => {
   return array.flatMap((item) => {
@@ -99,4 +100,23 @@ export const getDateArray = (array) => {
 
     return dates;
   });
+};
+
+export const getCharTypeFromId = (id: number) => {
+  switch (id) {
+    case 1:
+      return { name: "Portabilidad", icon: BaggageClaim };
+    case 2:
+      return { name: "Ubicación", icon: MapPinned };
+    case 3:
+      return { name: "Resistencia", icon: Shield };
+    case 4:
+      return { name: "Montaje", icon: Wrench };
+    case 5:
+      return { name: "Uso", icon:  UserCheck};
+    case 6:
+      return { name: "Estetica", icon: Palette };
+    default:
+      return { name: "Otros", icon: Lightbulb };
+  }
 };
