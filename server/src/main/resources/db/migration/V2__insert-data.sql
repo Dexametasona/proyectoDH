@@ -620,26 +620,26 @@ VALUES
 /* --------------------------------characteristics */
 INSERT INTO `characteristics`
 VALUES
-(1,"Fácil de transportar",'TRANSPORTE_FACIL'),
-(2,"Apto para interiores",'APTO_INTERIOR'),
-(3,"Apto para exteriores",'APTO_EXTERIOR'),
-(4,"Resistente al agua",'RESIST_AGUA'),
-(5,"Fácil de montar",'FACIL_MONTAR'),
-(6,"Ligero y portatil",'LIGERO_PORT'),
-(7,"Alta_Durabilidad",'DURABILIDAD'),
-(8,"Requiere conexión eléctrica",'CONEX_ELECTR'),
-(9,"Apto para niños",'NIÑOS'),
-(10,"Apto para adultos",'ADULTOS'),
-(11,"Para todas las edades",'TODAS_EDADES'),
-(12,"Uso en bodas o eventos formales",'BODAS_EVENTOS'),
-(13,"Colores llamativos",'COLORES'),
-(14,"Accesorios incluidos",'ACCESORIOS'),
-(15,"Diseño compacto",'COMPACTO'),
-(16,"Juego competitivo",'COMPETITIVO'),
-(17,"Actividad_interactiva",'ACT_INTERACTIVO'),
-(18,"Requiere supervisión",'SUPERVISION'),
-(19,"Sin necesidad de ensamblaje",'NO_ENSAMBLAJE'),
-(20,"Fácil limpieza y mantenimiento",'LIMPIEZA_MANTENIMIENTO');
+(1,"Fácil de transportar",'PORTABILIDAD'),
+(2,"Apto para interiores",'UBICACION'),
+(3,"Apto para exteriores",'UBICACION'),
+(4,"Resistente al agua",'RESISTENCIA'),
+(5,"Fácil de montar",'MONTAJE'),
+(6,"Ligero y portatil",'PORTABILIDAD'),
+(7,"Alta_Durabilidad",'RESISTENCIA'),
+(8,"Requiere conexión eléctrica",'OTROS'),
+(9,"Apto para niños",'USO'),
+(10,"Apto para adultos",'USO'),
+(11,"Para todas las edades",'USO'),
+(12,"Uso en bodas o eventos formales",'USO'),
+(13,"Colores llamativos",'ESTETICA'),
+(14,"Accesorios incluidos",'OTROS'),
+(15,"Diseño compacto",'OTROS'),
+(16,"Juego competitivo",'OTROS'),
+(17,"Actividad_interactiva",'OTROS'),
+(18,"Requiere supervisión",'OTROS'),
+(19,"Sin necesidad de ensamblaje",'MONTAJE'),
+(20,"Fácil limpieza y mantenimiento",'OTROS');
 
 /* --------------------------------product_characteristics */
 INSERT INTO `product_characteristics`
