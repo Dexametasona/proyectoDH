@@ -130,19 +130,15 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
                 />
               </div>
             </div>
-
+            
             <button
-              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to && !errorMessage
+              className={`w-full py-2 rounded-full ${selectedDates.from && selectedDates.to 
                 ? "bg-secondary text-white"
                 : "bg-gray-400 text-white cursor-not-allowed"
                 }`}
-              disabled={!selectedDates.from || !selectedDates.to || errorMessage}
+              disabled={!selectedDates.from || !selectedDates.to}
               onClick={() => {
-                if (errorMessage) {
-                  alert(errorMessage);  // Mostrar el mensaje de error si las fechas están reservadas
-                } else {
                   setStep("reservationSummary");
-                }
               }}
             >
               Continuar reserva
