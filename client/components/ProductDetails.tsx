@@ -3,7 +3,6 @@
 import { useParams, useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
-import { ProductById } from "@/types";
 import GalleryModal from "@/components/modal/GalleryModal";
 import {
   Check,
@@ -11,46 +10,46 @@ import {
   DollarSignIcon,
   CrownIcon,
   ChevronLeft,
-  TruckIcon,
-  UmbrellaIcon,
-  AirVent,
 } from "lucide-react";
 import { getProductById } from "@/lib/api_interface";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/context/AppContext";
 import ShowModal from "./ShowModal";
-
-
+import { IProductRes } from "@/types/IProduct";
+import { getCharTypeFromId } from "@/lib/utils";
 
 const ProductDetails = () => {
   const { setResultsProductsList } = useAppContext();
 
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductById | null>(null);
+  const [product, setProduct] = useState<IProductRes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
   const router = useRouter();
   const [isReservaModalOpen, setIsReservaModalOpen] = useState(false);
-  
 
   const handleBackHome = () => {
     setResultsProductsList([]);
     router.push("/home");
   };
 
-    useEffect(() => {
-      if (id) {
-        getProductById(id)
-          .then((foundProduct) => {
-            setProduct(foundProduct);
-          })
-          .catch((error) => {
-            console.error("Error fetching product:", error);
-            setProduct(null);
-          });
-      }
-    }, [id]);
+  const idTypeToIcon = (id:number) => {
+    const { icon: Icon } = getCharTypeFromId(id);
+    return (<Icon className="text-primary"/>);
+  };
 
+  useEffect(() => {
+    if (id) {
+      getProductById(id)
+        .then((foundProduct) => {
+          setProduct(foundProduct);
+        })
+        .catch((error) => {
+          console.error("Error fetching product:", error);
+          setProduct(null);
+        });
+    }
+  }, [id]);
 
   if (!product) return <p>Producto no encontrado</p>;
 
@@ -68,7 +67,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  
+
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md ">
@@ -78,14 +77,14 @@ const ProductDetails = () => {
       </div>
 
       <div className="container-layout mx-auto sm:mx-20 lg:mx-auto bg-white lg:bg-transparent lg:border lg:border-primary-light rounded-lg shadow-lg ">
-        <div className="container-images px-2 flex flex-col items-center  md:flex-row justify-center">
+        <div className="container-images px-2 flex flex-col items-center  md:flex-row justify-center md:items-stretch">
           <div className="container-img-main flex grow mb-4 md:w-1/2 md:mb-0 shadow-md">
             <Image
               src={product.photos.length ? product.photos[0].url : ""}
               alt={product.name}
               width={800}
               height={800}
-              className="w-full   h-auto rounded-lg object-cover"
+              className="w-full h-auto rounded-lg object-cover"
             />
           </div>
 
@@ -98,7 +97,7 @@ const ProductDetails = () => {
                   alt={`Thumbnail ${thumb.id}`}
                   width={100}
                   height={100}
-                  className="min-w-16 shadow-md md:w-full lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
+                  className="min-w-16 shadow-md md:w-full md:aspect-square lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
                   onClick={() => openModal(thumb.id)}
                 />
               ))}
@@ -124,7 +123,7 @@ const ProductDetails = () => {
               </div>
               {/* Status */}
               <div className="flex items-center gap-2">
-                {product.status ? (
+                {product.status === 0? (
                   <>
                     <Check className="text-success" />
                     <span className="text-[var(--color-active)] font-bold">
@@ -141,15 +140,13 @@ const ProductDetails = () => {
             </div>
             {/* Características solo visual */}
             <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
-              <div className="flex content-center flex-wrap gap-2">
-                <TruckIcon className="text-primary" /> Incluye transporte
+              {product.characteristics.map(char=>(
+              <div key={char.id} className="flex content-center flex-wrap gap-2">
+                 {idTypeToIcon(char.type)}
+                <span>{char.description}</span>
               </div>
-              <div className="flex flex-wrap content-center gap-2">
-                <AirVent className="text-primary" /> Incluye inflador
-              </div>
-              <div className="flex flex-wrap content-center gap-2">
-                <UmbrellaIcon className="text-primary" /> Impermeable
-              </div>
+
+              ))}
             </div>
           </div>
           {/* Descripción */}
@@ -166,7 +163,12 @@ const ProductDetails = () => {
             >
               Ver más
             </a>
-            <Button className="bg-secondary w-full sm:w-60 rounded-full" onClick={openReservaModal}>Reservar</Button>
+            <Button
+              className="bg-secondary w-full sm:w-60 rounded-full"
+              onClick={openReservaModal}
+            >
+              Reservar
+            </Button>
           </div>
           <GalleryModal
             images={product.photos}
@@ -176,7 +178,12 @@ const ProductDetails = () => {
           />
         </div>
         {/* Modal de reserva */}
-      <ShowModal isOpen={isReservaModalOpen} onClose={closeReservaModal} orders={product.orders} product={product}/>
+        <ShowModal
+          isOpen={isReservaModalOpen}
+          onClose={closeReservaModal}
+          orders={product.orders}
+          product={product}
+        />
       </div>
     </section>
   );

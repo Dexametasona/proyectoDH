@@ -1,14 +1,11 @@
-import { IProductShort } from "@/types/IProduct";
-import ProductCard from "./ProductCard";
-import { IPagination } from "@/types/IPagination";
+import ProductCard from "../shared/ProductCard";
 import CustomPagination from "../shared/CustomPagination";
+import { IProductListProps } from "@/types/IProps";
 const ProductList = ({
   data,
   setPagination,
-}: {
-  data: IPagination<IProductShort>;
-  setPagination: (index: number) => void;
-}) => {
+  addFavorite
+}: IProductListProps) => {
   return (
     <section className="px-2">
       <p className="mb-4">
@@ -21,7 +18,12 @@ const ProductList = ({
       <div className="products-container grid grid-cols-6 justify-items-center gap-4 mb-4">
         {data.content
           ? data.content.map((product) => (
-              <ProductCard key={product.id} data={product} />
+              <ProductCard
+                key={product.id}
+                isFavorite={false}
+                data={product}
+                handleAddFavorite={() => addFavorite!(product.id)}
+              />
             ))
           : null}
       </div>

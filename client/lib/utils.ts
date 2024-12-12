@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Swal from "sweetalert2";
 import { IAlertActions } from "@/types/IAlertActions";
+import { BaggageClaim, Lightbulb, MapPinned, Palette, Shield, UserCheck, Wrench } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,7 +58,7 @@ export const validateSearchNameProduct = (text: string) => {
   const pattern = /^[a-zA-Z\s]+$/;
   return pattern.test(text);
 };
-export const showGuardAdminAlert = ({success}:IAlertActions) => {
+export const showGuardAdminAlert = ({ success }: IAlertActions) => {
   Swal.fire({
     title: "Acceso denegado",
     html: "Necesitas permisos de administrador <br/> Rediriendo al inicio de sesión.",
@@ -68,11 +69,11 @@ export const showGuardAdminAlert = ({success}:IAlertActions) => {
     didOpen: () => {
       Swal.showLoading();
     },
-    willClose:success
-  })
+    willClose: success,
+  });
 };
 
-export const showGuardAuthAlert = ({success}:IAlertActions) => {
+export const showGuardAuthAlert = ({ success }: IAlertActions) => {
   Swal.fire({
     title: "Acceso denegado",
     html: "Necesitas iniciar sesión",
@@ -83,12 +84,12 @@ export const showGuardAuthAlert = ({success}:IAlertActions) => {
     didOpen: () => {
       Swal.showLoading();
     },
-    willClose:success
-  })
-}
+    willClose: success,
+  });
+};
 
-export const getDateArray = (array) => {
-  return array.flatMap((item) => {
+export const getDateArray = (array:any) => {
+  return array.flatMap((item:any) => {
     const shipStart = new Date(item.shipStart);
     const shipEnd = new Date(item.shipEnd);
     const dates = [];
@@ -100,3 +101,33 @@ export const getDateArray = (array) => {
     return dates;
   });
 };
+
+export const getCharTypeFromId = (id: number) => {
+  switch (id) {
+    case 1:
+      return { name: "Portabilidad", icon: BaggageClaim };
+    case 2:
+      return { name: "Ubicación", icon: MapPinned };
+    case 3:
+      return { name: "Resistencia", icon: Shield };
+    case 4:
+      return { name: "Montaje", icon: Wrench };
+    case 5:
+      return { name: "Uso", icon:  UserCheck};
+    case 6:
+      return { name: "Estetica", icon: Palette };
+    default:
+      return { name: "Otros", icon: Lightbulb };
+  }
+};
+export function getErrorMessage(error:any) {
+  const status = error.response?.status;
+  switch (status) {
+    case 400: return error.response?.data?.message || "Los datos enviados no son válidos.";
+    case 401: return error.response?.data?.message ||"Necesitas iniciar sesión para realizar esta acción.";
+    case 403: return error.response?.data?.message ||"No tienes permiso para realizar esta acción.";
+    case 404: return error.response?.data?.message ||"El recurso solicitado no fue encontrado.";
+    case 500: return error.response?.data?.message ||"Ocurrió un error en el servidor. Inténtalo más tarde.";
+    default: return error.response?.data?.message || "Ocurrió un error inesperado. Inténtalo de nuevo.";
+  }
+}

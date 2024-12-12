@@ -59,7 +59,7 @@ export const getAuthUser = async () => {
         const apiError = error.response.data as IApiRes<unknown>;
         console.log(apiError.message);
       }
-      return null;
+      throw error;
     }
   }
   return null;

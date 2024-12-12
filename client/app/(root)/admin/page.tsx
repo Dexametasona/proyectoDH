@@ -4,7 +4,7 @@ import Dashboard from "@/components/admin/dashboard/Dashboard";
 import isAdminGuard from "@/guards/adminGuard";
 
 
-const page = () => {
+const Page = () => {
 
   return (
     <div className="admin_container">
@@ -13,4 +13,4 @@ const page = () => {
   );
 };
 
-export default isAdminGuard(page) ;
+export default isAdminGuard(Page) ;

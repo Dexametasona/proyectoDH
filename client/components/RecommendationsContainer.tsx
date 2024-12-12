@@ -9,6 +9,16 @@ import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
 import ResultsCards from "@/components/ResultsCards";
 import { getTopProducts } from "@/services/productService";
+import { IProductShort } from "@/types/IProduct";
+
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const RecommendationsContainer = ({
   name,
@@ -16,7 +26,7 @@ const RecommendationsContainer = ({
 }: CardsContainerProps) => {
   const { resultsProductsList } = useAppContext();
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProductShort[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -42,7 +52,7 @@ const RecommendationsContainer = ({
 
   return (
     <section className="flex flex-col gap-4  justify-center px-6 mt-12 place-content-evenly ">
-      <p className="text-primary text-4xl text-left font-extrabold">
+      <p className="text-primary text-2xl text-left font-extrabold">
         {resultsProductsList.length > 0 ? "Resultados" : name}
       </p>
 
@@ -89,6 +99,7 @@ const RecommendationsContainer = ({
         totalPages={totalPages}
       ></CustomPagination>
     </section>
+    
   );
 };
 
