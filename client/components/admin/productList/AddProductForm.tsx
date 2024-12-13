@@ -22,6 +22,7 @@ import { IApiRes } from "@/types/IApiRes";
 import { getAllCharacteristics } from "@/services/characteristicService";
 import { ICharacteristicRes } from "@/types/ICharacteristic";
 import ProductInputChar from "./ProductInputChar";
+import { useRouter } from "next/navigation";
 
 const AddProductForm = () => {
   const emptyProduct: IProductReq = {
@@ -36,6 +37,7 @@ const AddProductForm = () => {
     orders:[]
   };
   const { authData } = useAuthContext();
+  const router = useRouter();
   const [product, setProduct] = useState(emptyProduct);
   const [listCategory, setListCaterogy] = useState<ICategoryRes[]>([]);
   const [characteristics, setCharacteristics] = useState<ICharacteristicRes[]>([]);
@@ -219,7 +221,7 @@ const AddProductForm = () => {
     <div className="add_product_container h-full bg-white p-4 flex flex-col gap-2">
       <div className="title-container p-6 flex justify-between">
         <h2 className="font-bold text-xl">Agregar productos</h2>
-        <Button className="bg-black hover:opacity-70">Cancelar</Button>
+        <Button type="button" onClick={()=>router.push('/admin/products')} className="bg-black hover:opacity-70">Cancelar</Button>
       </div>
       <div className="subtitle-container bg-slate-100 p-4 shadow-sm">
         <h2 className="font-bold text-xl">Detalles del producto</h2>
