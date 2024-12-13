@@ -10,7 +10,7 @@ export const getAllUsers = async (params: IUserParam) => {
       `/users`,
       { params }
     );
-    console.log("Get users short: ",data.data)
+    console.log("Get users short: ", data.data)
     return data.data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -26,7 +26,7 @@ export const getFullUsers = async (
     const { data } = await axios.get<IApiRes<IPagination<IUserRes>>>(
       `/users`,
       {
-        params: {...params, size: 10},
+        params: { ...params, size: 10 },
         headers: {
           Authorization: `Bearer ${authdata.token}`,
         },
@@ -39,15 +39,16 @@ export const getFullUsers = async (
   }
 };
 
-export const changeRole = async (authdata: IAuthRes, id:number, newRole: number) => {
+export const changeRole = async (authdata: IAuthRes, id: number, newRole: number) => {
   try {
-    console.log("Entramos en la segunda funcion");
-    
-    const { data } = await axios.post<IApiRes<IUserRes>>(`/users/role/${id}?role=${newRole}`, {
-      headers: {
-        Authorization: `Bearer ${authdata.token}`,
-      },
-    });
+    const { data } = await axios.post(
+      `/users/role/${id}?role=${newRole}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      });
     console.log(data);
     console.log("Datos enviados:", newRole);
     return data.data;

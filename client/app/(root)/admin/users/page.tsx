@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,36 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getFullUsers, changeRole } from "@/services/userService";
 import { IUserRes } from "@/types/IUser";
 import { useAuthContext } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import CustomPagination from "@/components/shared/CustomPagination";
 import { IPagination } from "@/types/IPagination";
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Swal from 'sweetalert2';
 import { isAxiosError } from "axios";
-import { IApiRes } from "@/types/IApiRes";
-
-
 
 const page = () => {
 
   const [users, setUsers] = useState<IPagination<IUserRes> | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState(0);
   const { authData } = useAuthContext();
   
-  const router = useRouter();
-
-  const statusColors = {
-    inactive: "bg-red-100 text-red-500",
-    active: "bg-green-100 text-green-500",
-  };
-
   const [responseErr, setResponseErr] = useState<string | null>(null);
 
   const setPagination = async (index: number) => {
@@ -86,39 +74,43 @@ const page = () => {
     fetchUsers();
   }, [authData]);
 
-  const showSuccessMessage = () => {
+  const showConfirmMessage = (id: number, role: number, name: string) => {
     Swal.fire({
-      title: "!Rol Actualizado¡",
-      text: "El rol del usuario ha sido actualizado con exito.",
-      confirmButtonText: "Aceptar",
-      icon: "success",
-      customClass: {
-        confirmButton: "bg-[#008000] px-40",
-        title: "text-[#008000]",
-        htmlContainer: "text-red-500"
+      title: "¿Estás seguro?",
+      text: `Estas a punto de cambiar los privilegios de ${name}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, cambiar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updateRole(id,role,name)
+        Swal.fire({
+          title: "Rol actializado!",
+          text: `Los privilegios de ${name} han sido modificados`,
+          icon: "success"
+        });
       }
-    })
+    });
   }
 
-  const updateRole = async (id: number, role: number) => {
-    console.log("Estamos dentro de la funcion");
-    
+  const updateRole = async (id: number, role: number, name: string) => {
     if (!authData) {
       console.error("Usuario no autenticado");
       return;
     }
-    
     try {
       const response = await changeRole(authData, id, role)
       console.log("Rol actualizado: ", response);
-      showSuccessMessage();
     } catch (error) {
       console.error(error);
       if (isAxiosError(error) && error.response) {
-        const response = error.response.data as IApiRes<unknown>;
         setResponseErr("Error al actualizar el rol del usuario.");
       }
-    };
+    } finally {
+      setIsLoading(1)
+    }
   }
 
   return (
@@ -154,17 +146,17 @@ const page = () => {
                   <TableCell className="text-center min-w-40">
                     <div className="flex items-center space-x-2">
                       <Switch
+                        key={isLoading}
                         id={`switch-${user.id}`}
                         checked={user.role === 0}
                         onCheckedChange={(checked: boolean) => {
                           const newRole = checked ? 0 : 1;
-                          updateRole(user.id, newRole);
+                          showConfirmMessage(user.id, newRole, user.name)
                         }}
                       />
                       <Label htmlFor="airplane-mode">Administrador</Label>
                     </div>
                   </TableCell>
-                  <TableCell>{user.role}</TableCell>
                 </TableRow>
               );
             })}
