@@ -3,6 +3,7 @@ package com.DH.server.service.implement;
 import com.DH.server.exception.EmailException;
 import com.DH.server.exception.UserException;
 import com.DH.server.model.dto.EmailDTO;
+import com.DH.server.model.dto.request.ChangePasswordDto;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.response.AuthRes;
 import com.DH.server.model.entity.UserEntity;
@@ -90,25 +91,39 @@ public class AuthServiceImpl implements AuthService {
     return (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  private void sendAccountVerification(UserEntity account){
-    String tokenUrl = domain+"/"+apiBase+"/auth/verify?token="+account.getTokenEmail();
-    Map<String,String> variables = new HashMap<>();
-    variables.put("username", account.getName()+" "+account.getLastname());
+  private void sendAccountVerification(UserEntity account) {
+    String tokenUrl = domain + "/" + apiBase + "/auth/verify?token=" + account.getTokenEmail();
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", account.getName() + " " + account.getLastname());
     variables.put("email", account.getEmail());
     variables.put("tokenUrl", tokenUrl);
     EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación", variables);
     try {
       this.emailService.sendMail(email, "emailVerify");
     } catch (MessagingException e) {
-      throw new EmailException("Fail to send email to: "+account.getEmail());
+      throw new EmailException("Fail to send email to: " + account.getEmail());
+    }
+  }
+
+  private void sendAccountVerificationForEmailChange(UserEntity account) {
+    String tokenUrl = domain + "/" + apiBase + "/auth/verify?token=" + account.getTokenEmail();
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", account.getName() + " " + account.getLastname());
+    variables.put("email", account.getEmail());
+    variables.put("tokenUrl", tokenUrl);
+    EmailDTO email = new EmailDTO(account.getEmail(), "Correo de confirmación", variables);
+    try {
+      this.emailService.sendMail(email, "emailVerifyChange");
+    } catch (MessagingException e) {
+      throw new EmailException("Fail to send email to: " + account.getEmail());
     }
   }
 
   @Override
-  public void verifyAccountEmail(String token){
+  public void verifyAccountEmail(String token) {
     UserEntity user = this.userService.getByEmailToken(token);
-    if(this.jwtutils.isTokenExpired(token)){
-     throw new EmailException("Email verify token is expired");
+    if (this.jwtutils.isTokenExpired(token)) {
+      throw new EmailException("Email verify token is expired");
     }
     this.userService.updateEnabledByUserId(user.getId());
   }
@@ -119,5 +134,32 @@ public class AuthServiceImpl implements AuthService {
     currentUser.setTokenEmail(jwtutils.generateEmailToken(currentUser));
     var updateUser = userService.create(currentUser);
     this.sendAccountVerification(updateUser);
+  }
+
+  @Transactional
+  @Override
+  public void changeEmail(LoginReq request) {
+    UserEntity currentUser = this.getAuthUser();
+    this.login(new LoginReq(currentUser.getEmail(), request.password()));
+    try {
+      this.userService.getByEmail(request.email());
+    } catch (UserException err) {
+      currentUser.setEmail(request.email());
+      currentUser.setIsEnabled(false);
+      currentUser.setTokenEmail(jwtutils.generateEmailToken(currentUser));
+      userService.create(currentUser);
+      this.sendAccountVerificationForEmailChange(currentUser);
+      return;
+    }
+    throw new UserException("Already exist, email: " + request.email());
+  }
+
+  @Transactional
+  @Override
+  public void changePassword(ChangePasswordDto request) {
+    UserEntity currentUser = this.getAuthUser();
+    this.login(new LoginReq(currentUser.getEmail(), request.password()));
+    currentUser.setPassword(encoder.encode(request.newPassword()));
+    userService.create(currentUser);
   }
 }

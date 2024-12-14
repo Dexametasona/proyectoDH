@@ -55,7 +55,7 @@ public class SecurityConfig {
                     .requestMatchers( HttpMethod.GET, "api/v1/users").hasRole("ADMIN")
                     .requestMatchers("api/v1/users").hasRole("USER")
                     .requestMatchers( HttpMethod.POST, "api/v1/users/role/**").hasRole("ADMIN")
-                    .requestMatchers( HttpMethod.GET, "api/v1/favorites/**").hasRole("USER")
+                    .requestMatchers( HttpMethod.GET, "api/v1/favorites/**").authenticated()
                     .anyRequest().authenticated()
             ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)

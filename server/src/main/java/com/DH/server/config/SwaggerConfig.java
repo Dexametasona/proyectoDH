@@ -29,6 +29,10 @@ public class SwaggerConfig {
             .url("http://localhost:8080")
             .description("Development server");
 
+    Server production = new Server()
+            .url("https://proyectodh-13hj.onrender.com")
+            .description("Production server");
+
     Info information = new Info()
             .title("GameYard management API")
             .description("This API expose endpoints to manage GameYard company.")
@@ -51,7 +55,7 @@ public class SwaggerConfig {
 
     return new OpenAPI()
             .info(information)
-            .servers(List.of(development))
+            .servers(List.of(development, production))
             .components(components);
   }
 
