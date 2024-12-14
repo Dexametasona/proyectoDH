@@ -93,7 +93,8 @@ public class AuthController {
   }
 
   @PostMapping("/change-email")
-  @Operation(summary = "Change email", description = "Change email for user, and set user as unable")
+  @Operation(summary = "Change email", description = "Change email for user, and set user as unable",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   public ResponseEntity<?> changeEmail(
           @Parameter(description = "new email and current password")
           @Validated(OnCreate.class)
@@ -104,7 +105,8 @@ public class AuthController {
   }
 
   @PostMapping("/change-password")
-  @Operation(summary = "Change password", description = "Change password for user")
+  @Operation(summary = "Change password", description = "Change password for user",
+          security = {@SecurityRequirement(name = "bearerAuth")})
   public ResponseEntity<?> changePassword(
           @Parameter(description = "old password and new password")
           @Validated(OnCreate.class)
