@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 
 import { CardsContainerProps, Product } from "@/types";
 import ProductsCards from "./ProductsCards";
-
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
 import ResultsCards from "@/components/ResultsCards";
@@ -51,19 +50,19 @@ const RecommendationsContainer = ({
   );
 
   return (
-    <section className="flex flex-col gap-4  justify-center px-6 mt-12 place-content-evenly ">
-      <p className="text-primary text-2xl text-left font-extrabold">
+    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+      <h3 className="text-primary text-5xl text-center font-bold mb-2">
         {resultsProductsList.length > 0 ? "Resultados" : name}
-      </p>
+      </h3>
 
       <div
-        className={`grid grid-cols-2 mb-4 gap-4 self-center ${
-          verticalColumnMobile ? "flex-col" : "grid"
-        } ${
-          resultsProductsList.length > 0
-            ? "w-full gap-10 flex"
-            : "max-w-screen-lg gap-4 "
-        }`}
+        className={`rounded-2xl mb-4 gap-16 self-center bg-secondary  ${verticalColumnMobile
+            ? "flex flex-col"
+            : "grid grid-cols-2"
+          } sm:flex sm:flex-col md:grid md:grid-cols-2 py-12 px-20 ${resultsProductsList.length > 0
+            ? "w-full gap-10"
+            : "max-w-screen-lg"
+          }`}
       >
         {resultsProductsList.length > 0 ? (
           <>
@@ -99,7 +98,7 @@ const RecommendationsContainer = ({
         totalPages={totalPages}
       ></CustomPagination>
     </section>
-    
+
   );
 };
 
