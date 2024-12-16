@@ -18,11 +18,11 @@ const AuhtBox = ({
   handleLogout: () => void;
 }) => {
   return (
-    <div className="auth-box flex">
+    <div className="auth-box flex pl-2">
       <div className="btns-box sm:flex items-center gap-2">
         {user ? (
           <>
-            <p className="text-white text-md uppercase hidden sm:flex">
+            <p className="text-white text-xs text-end uppercase hidden sm:flex">
               {user.name + " " + user.lastname}
             </p>
             <DropdownMenu>
