@@ -41,6 +41,7 @@ const Page = () => {
     (async () => {
       if (!loading && authData) {
         const response = await getAllFavoritesByUser(authData!);
+        if(!response) return;
         const newProduct: IProductShort[] = response.map(productToFavorite);
         setProducts(newProduct);
       }
@@ -62,7 +63,7 @@ const Page = () => {
           Favoritos
         </h2>
         <div className="favorites-container grid grid-cols-6 px-2 gap-4 pb-4 justify-items-center">
-          {products ? (
+          {products.length !== 0 ? (
             products.map((product) => (
               <ProductCard
                 key={product.id}

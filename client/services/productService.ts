@@ -10,7 +10,7 @@ export const getAllProducts = async (params: IProductParam) => {
       `/products`,
       { params }
     );
-    console.log("Get products short: ",data.data)
+    console.log("Get products short: ", data.data);
     return data.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -26,7 +26,7 @@ export const getFullProducts = async (
     const { data } = await axios.get<IApiRes<IPagination<IProductRes>>>(
       `/products/all`,
       {
-        params: {...params, size: 10},
+        params: { ...params, size: 10 },
         headers: {
           Authorization: `Bearer ${authdata.token}`,
         },
@@ -45,16 +45,61 @@ export const getTopProducts = () =>
     sort: "avgScore",
   });
 
-export const createProduct = async (authdata: IAuthRes, productData: FormData) => {
+export const createProduct = async (
+  authdata: IAuthRes,
+  productData: FormData
+) => {
   try {
-    const { data } = await axios.post<IApiRes<IProductRes>>(`/products`, productData, {
-      headers: {
-        Authorization: `Bearer ${authdata.token}`,
-      },
-    });
+    const { data } = await axios.post<IApiRes<IProductRes>>(
+      `/products`,
+      productData,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      }
+    );
     return data.data;
   } catch (error) {
     console.error("Error creating product:", error);
+    throw error;
+  }
+};
+
+export const deleteProduct = async (authdata: IAuthRes, productId: number) => {
+  try {
+    const { data } = await axios.delete<IApiRes<string>>(
+      `/products/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      }
+    );
+    return data.data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+};
+
+export const updateProduct = async (
+  authdata: IAuthRes,
+  productData: FormData,
+  productId: number
+) => {
+  try {
+    const { data } = await axios.put<IApiRes<IProductRes>>(
+      `/products/${productId}`,productData,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      }
+    );
+    return data.data;
+  } catch (error) {
+    console.error("Error updating product:", error);
     throw error;
   }
 };

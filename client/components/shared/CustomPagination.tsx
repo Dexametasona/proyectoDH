@@ -103,7 +103,7 @@ const CustomPagination = ({
           <PaginationItem>
             <PaginationPrevious
               className={
-                currentPage === 1 ? "pointer-events-none opacity-50" : undefined
+                currentPage === 1 ? "pointer-events-none opacity-50" : 'cursor-pointer'
               }
               onClick={handlePrevPage}
             />
@@ -114,7 +114,7 @@ const CustomPagination = ({
               className={
                 currentPage === totalPages
                   ? "pointer-events-none opacity-50"
-                  : undefined
+                  : 'cursor-pointer'
               }
               onClick={handleNextPage}
             />

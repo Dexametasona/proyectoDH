@@ -32,9 +32,7 @@ export default function RootLayout({
       <AuthContextProvider>
         <AppContextProvider>
           <html lang="en">
-            <body
-              className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}
-            >
+            <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased min-h-screen`}>
               <MainComponent>
                 {children}
               </MainComponent>

@@ -19,6 +19,10 @@ import { createProduct } from "@/services/productService";
 import { useAuthContext } from "@/context/AuthContext";
 import { isAxiosError } from "axios";
 import { IApiRes } from "@/types/IApiRes";
+import { getAllCharacteristics } from "@/services/characteristicService";
+import { ICharacteristicRes } from "@/types/ICharacteristic";
+import ProductInputChar from "./ProductInputChar";
+import { useRouter } from "next/navigation";
 
 const AddProductForm = () => {
   const emptyProduct: IProductReq = {
@@ -29,10 +33,14 @@ const AddProductForm = () => {
     categoryId: 1,
     tagId: 0,
     photos: [],
+    characteristic: [],
+    orders:[]
   };
   const { authData } = useAuthContext();
+  const router = useRouter();
   const [product, setProduct] = useState(emptyProduct);
   const [listCategory, setListCaterogy] = useState<ICategoryRes[]>([]);
+  const [characteristics, setCharacteristics] = useState<ICharacteristicRes[]>([]);
   const [validationErr, setValidationErr] = useState<string | null>(null);
   const [responseErr, setResponseErr] = useState<string | null>(null);
 
@@ -40,6 +48,13 @@ const AddProductForm = () => {
     (async () => {
       const response = await getAllCategories();
       setListCaterogy(response);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getAllCharacteristics();
+      setCharacteristics(response);
     })();
   }, []);
 
@@ -54,6 +69,12 @@ const AddProductForm = () => {
   };
   const handleMarca = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProduct({ ...product, brand: e.target.value });
+  };
+  const handleCaracteristicas = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (inputValue.length === 0) return;
+    const charsId = inputValue.split(",").map(Number);
+    setProduct({ ...product, characteristic: charsId });
   };
   const handleCategoria = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setProduct({ ...product, categoryId: Number(e.target.value) });
@@ -85,6 +106,17 @@ const AddProductForm = () => {
       setResponseErr(null);
     }, 4000);
   };
+
+  const addCharacteristic = (id:number)=>{
+    if(id===0) return;
+    if(product.characteristic.includes(id)) return;
+    setProduct({...product, characteristic:[...product.characteristic, id]})
+  }
+  const removeCharacteristic = (id:number)=>{
+    if(id===0) return;
+    if(!product.characteristic.includes(id)) return;
+    setProduct({...product, characteristic: product.characteristic.filter(item=>item !== id)})
+  }
 
   const showSuccessMessage = () => {
     Swal.fire({
@@ -132,6 +164,11 @@ const AddProductForm = () => {
       clearMessage();
       return;
     }
+    if(product.characteristic.length === 0 || product.characteristic.length >5){
+      setValidationErr("Mínimo 1 característica o máximo 5.");
+      clearMessage();
+      return;
+    }
     console.log("Producto enviado: ", product);
     registerProduct();
   };
@@ -152,6 +189,7 @@ const AddProductForm = () => {
 
     formData.append("price", String(product.price));
     formData.append("tagId", "1");
+    formData.append("characteristic", product.characteristic.toString())
     if (!authData) {
       console.error("Usuario no autenticado");
       return;
@@ -183,7 +221,7 @@ const AddProductForm = () => {
     <div className="add_product_container h-full bg-white p-4 flex flex-col gap-2">
       <div className="title-container p-6 flex justify-between">
         <h2 className="font-bold text-xl">Agregar productos</h2>
-        <Button className="bg-black hover:opacity-70">Cancelar</Button>
+        <Button type="button" onClick={()=>router.push('/admin/products')} className="bg-black hover:opacity-70">Cancelar</Button>
       </div>
       <div className="subtitle-container bg-slate-100 p-4 shadow-sm">
         <h2 className="font-bold text-xl">Detalles del producto</h2>
@@ -221,6 +259,13 @@ const AddProductForm = () => {
             onChange={handlePrecio}
             value={product.price.toString()}
           />
+          <ProductInputChar 
+          characteristics={characteristics} 
+          handleCaracteristicas={handleCaracteristicas}
+          handleAddChar={addCharacteristic}
+          handleRemoveChar={removeCharacteristic}
+          product={product}/>
+
           <div className={`${style.fieldCategory} field_category`}>
             <label htmlFor="categoria">Categoría: </label>
             <select
@@ -248,6 +293,7 @@ const AddProductForm = () => {
               <p>Imágenes: Solo jpg/png</p>
               <div className="actions flex gap-4">
                 <Button
+                  type="button"
                   className="bg-black hover:opacity-70 transition-all duration-300 ease-in-out"
                   onClick={handleClearPhotos}
                 >

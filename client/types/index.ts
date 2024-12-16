@@ -1,3 +1,5 @@
+import { IPhotoRes } from "./IProduct";
+
 export interface CardsContainerProps {
   name: string;
   verticalColumnMobile?: boolean;
@@ -8,7 +10,8 @@ export interface Thumbnail {
   url: string;
 }
 export interface GalleryModalProps {
-  images: { id: string; url: string }[]; // Lista de imágenes con id y url
+  // images: { id: string; url: string }[]; // Lista de imágenes con id y url
+  images:IPhotoRes[]
   isOpen: boolean; // Controla si el modal está abierto o cerrado
   onClose: () => void; // Función para cerrar el modal
   initialIndex?: number; // Índice inicial de la imagen que se mostrará en el modal

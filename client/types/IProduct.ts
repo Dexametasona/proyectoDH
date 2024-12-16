@@ -1,4 +1,6 @@
 import { ICategoryRes } from "./ICategory";
+import { ICharacteristicRes } from "./ICharacteristic";
+import { IOrderShort } from "./IOrder";
 import { IPaginationParam } from "./IPagination";
 
 export interface IProductParam extends IPaginationParam{
@@ -18,17 +20,19 @@ export interface IProductRes{
   brand: string,
   status : number,
   category: ICategoryRes,
-  photos: IPhotoRes[]
+  photos: IPhotoRes[],
+  characteristics:ICharacteristicRes[],
+  orders:IOrderShort[]
 }
 
-export interface IProductReq extends Omit<IProductRes, 'id' | 'status' | 'photos' | 'category'>{
+export interface IProductReq extends Omit<IProductRes, 'id' | 'status' | 'photos' | 'category'| 'characteristics' >{
   photos:File[],
   categoryId:number,
   tagId:number
-
+  characteristic:number[]
 }
 
-export interface IProductShort extends Omit<IProductRes, 'description' | 'status' | 'photos'>{
+export interface IProductShort extends Omit<IProductRes, 'description' | 'status' | 'photos' | 'characteristics'>{
   photoUrl: string
 }
 

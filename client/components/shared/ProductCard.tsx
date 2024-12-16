@@ -13,7 +13,8 @@ const ProductCard = ({
   return (
     <div
       title="ver detalles"
-      className="card-container cursor-pointer col-span-6 md:col-span-3 xl:col-span-2 relative py-4 bg-white rounded-md overflow-hidden hover:shadow-lg group max-w-[400px] w-full transition-all duration-300 ease-in-out hover:-translate-y-1"
+      className="card-container cursor-pointer col-span-6 md:col-span-3 xl:col-span-2 relative py-4 bg-white rounded-md overflow-hidden hover:shadow-lg group max-w-[400px] w-full transition-default hover:-translate-y-1"
+      onClick={() => router.push("/product/" + data.id)}
     >
       <div className="img-container rounded-md overflow-hidden">
         <Image
@@ -33,13 +34,13 @@ const ProductCard = ({
       </div>
       <button
         onClick={() => router.push("/product/" + data.id)}
-        className="toDetail absolute top-4 right-2 bg-secondary p-2 rounded-sm hover:opacity-70 translate-x-12 group-hover:translate-x-0 transition-all duration-300 ease-in-out"
+        className="toDetail absolute top-4 right-2 bg-secondary p-2 rounded-sm hover:opacity-70 translate-x-12 group-hover:translate-x-0 transition-default"
       >
         <SearchIcon />
       </button>
       <button
         onClick={isFavorite ? handleRemoveFavorite : handleAddFavorite}
-        className="favorite absolute bottom-2 left-2 bg-secondary p-2 text-xs text-primary rounded-sm hover:bg-primary-soft  translate-y-12 group-hover:translate-y-0 transition-all duration-300 ease-in-out"
+        className="favorite absolute bottom-2 left-2 bg-secondary p-2 text-xs text-primary rounded-sm hover:bg-primary-soft  translate-y-12 group-hover:translate-y-0 transition-default"
       >
         {isFavorite ? "Remover de favoritos" : "Añadir a favoritos"}
       </button>

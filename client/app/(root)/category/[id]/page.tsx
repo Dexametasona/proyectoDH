@@ -12,14 +12,14 @@ const CategoryPage = () => {
 
   console.log(id);
 
-  useEffect(() => {
-    if (id) {
-      const foundCategory = categoriesCards.find(
-        (category) => category.id === id,
-      );
-      setCategory(foundCategory || null);
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     const foundCategory = categoriesCards.find(
+  //       (category) => category.id === id,
+  //     );
+  //     setCategory(foundCategory || null);
+  //   }
+  // }, [id]);
 
   if (!category) return <p>Categoría no encontrado</p>;
 
