@@ -7,11 +7,13 @@ import { createOrder } from "@/lib/api_interface";
 import ErrorModal from "./ErrorModal";
 import { getErrorMessage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { startOfDay } from "date-fns";
+import { ShowModalProps } from "./ShowModal";
 
 
 
 
-const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
+const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps) => {
   const [selectedDates, setSelectedDates] = useState({
     from: null,
     to: null,
@@ -28,12 +30,15 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
   const handleNavigation = (path: string) => {
     router.push(`${path}`);
   };
+  
   // Procesar las órdenes como rangos deshabilitados
   const disabledDates = orders.map((order) => ({
-    from: new Date(order.shipStart),
-    to: new Date(order.shipEnd),
+    from: new Date(order.shipStart.toString()+"T00:00:00"),
+    to: new Date(order.shipEnd.toString()+"T00:00:00"),
   }));
 
+console.log("Fecha 1 ", disabledDates[0].from)
+  
   // Manejar el cambio de fechas seleccionadas
   function handleDateChange(dates) {
     if (!dates.from && !dates.to) {
@@ -62,8 +67,8 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
 
 
   const dateDetails = {
-    startDate: selectedDates.from ? selectedDates.from.toLocaleDateString() : "",
-    endDate: selectedDates.to ? selectedDates.to.toLocaleDateString() : "",
+    startDate: selectedDates.from ? selectedDates.from.toLocaleDateString().split("T")[0] : "",
+    endDate: selectedDates.to ? selectedDates.to.toLocaleDateString().split("T")[0] : "",
   };
 
 
@@ -81,6 +86,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }) => {
       shipEnd: selectedDates.to.toISOString().split("T")[0],
       remarks,
     };
+    
 
     if (!shipAddress.trim()) {
       setAddressError("Por favor, ingresa una dirección");

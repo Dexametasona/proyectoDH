@@ -22,16 +22,17 @@ export function DateCalendar({
     product
 }: DatePickerWithRangeProps) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    console.log(today)
-
-
+    startOfDay(today);
+    
+    
+    
     const unavailableDates = getDateArray(product.orders).map(date => startOfDay(new Date(date)));
+    
+    
 
     // Manejar selección de fechas
     const handleSelect = (selectedDate: DateRange | undefined) => {
-           if (selectedDate) {
+           if (selectedDate) {                       
                 onDateChange(selectedDate);
             }  else if (selectedDate) {
                 alert("El rango seleccionado incluye fechas no disponibles.");

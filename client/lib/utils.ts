@@ -90,8 +90,8 @@ export const showGuardAuthAlert = ({ success }: IAlertActions) => {
 
 export const getDateArray = (array:any) => {
   return array.flatMap((item:any) => {
-    const shipStart = new Date(item.shipStart);
-    const shipEnd = new Date(item.shipEnd);
+    const shipStart = new Date(item.shipStart.toString()+"T00:00:00");
+    const shipEnd = new Date(item.shipEnd.toString()+"T00:00:00");
     const dates = [];
 
     for (let d = shipStart; d <= shipEnd; d.setDate(d.getDate() + 1)) {
