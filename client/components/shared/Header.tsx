@@ -61,7 +61,7 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Link href="/home" className="sm:hidden cursor-pointer">
+      <Link href="/home" className="md:hidden cursor-pointer">
         <Image
           width={54}
           height={30}
@@ -69,14 +69,21 @@ const Header = () => {
           alt={"logo"}
         />
       </Link>
-      <Link href="/home" className="hidden sm:block cursor-pointer">
+      
+      <Link href="/home" className="hidden md:block cursor-pointer">
+      <div className="grid grid-cols-2 items-center ">
+        {/* //<div> */}
         <Image
           width={128}
           height={48}
           src={"/assets/icons/logo-desktop.svg"}
           alt={"logo"}
-        />
+         /> 
+         {/* </div> */}
+        <p className="text-white font-semibold  md:block hidden pl-3 ">FUN STARTS HERE</p>
+        </div>
       </Link>
+      
 
       <div className="gap-8 md:flex hidden cursor-pointer text-white">
         {navbarOptions.map((option) => (

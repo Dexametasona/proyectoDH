@@ -67,12 +67,13 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-
+  
+ 
   return (
     <section className="w-full">
-      <div className="text-primary p-1 my-2 bg-white shadow-md ">
-        <div className="flex rounded hover:bg-primary-light m-1 p-1 cursor-pointer">
-          <ChevronLeft onClick={handleBackHome} /> Atrás
+      <div className="text-primary p-1 my-2 bg-white shadow-md  ">
+        <div className="flex rounded hover:bg-primary-light m-1 p-1 pr-4 cursor-pointer justify-end" onClick={handleBackHome}>
+          <ChevronLeft/> Atrás
         </div>
       </div>
 
@@ -105,7 +106,7 @@ const ProductDetails = () => {
           )}
         </div>
         <div className="characteristic-container bg-white md:m-4 md:p-4">
-          <div className="text-center mb-5 mt-5 px-2">
+          <div className=" mb-5 mt-5 px-2">
             <h1 className="text-2xl font-bold text-primary">{product.name}</h1>
           </div>
           <div className="flex flex-col gap-4 p-2 mt-2 md:grid md:grid-cols-2 border-y border-primary-light">
