@@ -16,7 +16,7 @@ const ProductsCards = ({ id, bgImage, photoUrl, name, price }: Product) => {
     <>
       {bgImage ? (
         <div
-          className="relative w-full h-48 bg-cover bg-center rounded-t-lg cursor-pointer"
+          className=" objetivo relative w-full h-48 bg-cover bg-center rounded-t-lg cursor-pointer"
           style={{ backgroundImage: `url(${bgImage})` }}
           onClick={() => handleRedirect("category")}
         >
@@ -26,7 +26,7 @@ const ProductsCards = ({ id, bgImage, photoUrl, name, price }: Product) => {
           </p>
         </div>
       ) : (
-        <div className="rounded-t-lg shadow-lg">
+        <div className="rounded-t-lg shadow-lg col-span-2 md:col-span-1">
           <div
             className="mt-2 text-center bg-white p-3 rounded-t-lg shadow-md"
             onClick={() => handleRedirect("product")}

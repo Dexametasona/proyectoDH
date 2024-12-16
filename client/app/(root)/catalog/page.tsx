@@ -41,14 +41,6 @@ const Page = () => {
     setProducts(response ?? paginationEmpty);
   }, [])
 
-  // useEffect(() => {
-  //   const params = Object.fromEntries(searchParams.entries()) as IProductParam;
-  //   (async () => {
-  //     const response = await getAllProducts({ ...params, size: 10 });
-  //     setProducts(response ?? paginationEmpty);
-  //   })();
-  // }, [searchParams]);
-
   useEffect(() => {
     (async () => {
       const response = await getAllCategories();

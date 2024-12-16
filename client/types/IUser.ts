@@ -1,4 +1,3 @@
-// import { ICategoryRes } from "./ICategory";
 import { IPaginationParam } from "./IPagination";
 
 export interface IUserParam extends IPaginationParam{
@@ -9,10 +8,31 @@ export interface IUserParam extends IPaginationParam{
   isDeleted?: boolean,
 }
 
-export interface IUserRes{
+export interface IUserShort{
   id: number,
   name: string,
   lastname : string,
   email: string,
   role: number
+}
+
+export interface IUserRes {
+  id: number;
+  name: string;
+  lastname: string;
+  email: string;
+  role: number;
+  isEnabled: boolean;
+  isDeleted: boolean;
+  createdAt: Date;
+}
+
+export interface IUserUpdate{
+  name: string;
+  lastname: string;
+}
+
+export interface IUserPassword{
+  password:string;
+  newPassword:string;
 }

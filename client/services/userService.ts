@@ -1,8 +1,8 @@
 import axios from "@/lib/axiosInstance";
 import { IApiRes } from "@/types/IApiRes";
-import { IAuthRes } from "@/types/IAuth";
+import { IAuthReq, IAuthRes } from "@/types/IAuth";
 import { IPagination } from "@/types/IPagination";
-import { IUserParam, IUserRes } from "@/types/IUser";
+import { IUserParam, IUserPassword, IUserRes, IUserShort, IUserUpdate } from "@/types/IUser";
 
 export const getAllUsers = async (params: IUserParam) => {
   try {
@@ -23,7 +23,7 @@ export const getFullUsers = async (
   authdata: IAuthRes
 ) => {
   try {
-    const { data } = await axios.get<IApiRes<IPagination<IUserRes>>>(
+    const { data } = await axios.get<IApiRes<IPagination<IUserShort>>>(
       `/users`,
       {
         params: { ...params, size: 10 },
@@ -57,3 +57,57 @@ export const changeRole = async (authdata: IAuthRes, id: number, newRole: number
     throw error;
   }
 };
+
+export const updateUser = async (authdata: IAuthRes, userData:IUserUpdate)=>{
+  try {
+    const { data } = await axios.put<IApiRes<IUserRes>>(
+      `/users`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      });
+    console.log("Datos actualizados:", data);
+    return data.data;
+  } catch (error) {
+    console.error("Error updating:", error);
+    throw error;
+  }
+}
+
+export const changeEmail = async (authdata: IAuthRes, userData:IAuthReq)=>{
+  try {
+    const { data } = await axios.post<IApiRes<string>>(
+      `/auth/change-email`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      });
+    console.log("Datos actualizados:", data);
+    return data.data;
+  } catch (error) {
+    console.error("Error updating:", error);
+    throw error;
+  }
+}
+
+export const changePassword = async (authdata: IAuthRes, userData:IUserPassword)=>{
+  try {
+    const { data } = await axios.post<IApiRes<string>>(
+      `/auth/change-password`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${authdata.token}`,
+        },
+      });
+    console.log("Datos actualizados:", data);
+    return data.data;
+  } catch (error) {
+    console.error("Error updating:", error);
+    throw error;
+  }
+}

@@ -1,5 +1,11 @@
+import ProfilePage from "@/components/profile/ProfilePage";
+
 const Page = () => {
-  return <section></section>;
+  return (
+    <div className="min-h-[calc(100vh-176px)] basis-full">
+      <ProfilePage />
+    </div>
+  );
 };
 
 export default Page;
