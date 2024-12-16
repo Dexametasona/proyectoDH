@@ -37,7 +37,6 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps)
     to: new Date(order.shipEnd.toString()+"T00:00:00"),
   }));
 
-console.log("Fecha 1 ", disabledDates[0].from)
   
   // Manejar el cambio de fechas seleccionadas
   function handleDateChange(dates) {

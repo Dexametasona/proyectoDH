@@ -69,7 +69,7 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  console.log("ordenes "+product.orders[0].shipStart)
+
 
   return (
     <section className="w-full">
