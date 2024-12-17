@@ -18,7 +18,7 @@
 
 - **Back End**
 
-<img src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java" height=60/> <img src="https://user-images.githubusercontent.com/25181517/117201470-f6d56780-adec-11eb-8f7c-e70e376cfd07.png" alt="Spring" title="Spring" height=60/> <img src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png" alt="SpringBoot"  title="SpringBoot" height=60/> <img src="https://user-images.githubusercontent.com/25181517/117208740-bfb78400-adf5-11eb-97bb-09072b6bedfc.png" alt="PostgreSQL" title="PostgreSQL"  height=60/> <img src="https://user-images.githubusercontent.com/25181517/186711335-a3729606-5a78-4496-9a36-06efcc74f800.png" alt="Swagger" title="Swagger" height=60 />
+<img src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java" height=60/> <img src="https://user-images.githubusercontent.com/25181517/117201470-f6d56780-adec-11eb-8f7c-e70e376cfd07.png" alt="Spring" title="Spring" height=60/> <img src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png" alt="SpringBoot"  title="SpringBoot" height=60/> <img src="https://www.svgrepo.com/svg/303251/mysql-logo" alt="PostgreSQL" title="PostgreSQL"  height=60/> <img src="https://user-images.githubusercontent.com/25181517/186711335-a3729606-5a78-4496-9a36-06efcc74f800.png" alt="Swagger" title="Swagger" height=60 />
 
 
  - **Front End**
@@ -34,6 +34,7 @@
 - **Organización y comunicación**
 
 <img src="https://user-images.githubusercontent.com/25181517/192108374-8da61ba1-99ec-41d7-80b8-fb2f7c0a4948.png" title="GitHub"  height=60/> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhN8NWoR9uSZKueIfU_gLaG_q7DxCD7-jRm82dlWwmAoQpOa6yCTWed78QcsMe3oC4XQk&usqp=CAU" title="Trello"  height=60/> <img src="https://i.pinimg.com/736x/d6/11/54/d61154b2cae2e1c123477eaecbdbd487.jpg" title="Discord"  height=60/> 
+
 
 ## 🚀 **Equipo**
 
@@ -88,5 +89,4 @@
 | Nombre | Linkedin | GitHub |
 | :---:         |     :---:      |          :---: |
 | Fernando Aguas  |[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/)   | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white)](https://github.com/)|
-
 

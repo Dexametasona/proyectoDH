@@ -10,8 +10,6 @@ const CategoryPage = () => {
   const { id } = useParams();
   const [category, setCategory] = useState<ProductCards | null>(null);
 
-  console.log(id);
-
   // useEffect(() => {
   //   if (id) {
   //     const foundCategory = categoriesCards.find(

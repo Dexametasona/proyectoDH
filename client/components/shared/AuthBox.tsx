@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import { User2, UserCheck } from "lucide-react";
+import { CalendarCheck2, User2, UserCheck } from "lucide-react";
 import { Button } from "../ui/button";
 
 const AuhtBox = ({
@@ -18,11 +18,11 @@ const AuhtBox = ({
   handleLogout: () => void;
 }) => {
   return (
-    <div className="auth-box flex">
+    <div className="auth-box flex pl-2">
       <div className="btns-box sm:flex items-center gap-2">
         {user ? (
           <>
-            <p className="text-white text-md uppercase hidden sm:flex">
+            <p className="text-white text-xs text-end uppercase hidden sm:flex">
               {user.name + " " + user.lastname}
             </p>
             <DropdownMenu>
@@ -50,6 +50,14 @@ const AuhtBox = ({
                     <UserCheck/> 
                   <p>
                     Mi perfil</p>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="hover:bg-slate-400 flex items-center gap-2 p-2 outline-none ease-in-out transition-all duration-200 cursor-pointer"
+                  onClick={() => handleNavigation('/orders')}
+                >
+                    <CalendarCheck2/> 
+                  <p>
+                    Mis reservas</p>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 
-import { CardsContainerProps, Product } from "@/types";
+import { CardsContainerProps} from "@/types";
 import ProductsCards from "./ProductsCards";
-
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
 import ResultsCards from "@/components/ResultsCards";
@@ -12,17 +11,8 @@ import { getTopProducts } from "@/services/productService";
 import { IProductShort } from "@/types/IProduct";
 
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-
 const RecommendationsContainer = ({
   name,
-  verticalColumnMobile,
 }: CardsContainerProps) => {
   const { resultsProductsList } = useAppContext();
 
@@ -51,19 +41,21 @@ const RecommendationsContainer = ({
   );
 
   return (
-    <section className="flex flex-col gap-4  justify-center px-6 mt-12 place-content-evenly ">
-      <p className="text-primary text-2xl text-left font-extrabold">
+    <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
+      <h3 className="text-primary sm:text-5xl text-xl text-center font-bold mb-2">
         {resultsProductsList.length > 0 ? "Resultados" : name}
-      </p>
+      </h3>
 
       <div
-        className={`grid grid-cols-2 mb-4 gap-4 self-center ${
-          verticalColumnMobile ? "flex-col" : "grid"
-        } ${
-          resultsProductsList.length > 0
-            ? "w-full gap-10 flex"
-            : "max-w-screen-lg gap-4 "
-        }`}
+        className={`rounded-2xl mb-4 gap-16 self-center bg-secondary  
+          flex flex-col 
+          sm:grid sm:grid-cols-2 
+          md:grid md:grid-cols-2 
+          p-4
+          sm:py-5 sm:px-5
+          md:py-12 md:px-20 
+          ${resultsProductsList.length > 0 ? "w-full gap-10" : "max-w-screen-lg"}
+        `}
       >
         {resultsProductsList.length > 0 ? (
           <>
@@ -99,7 +91,7 @@ const RecommendationsContainer = ({
         totalPages={totalPages}
       ></CustomPagination>
     </section>
-    
+
   );
 };
 
