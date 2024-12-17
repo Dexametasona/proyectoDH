@@ -5,7 +5,17 @@ import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
-const OrderCard = ({ order }: { order: IOrderRes }) => {
+const OrderCard = ({
+  order,
+  triggerModal,
+}: {
+  order: IOrderRes;
+  triggerModal: (order:IOrderRes) => void;
+}) => {
+  const isOrderEnded = () => {
+    const orderShipEnd = new Date(order.shipEnd + "T23:59:00");
+    return new Date() > orderShipEnd;
+  };
   return (
     <div className="border border-grey-subtext max-w-[400px] sm:max-w-max rounded-lg flex flex-col gap-2 md:gap-6 items-center p-3 text-sm sm:flex-row lg:text-xl relative">
       <Image
@@ -24,6 +34,15 @@ const OrderCard = ({ order }: { order: IOrderRes }) => {
           Del {order.shipStart} al {order.shipEnd}
         </p>
         <p className="text-grey-subtext">Total: {order.amount} USD</p>
+        {isOrderEnded() ? (
+          <button
+            onClick={() => triggerModal(order)}
+            type="button"
+            className="text-sm bg-primary-soft rounded-md text-white transition-default hover:opacity-75"
+          >
+            Reseña
+          </button>
+        ) : null}
       </div>
       <Link href={"/product/" + order.productId}>
         <Button
