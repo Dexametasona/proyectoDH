@@ -164,7 +164,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps)
               <p>Descripción:</p>
               <p className="col-span-2">{product.description}</p>
               <p>Precio:</p>
-              <p className="col-span-2">{product.price} USD por hora</p>
+              <p className="col-span-2">{product.price} USD por día</p>
               <p>Marca:</p>
               <p className="col-span-2">{product.brand}</p>
             </div>

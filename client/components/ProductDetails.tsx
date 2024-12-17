@@ -118,7 +118,7 @@ const ProductDetails = () => {
               <div className="flex items-center gap-2">
                 <DollarSignIcon className="text-grey-subtext" />
                 <p>
-                  <strong>{product.price} USD</strong> por hora
+                  <strong>{product.price} USD</strong> por día
                 </p>
               </div>
               {/* Brand */}
