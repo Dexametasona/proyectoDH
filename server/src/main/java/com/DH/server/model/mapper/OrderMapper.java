@@ -13,7 +13,7 @@ public abstract class OrderMapper {
   public abstract Order toEntity(OrderReqDto order);
   @Mapping(target = "productId", source = "product.id")
   @Mapping(target = "productName", source = "product.name")
-  @Mapping(target = "ProductPhotoUrl", expression = "java(order.getProduct().getPhotos().getFirst().getUrl())")
+  @Mapping(target = "productPhotoUrl", expression = "java(order.getProduct().getPhotos().getFirst().getUrl())")
   @Mapping(target = "userId", source = "user.id")
   public abstract OrderResDto toResponse(Order order);
 
