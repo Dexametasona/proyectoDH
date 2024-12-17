@@ -42,7 +42,7 @@ const RecommendationsContainer = ({
 
   return (
     <section className="flex flex-col gap-4 justify-center px-6 mt-12 place-content-evenly ">
-      <h3 className="text-primary text-5xl text-center font-bold mb-2">
+      <h3 className="text-primary sm:text-5xl text-xl text-center font-bold mb-2">
         {resultsProductsList.length > 0 ? "Resultados" : name}
       </h3>
 
@@ -51,7 +51,9 @@ const RecommendationsContainer = ({
           flex flex-col 
           sm:grid sm:grid-cols-2 
           md:grid md:grid-cols-2 
-          py-12 px-20 
+          p-4
+          sm:py-5 sm:px-5
+          md:py-12 md:px-20 
           ${resultsProductsList.length > 0 ? "w-full gap-10" : "max-w-screen-lg"}
         `}
       >
