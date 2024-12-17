@@ -25,7 +25,7 @@ const ProductsCards = ({ id,  photoUrl, name, price }: Product) => {
                 alt="product image"
                 width={400}
                 height={200}
-                className="mb-3 w-80 h-80 rounded-t-lg cursor-pointer object-cover"
+                className="mb-3 w-full rounded-t-lg cursor-pointer aspect-square"
                 layout="fixed"
               />
             </div>
