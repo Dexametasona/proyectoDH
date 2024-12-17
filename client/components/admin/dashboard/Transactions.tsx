@@ -20,7 +20,7 @@ const Transactions = () => {
 
   //   fetchTransactions();
   // }, []);
-   console.log(transactions)
+
   return (
 
     <>

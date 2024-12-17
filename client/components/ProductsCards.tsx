@@ -14,21 +14,21 @@ const ProductsCards = ({ id, photoUrl, name, price }: Product) => {
 
   return (
     <>
-      <div className="rounded-lg shadow-lg">
-        <div
-          className="text-center bg-white p-3 rounded-t-lg shadow-md"
-          onClick={() => handleRedirect("product")}
-        >
-          <div className="flex justify-center item-center">
-            <Image
-              src={photoUrl || ""}
-              alt="product image"
-              width={400}
-              height={200}
-              className="mb-3 w-80 h-80 rounded-t-lg cursor-pointer object-cover"
-              layout="fixed"
-            />
-          </div>
+        <div className="rounded-lg shadow-lg">
+          <div
+            className="text-center bg-white p-3 rounded-t-lg shadow-md"
+            onClick={() => handleRedirect("product")}
+          >
+            <div className="flex justify-center item-center">
+              <Image
+                src={photoUrl || ""}
+                alt="product image"
+                width={400}
+                height={200}
+                className="mb-3 w-full rounded-t-lg cursor-pointer aspect-square"
+                layout="fixed"
+              />
+            </div>
 
           <div className="justify-items-start">
             <p className="text-text-color font-semibold"> {name} </p>
