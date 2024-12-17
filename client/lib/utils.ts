@@ -8,6 +8,22 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const validateUserName = (name: string) => {
+  if (name === null) return false;
+  name = name.trim();
+  const regexp = /^[a-zA-Zñ\s]+$/;
+  if(!regexp.test(name)) return false;
+  return name.length >= 2 && name.length <= 50;
+};
+
+export const validateUserLastname = (lastname: string) => {
+  if (lastname === null) return false;
+  lastname = lastname.trim();
+  const regexp = /^[a-zA-Zñ\s]+$/;
+  if(!regexp.test(lastname)) return false;
+  return lastname.length >= 2 && lastname.length <= 100;
+};
+
 export const validateEmail = (email: string) => {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

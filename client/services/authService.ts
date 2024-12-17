@@ -2,6 +2,7 @@ import { IApiRes } from "@/types/IApiRes";
 import { IAuthReq, IAuthRes, IUserReq, User } from "@/types/IAuth";
 import axios from "@/lib/axiosInstance";
 import { isAxiosError } from "axios";
+import { IUserRes } from "@/types/IUser";
 
 export const login = async (credentials: IAuthReq) => {
   try {
@@ -47,7 +48,7 @@ export const getAuthUser = async () => {
   const authData = getAuhtData();
   if (authData) {
     try {
-      const response = await axios.get<IApiRes<User>>("/auth", {
+      const response = await axios.get<IApiRes<IUserRes>>("/auth", {
         headers: {
           Authorization: `Bearer ${authData.token}`,
         },
