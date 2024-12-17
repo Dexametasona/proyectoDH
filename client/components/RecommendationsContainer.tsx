@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { CardsContainerProps, Product } from "@/types";
+import { CardsContainerProps} from "@/types";
 import ProductsCards from "./ProductsCards";
 import CustomPagination from "./shared/CustomPagination";
 import { useAppContext } from "@/context/AppContext";
@@ -11,17 +11,8 @@ import { getTopProducts } from "@/services/productService";
 import { IProductShort } from "@/types/IProduct";
 
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-
 const RecommendationsContainer = ({
   name,
-  verticalColumnMobile,
 }: CardsContainerProps) => {
   const { resultsProductsList } = useAppContext();
 
@@ -56,13 +47,13 @@ const RecommendationsContainer = ({
       </h3>
 
       <div
-        className={`rounded-2xl mb-4 gap-16 self-center bg-secondary  ${verticalColumnMobile
-            ? "flex flex-col"
-            : "grid grid-cols-2"
-          } sm:flex sm:flex-col md:grid md:grid-cols-2 py-12 px-20 ${resultsProductsList.length > 0
-            ? "w-full gap-10"
-            : "max-w-screen-lg"
-          }`}
+        className={`rounded-2xl mb-4 gap-16 self-center bg-secondary  
+          flex flex-col 
+          sm:grid sm:grid-cols-2 
+          md:grid md:grid-cols-2 
+          py-12 px-20 
+          ${resultsProductsList.length > 0 ? "w-full gap-10" : "max-w-screen-lg"}
+        `}
       >
         {resultsProductsList.length > 0 ? (
           <>

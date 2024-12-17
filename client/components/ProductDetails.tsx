@@ -18,7 +18,9 @@ import ShowModal from "./ShowModal";
 import { IProductRes } from "@/types/IProduct";
 import { getCharTypeFromId } from "@/lib/utils";
 
+
 const ProductDetails = () => {
+
   const { setResultsProductsList } = useAppContext();
 
   const { id } = useParams();
@@ -33,9 +35,9 @@ const ProductDetails = () => {
     router.push("/home");
   };
 
-  const idTypeToIcon = (id:number) => {
+  const idTypeToIcon = (id: number) => {
     const { icon: Icon } = getCharTypeFromId(id);
-    return (<Icon className="text-primary"/>);
+    return (<Icon className="text-primary" />);
   };
 
   useEffect(() => {
@@ -67,13 +69,13 @@ const ProductDetails = () => {
   const closeReservaModal = () => {
     setIsReservaModalOpen(false);
   };
-  
- 
+
+
   return (
     <section className="w-full">
       <div className="text-primary p-1 my-2 bg-white shadow-md  ">
         <div className="flex rounded hover:bg-primary-light m-1 p-1 pr-4 cursor-pointer justify-end" onClick={handleBackHome}>
-          <ChevronLeft/> Atrás
+          <ChevronLeft /> Atrás
         </div>
       </div>
 
@@ -91,7 +93,7 @@ const ProductDetails = () => {
 
           {product.photos && product.photos.length > 0 && (
             <div className="container-img-gallery flex gap-2 w-full justify-evenly md:w-1/2 md:grid md:grid-cols-2 md:pl-4">
-              {product.photos.map((thumb) => (
+              {product.photos.map((thumb, index) => (
                 <Image
                   key={thumb.id}
                   src={thumb.url}
@@ -99,16 +101,18 @@ const ProductDetails = () => {
                   width={100}
                   height={100}
                   className="min-w-16 shadow-md md:w-full md:aspect-square lg:w-full rounded-md cursor-pointer hover:ring-2 hover:ring-primary"
-                  onClick={() => openModal(thumb.id)}
+                  onClick={() => openModal(index)}
+
                 />
               ))}
             </div>
           )}
         </div>
         <div className="characteristic-container bg-white md:m-4 md:p-4">
-          <div className=" mb-5 mt-5 px-2">
+          <div className=" mb-5 mt-5 px-2 flex justify-between">
             <h1 className="text-2xl font-bold text-primary">{product.name}</h1>
           </div>
+
           <div className="flex flex-col gap-4 p-2 mt-2 md:grid md:grid-cols-2 border-y border-primary-light">
             <div className="flex flex-col gap-2 mb-2">
               <div className="flex items-center gap-2">
@@ -124,7 +128,7 @@ const ProductDetails = () => {
               </div>
               {/* Status */}
               <div className="flex items-center gap-2">
-                {product.status === 0? (
+                {product.status === 0 ? (
                   <>
                     <Check className="text-success" />
                     <span className="text-[var(--color-active)] font-bold">
@@ -139,13 +143,13 @@ const ProductDetails = () => {
                 )}
               </div>
             </div>
-            {/* Características solo visual */}
+            {/* Características*/}
             <div className="flex md:flex-col gap-4 align-items p-2 lg:flex-row">
-              {product.characteristics.map(char=>(
-              <div key={char.id} className="flex content-center flex-wrap gap-2">
-                 {idTypeToIcon(char.type)}
-                <span>{char.description}</span>
-              </div>
+              {product.characteristics.map(char => (
+                <div key={char.id} className="flex content-center flex-wrap gap-2">
+                  {idTypeToIcon(char.type)}
+                  <span>{char.description}</span>
+                </div>
 
               ))}
             </div>

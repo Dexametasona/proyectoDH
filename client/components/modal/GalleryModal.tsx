@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { GalleryModalProps } from '@/types';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
@@ -7,10 +7,16 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
    images, 
    isOpen, 
    onClose, 
-   initialIndex = 0 }) => {
+   initialIndex}) => {
     
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentIndex(initialIndex);
+    }
+  }, [isOpen, initialIndex]);
+  
   if (!isOpen) return null;
 
   const handleNext = () => {
