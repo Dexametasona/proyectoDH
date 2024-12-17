@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
     List<Order> orders = this.orderRepository.getOrdersByProductIdAndDate(productId, LocalDate.now());
     this.verifyOverlapDates(orders, entity);
 
-    long daysShip = ChronoUnit.DAYS.between(entity.getShipStart(), entity.getShipEnd()) + 1;
+    long daysShip = ChronoUnit.DAYS.between(entity.getShipStart(), entity.getShipEnd());
     entity.setAmount(entity.getProduct().getPrice() * daysShip);
 
     return this.orderRepository.save(entity);
