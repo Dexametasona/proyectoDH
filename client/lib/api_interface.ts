@@ -3,7 +3,6 @@ import { IApiRes } from "@/types/IApiRes";
 import { IAuthRes } from "@/types/IAuth";
 import { IProductRes } from "@/types/IProduct";
 
-
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
 
 export const getAllProducts = async () => {
@@ -27,7 +26,6 @@ export const getProductById = async (id: string | string[]) => {
   }
 };
 
-
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/users`);
@@ -41,7 +39,9 @@ export const getAllUsers = async () => {
 
 export const filterByName = async (name: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/products/autocomplete/${name}`);
+    const response = await axios.get(
+      `${BASE_URL}/products/autocomplete/${name}`,
+    );
 
     console.log(response);
     return response;
@@ -52,14 +52,33 @@ export const filterByName = async (name: string) => {
 
 export const createOrder = async (authData: IAuthRes, reservationData: any) => {
   try {
-    const { data } = await axios.post<IApiRes<IProductRes>>(`/order`, reservationData, {
-      headers: {
-        Authorization: `Bearer ${authData?.token}`,
+    const { data } = await axios.post<IApiRes<IProductRes>>(
+      `/order`,
+      reservationData,
+      {
+        headers: {
+          Authorization: `Bearer ${authData?.token}`,
+        },
       },
-    });
+    );
     console.log(data);
     console.log("Datos enviados:", reservationData);
     return data.data;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+};
+
+export const getOrderByUser = async (authData: IAuthRes) => {
+  try {
+    const token = authData?.token;
+    const { data } = await axios.get(`${BASE_URL}/order/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
