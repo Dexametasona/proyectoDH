@@ -5,42 +5,55 @@ import com.DH.server.exception.OrderException;
 import com.DH.server.exception.ProductException;
 import com.DH.server.exception.TagException;
 import com.DH.server.model.dto.request.ProductFilters;
-import com.DH.server.model.entity.Characteristics;
-import com.DH.server.model.entity.Photo;
-import com.DH.server.model.entity.Product;
+import com.DH.server.model.entity.*;
 import com.DH.server.model.mapper.ProductMapper;
 import com.DH.server.persistance.CharacteristicsRepository;
 import com.DH.server.persistance.ProductRepository;
 import com.DH.server.persistance.ReviewRepository;
 import com.DH.server.service.interfaces.*;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ProductServiceImpl implements ProductService {
-  private final ProductRepository productRepository;
-  private final ProductMapper productMapper;
-  private final S3Service s3Service;
-  private final CategoryService categoryService;
-  private final TagService tagService;
-  private final PhotoService photoService;
-
-  private final CharacteristicsRepository characteristicsRepository;
-
-  private final ReviewRepository reviewRepository;
+  @Autowired
+  private ProductRepository productRepository;
+  @Autowired
+  private ProductMapper productMapper;
+  @Autowired
+  private S3Service s3Service;
+  @Autowired
+  private CategoryService categoryService;
+  @Autowired
+  private TagService tagService;
+  @Autowired
+  private PhotoService photoService;
+  @Autowired
+  @Lazy
+  private FavoriteService favoriteService;
+  @Autowired
+  @Lazy
+  private OrderService orderService;
+  @Autowired
+  private AuthService authService;
+  @Autowired
+  private CharacteristicsRepository characteristicsRepository;
+  @Autowired
+  private ReviewRepository reviewRepository;
 
 
   @Override
@@ -52,8 +65,8 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Product create(Product entity, List<MultipartFile> photos, Integer categoryId, Integer tagId, List<Long> characteristicsId) {
 
-    Optional<Product> currentProduct =  this.productRepository.findByName(entity.getName());
-    if(currentProduct.isPresent()) throw new ProductException("Product name is already in use");
+    Optional<Product> currentProduct = this.productRepository.findByName(entity.getName());
+    if (currentProduct.isPresent()) throw new ProductException("Product name is already in use");
     List<Photo> photosUrl = photos
             .stream()
             .map(photo -> {
@@ -64,22 +77,22 @@ public class ProductServiceImpl implements ProductService {
             }).toList();
     entity.setPhotos(photosUrl);
     try {
-    entity.setCategory(categoryService.getById(categoryId.longValue()));
-    entity.setTag(tagService.getById(tagId.longValue()));
+      entity.setCategory(categoryService.getById(categoryId.longValue()));
+      entity.setTag(tagService.getById(tagId.longValue()));
     } catch (CategoryException e) {
       log.info("category not present");
-    } catch (TagException e){
+    } catch (TagException e) {
       log.info("tag not present");
     }
 
     if (characteristicsId != null && !characteristicsId.isEmpty()) {
 
-      List<Characteristics> productCharacteristics=new ArrayList<>();
+      List<Characteristics> productCharacteristics = new ArrayList<>();
 
       characteristicsId.forEach(characteristic -> {
         Optional<Characteristics> characteristics = this.characteristicsRepository.findById(characteristic);
         characteristics.ifPresent(productCharacteristics::add);
-      } );
+      });
 
       entity.setCharacteristics(productCharacteristics);
     }
@@ -109,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
                             List<MultipartFile> photos,
                             Integer categoryId,
                             Integer tagId,
-                            List<Long> characteristicsId ) {
+                            List<Long> characteristicsId) {
 
     Product previousProduct = this.getById(id);
 
@@ -154,12 +167,12 @@ public class ProductServiceImpl implements ProductService {
 
     if (characteristicsId != null && !characteristicsId.isEmpty()) {
 
-      List<Characteristics> productCharacteristics=new ArrayList<>();
+      List<Characteristics> productCharacteristics = new ArrayList<>();
 
       characteristicsId.forEach(characteristic -> {
-        Characteristics characteristics = this.characteristicsRepository.findById(characteristic).orElseThrow(()->new ProductException("Characteristic with ID"+characteristic+"was not found"));
+        Characteristics characteristics = this.characteristicsRepository.findById(characteristic).orElseThrow(() -> new ProductException("Characteristic with ID" + characteristic + "was not found"));
         productCharacteristics.add(characteristics);
-      } );
+      });
 
       previousProduct.setCharacteristics(productCharacteristics);
     }
@@ -168,8 +181,22 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
+  @Transactional
   public void deleteById(Long id) {
-    this.getById(id);
+    Product productTarget = this.getById(id);
+    var authUser = this.authService.getAuthUser();
+    List<Long> favoriteIds = this.favoriteService.getFavoritesByUser(authUser)
+            .stream()
+            .map(Favorite::getId)
+            .toList();
+    List<Order> orders = this.orderService.getAllByFilters(Pageable.unpaged(), null, productTarget.getId(), null, null).getContent();
+    orders.forEach(order -> {
+      if (!order.getShipEnd().isBefore(LocalDate.now())) {
+        throw new OrderException("You can't delete current or pending product orders. order id:" + order.getId());
+      }
+      this.orderService.deleteById(order.getId());
+    });
+    favoriteIds.forEach(this.favoriteService::deleteById);
     this.productRepository.deleteById(id);
   }
 
@@ -210,18 +237,18 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<Product> getProductNames(String name){
-    if(name.trim().length() < 4) throw new OrderException("name must have at least 4 characters");
+  public List<Product> getProductNames(String name) {
+    if (name.trim().length() < 4) throw new OrderException("name must have at least 4 characters");
     Pageable limit = PageRequest.of(0, 10);
     return this.productRepository.findProductNames(limit, name);
   }
 
-  public void averageProductScore (Long product_id){
-          Double average= reviewRepository.averageScorebyProduct(product_id);
+  public void averageProductScore(Long product_id) {
+    Double average = reviewRepository.averageScorebyProduct(product_id);
 
-          Product product=this.getById(product_id);
-          product.setAvgScore(average);
-          productRepository.save(product);
+    Product product = this.getById(product_id);
+    product.setAvgScore(average);
+    productRepository.save(product);
   }
 
 }

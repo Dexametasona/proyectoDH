@@ -1,12 +1,12 @@
 package com.DH.server.service.implement;
 
+import com.DH.server.exception.FavoriteException;
 import com.DH.server.model.dto.response.FavoriteResDto;
 import com.DH.server.model.entity.Favorite;
 import com.DH.server.model.entity.Product;
 import com.DH.server.model.entity.UserEntity;
 import com.DH.server.model.enums.ProductStatus;
 import com.DH.server.persistance.FavoriteRepository;
-import com.DH.server.service.interfaces.AuthService;
 import com.DH.server.service.interfaces.FavoriteService;
 import com.DH.server.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class FavoriteServiceImp implements FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
     private final ProductService productService;
-    private final AuthService authService;
+
     @Override
     public List<Favorite> getFavoritesByUser(UserEntity authUser) {
         return favoriteRepository.findByUser(authUser);
@@ -65,5 +65,12 @@ public class FavoriteServiceImp implements FavoriteService {
                         fav.getProduct().getPhotos().getFirst().getUrl(),
                         fav.getProduct().getPrice()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteById(long id){
+        boolean exists = this.favoriteRepository.existsById(id);
+        if(!exists) throw new FavoriteException("id not found: "+id);
+        this.favoriteRepository.deleteById(id);
     }
 }
