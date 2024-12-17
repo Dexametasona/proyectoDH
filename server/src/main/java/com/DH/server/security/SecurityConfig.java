@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity()
 public class SecurityConfig {
   private final JwtAuthFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
@@ -43,12 +45,17 @@ public class SecurityConfig {
                             "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.GET,"api/v1/category/**").permitAll()
                     .requestMatchers("api/v1/category/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"api/v1/characteristic/**").permitAll()
+                    .requestMatchers("api/v1/characteristic/**").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/tag/**").permitAll()
+                    .requestMatchers( HttpMethod.GET, "api/v1/products/all").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/products/**").permitAll()
                     .requestMatchers(  "api/v1/products/**").hasRole("ADMIN")
+                    .requestMatchers(  HttpMethod.GET, "api/v1/orders").hasRole("ADMIN")
                     .requestMatchers( HttpMethod.GET, "api/v1/users").hasRole("ADMIN")
                     .requestMatchers("api/v1/users").hasRole("USER")
                     .requestMatchers( HttpMethod.POST, "api/v1/users/role/**").hasRole("ADMIN")
+                    .requestMatchers( HttpMethod.GET, "api/v1/favorites/**").authenticated()
                     .anyRequest().authenticated()
             ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)

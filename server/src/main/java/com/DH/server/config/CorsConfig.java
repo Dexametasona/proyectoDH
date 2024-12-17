@@ -21,7 +21,8 @@ public class CorsConfig {
                         "http://localhost:3003",
                         "http://localhost:3004",
                         "http://localhost:3005",
-                        "http://localhost:5173"
+                        "http://localhost:5173",
+                        "https://proyecto-dh.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +42,24 @@ public class Product {
   @JoinColumn(name = "tag_id")
   private Tag tag;
 
+  @Column(nullable = false)
+  private Double avgScore;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+  private List<Review> review = new ArrayList<>();
+
+
+  @ManyToMany
+  @JoinTable(
+          name = "product_characteristics",
+          joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "characteristics_id")
+  )
+  private List<Characteristics> characteristics=new ArrayList<>();
+
   @PrePersist
   public void onCreate(){
     this.status = ProductStatus.AVAILABLE;
+    this.avgScore=0.0;
   }
 }

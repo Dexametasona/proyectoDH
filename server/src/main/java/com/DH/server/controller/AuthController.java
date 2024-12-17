@@ -2,6 +2,7 @@ package com.DH.server.controller;
 
 import com.DH.server.model.dto.ApiResponseDto;
 import com.DH.server.model.dto.OnCreate;
+import com.DH.server.model.dto.request.ChangePasswordDto;
 import com.DH.server.model.dto.request.LoginReq;
 import com.DH.server.model.dto.request.UserReqDto;
 import com.DH.server.model.dto.response.UserResDto;
@@ -21,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,7 +52,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  @Operation(summary = "Login user", description = "This endpoint is public")
+  @Operation(summary = "Login user", description = "Login user with email and password")
   public ResponseEntity<?> login(
           @Parameter(description = "Login request")
           @Validated(OnCreate.class)
@@ -89,5 +91,29 @@ public class AuthController {
           @RequestParam String email){
     this.authService.resendEmailToken(email);
     return ResponseEntity.ok(new ApiResponseDto<>("Email send successfully"));
+  }
+
+  @PostMapping("/change-email")
+  @Operation(summary = "Change email", description = "Change email for user, and set user as unable",
+          security = {@SecurityRequirement(name = "bearerAuth")})
+  public ResponseEntity<?> changeEmail(
+          @Parameter(description = "new email and current password")
+          @Validated(OnCreate.class)
+          @RequestBody
+          LoginReq request){
+    this.authService.changeEmail(request);
+    return ResponseEntity.ok(new ApiResponseDto<>("The email changed"));
+  }
+
+  @PostMapping("/change-password")
+  @Operation(summary = "Change password", description = "Change password for user",
+          security = {@SecurityRequirement(name = "bearerAuth")})
+  public ResponseEntity<?> changePassword(
+          @Parameter(description = "old password and new password")
+          @Validated(OnCreate.class)
+          @RequestBody
+          ChangePasswordDto request){
+    this.authService.changePassword(request);
+    return ResponseEntity.ok(new ApiResponseDto<>("The password changed"));
   }
 }
