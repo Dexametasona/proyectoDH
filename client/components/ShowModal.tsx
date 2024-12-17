@@ -1,6 +1,6 @@
 import isAuthReserve from "@/guards/authGuardReserve";
 import ReservaModal from "./ReservaModal";
-import { IOrderRes, IOrderShort } from "@/types/IOrder";
+import { IOrderShort } from "@/types/IOrder";
 import { IProductRes } from "@/types/IProduct";
 
 export interface ShowModalProps {

@@ -2,16 +2,18 @@
 import { useEffect, useState } from "react";
 
 import { useAuthContext } from "@/context/AuthContext";
-import { getOrderByUser, getProductById } from "@/lib/api_interface";
+import { getOrderByUser } from "@/lib/api_interface";
 import OrderCard from "@/components/orders/OrderCard";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { IOrderRes } from "@/types/IOrder";
+import isAuth from "@/guards/authGuard";
 
 const Page = () => {
-  const { authData, loading } = useAuthContext();
   const router = useRouter();
 
-  const [orders, setOrders] = useState([]);
+  const { authData, loading } = useAuthContext();
+  const [orders, setOrders] = useState<IOrderRes[]>([]);
 
   const handleBackHome = () => {
     router.push("/home");
@@ -21,21 +23,10 @@ const Page = () => {
     const fetchOrders = async () => {
       if (!loading && authData) {
         try {
-          const orderData = await getOrderByUser(authData);
-
-          const enrichedOrders = await Promise.all(
-            orderData.data.content.map(async (order) => {
-              const product = await getProductById(order.productId);
-              console.log("Producto obtenido:", product);
-              return {
-                ...order,
-                productName: product.name,
-                photoUrl: product.photos[0].url,
-              };
-            }),
-          );
-
-          setOrders(enrichedOrders);
+          const orderData = await getOrderByUser(authData, {
+            sort: "shipStart",
+          });
+          setOrders(orderData.content);
         } catch (err) {
           console.error("Error fetching orders or products:", err);
         }
@@ -46,7 +37,7 @@ const Page = () => {
   }, [authData, loading]);
 
   return (
-    <div className="flex flex-col  gap-8 p-6 w-full h-full">
+    <div className="flex flex-col  gap-8 p-6 max-w-screen-lg mx-auto">
       <div className="text-primary p-1 my-2 bg-white shadow-md ">
         <div className="flex rounded hover:bg-primary-light m-1 p-1 cursor-pointer">
           <ChevronLeft onClick={handleBackHome} /> Atrás
@@ -67,4 +58,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default isAuth(Page);

@@ -1,6 +1,8 @@
 import axios from "@/lib/axiosInstance";
 import { IApiRes } from "@/types/IApiRes";
 import { IAuthRes } from "@/types/IAuth";
+import { IOrderRes } from "@/types/IOrder";
+import { IPagination, IPaginationParam } from "@/types/IPagination";
 import { IProductRes } from "@/types/IProduct";
 
 const BASE_URL = "https://proyectodh-13hj.onrender.com/api/v1";
@@ -70,17 +72,18 @@ export const createOrder = async (authData: IAuthRes, reservationData: any) => {
   }
 };
 
-export const getOrderByUser = async (authData: IAuthRes) => {
+export const getOrderByUser = async (authData: IAuthRes, params:IPaginationParam) => {
   try {
     const token = authData?.token;
-    const { data } = await axios.get(`${BASE_URL}/order/user`, {
+    const { data } = await axios.get<IApiRes<IPagination<IOrderRes>>>(`${BASE_URL}/order/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params
     });
-    return data;
+    return data.data;
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error getting orders:", error);
     throw error;
   }
 };

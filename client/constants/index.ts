@@ -22,12 +22,9 @@ export const navbarOptions = [
     link: "/favorites",
   },
   {
-    name: "Reservas",
-    link: "/orders",
-  },{
-     name: "Nosotros",
+    name: "Nosotros",
     link: "/nosotros",
-  }
+  },
 ];
 
 export const socialMedia = [

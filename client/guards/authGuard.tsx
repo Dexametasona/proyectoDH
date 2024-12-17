@@ -9,17 +9,20 @@ const isAuth = <P extends GenericComponentProps>(
   WrappedComponent: React.ComponentType<P>
 ) => {
   const UserGuard = (props: P) => {
-    const { authData } = useAuthContext();
+    const { authData, loading } = useAuthContext();
     const router = useRouter();
 
     useEffect(() => {
+      if(loading) return;
       if (authData === null || authData.rol != 1) {
+        console.log('dentro del effect')
         showGuardAuthAlert({ success: () => router.push("/login") });
         return;
       }
-    }, [authData, router]);
+    }, [authData, router, loading]);
 
-    if (authData === null || authData.rol != 1) {
+    if ((authData === null || authData.rol != 1) && !loading) {
+      console.log('fuera del effect')
       showGuardAuthAlert({ success: () => router.push("/login") });
       return;
     }
