@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu} from "lucide-react";
 
 import {
@@ -15,10 +15,19 @@ import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import AuhtBox from "./AuthBox";
+import { useEffect } from "react";
 
 const Header = () => {
   const router = useRouter();
-  const { user, logoutContext, authData } = useAuthContext();
+  const path = usePathname();
+  const { user, logoutContext, authData, loading } = useAuthContext();
+  useEffect(()=>{
+    if(loading) return;
+    if(!authData) return;
+    if(authData.rol === 0 && !path.includes('admin')){
+      router.push('/admin');
+    }
+  },[loading, authData, path, router])
 
   const handleLogout = () => {
     Swal.fire({
