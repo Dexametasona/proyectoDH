@@ -12,6 +12,8 @@ public record OrderResDto(
         double amount,
         String remarks,
         long productId,
+        String productName,
+        String productPhotoUrl,
         long userId
 ) {
 }
