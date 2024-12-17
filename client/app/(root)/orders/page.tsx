@@ -56,18 +56,18 @@ const Page = () => {
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         const response = error.response.data as IApiRes<unknown>;
-        Swal.fire({icon:'error', text:response.message})
-        return
+        Swal.fire({ icon: "error", text: response.message });
+        return;
       }
-      console.error('Error al crear resena', error);
-      Swal.fire({icon:'error', text:'Error al crear la reseña.'})
+      console.error("Error al crear resena", error);
+      Swal.fire({ icon: "error", text: "Error al crear la reseña." });
     } finally {
       setShowModal(false);
     }
   };
 
   return (
-    <div className="flex flex-col  gap-8 p-6 max-w-screen-lg mx-auto">
+    <div className="flex flex-col  gap-8 p-6 max-w-screen-lg mx-auto min-h-[calc(100vh-176px)]">
       <div className="text-primary p-1 my-2 bg-white shadow-md ">
         <div className="flex rounded hover:bg-primary-light m-1 p-1 cursor-pointer">
           <ChevronLeft onClick={handleBackHome} /> Atrás
@@ -78,21 +78,26 @@ const Page = () => {
         <p className="col-span-full text-3xl font-extrabold text-primary">
           Reservas
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {orders.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              triggerModal={handleShowModal}
-            />
-          ))}
-        </div>
+        {!orders || orders.length < 1 ? (
+          <p>Todavia no tienes reservas.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {orders.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                triggerModal={handleShowModal}
+              />
+            ))}
+          </div>
+        )}
       </div>
       {showModal ? (
-        <ReviewModal 
-        handleShowModal={setShowModal} 
-        handleCreateReview={handleCreateReview}
-        order={selectedOrder!} />
+        <ReviewModal
+          handleShowModal={setShowModal}
+          handleCreateReview={handleCreateReview}
+          order={selectedOrder!}
+        />
       ) : null}
     </div>
   );
