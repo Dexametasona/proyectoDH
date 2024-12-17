@@ -164,7 +164,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps)
               <p>Descripción:</p>
               <p className="col-span-2">{product.description}</p>
               <p>Precio:</p>
-              <p className="col-span-2">{product.price} USD por hora</p>
+              <p className="col-span-2">{product.price} USD por día</p>
               <p>Marca:</p>
               <p className="col-span-2">{product.brand}</p>
             </div>
@@ -231,7 +231,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps)
               Revisa tu correo electrónico y termina con el proceso de reserva.
             </p>
             <button
-              onClick={() => handleNavigation("/home")}
+              onClick={() => handleNavigation("/orders")}
               className="bg-secondary text-white px-4 py-2 rounded-full w-full"
             >
               Entendido
