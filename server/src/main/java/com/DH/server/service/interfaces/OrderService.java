@@ -1,6 +1,7 @@
 package com.DH.server.service.interfaces;
 
 import com.DH.server.model.entity.Order;
+import com.DH.server.model.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +15,5 @@ public interface OrderService extends GenericService<Order>{
   Page<Order> getAllByFilters(Pageable page, Long userId, Long productId, LocalDate start, LocalDate end);
 
   List<Order> getCurrentOrdersByProduct(Long productId);
+  void sendOrderConfirmation(UserEntity account, Order order);
 }
