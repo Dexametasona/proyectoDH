@@ -47,10 +47,9 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody
                                     @Validated(OnCreate.class)
-                                    OrderReqDto request) throws BadRequestException {
+                                    OrderReqDto request){
         var order=this.orderMapper.toEntity(request);
         order=this.orderService.create(order, request.productId());
-
         UserEntity authUser = this.authService.getAuthUser();
         this.orderService.sendOrderConfirmation(authUser, order);
         return ResponseEntity
@@ -120,27 +119,5 @@ public class OrderController {
                                     @PathVariable Long id){
         this.orderService.deleteById(id);
         return ResponseEntity.ok(new ApiResponseDto<>("Tag delete successfully, id: "+id));
-    }
-    @PostMapping("/confirmation")
-    @Operation(summary = "Confirm a product reservation", description = "Send reservation confirmation email")
-        public ResponseEntity<?> OrderConfirmation(
-            @Parameter(description = "Reservation request", required = true)
-            @Validated
-            @RequestBody
-            OrderReqDto reqDto){
-        long productId = reqDto.productId();
-        Product product = this.productService.getById(productId);
-        UserEntity authUser = this.authService.getAuthUser();
-        Order order = new Order();
-        order.setCreatedAt(LocalDateTime.now());
-        order.setShipStart(reqDto.shipStart());
-        order.setShipEnd(reqDto.shipEnd());
-        order.setShipAddress(reqDto.shipAddress());
-        order.setRemarks(reqDto.remarks());
-        order.setProduct(product);
-        order.setAmount(product.getPrice() * ChronoUnit.DAYS.between(reqDto.shipStart(), reqDto.shipEnd()));
-        order = this.orderService.create(order);
-        this.orderService.sendOrderConfirmation(authUser, order);
-        return ResponseEntity.ok(new ApiResponseDto<>("Send Order confirmation mail"));
     }
 }

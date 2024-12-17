@@ -47,7 +47,6 @@ public class OrderServiceImpl implements OrderService {
       throw new OrderException("The product is unavailable, product id: "+ productId);
     }
     entity.setProduct(productTarget);
-    entity.setCreatedAt(LocalDateTime.now());
     entity.setUser(authUser);
 
     List<Order> orders = this.orderRepository.getOrdersByProductIdAndDate(productId, LocalDate.now());
