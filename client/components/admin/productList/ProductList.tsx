@@ -122,7 +122,7 @@ const ProductList = () => {
       const res = await Swal.fire({
         icon: "warning",
         title: "Eliminar prodcuto",
-        text: "Seguro que deseas eliminar este producto? Esta operación es irreversible.",
+        text: "Seguro que deseas eliminar este producto?, recuerda que no puedes eliminar un producto que este en reserva.",
         showCancelButton: true,
         showConfirmButton: true,
       });
@@ -136,7 +136,7 @@ const ProductList = () => {
         fetchProducts();
       }
     } catch (error) {
-      console.error("Error al elminar elproducto", error);
+      console.error("Error al eliminar elproducto", error);
       Swal.fire({
         icon: "error",
         title: "Error al eliminar",

@@ -231,7 +231,7 @@ const ReservaModal = ({ isOpen, onClose, orders = [], product }: ShowModalProps)
               Revisa tu correo electrónico y termina con el proceso de reserva.
             </p>
             <button
-              onClick={() => handleNavigation("/home")}
+              onClick={() => handleNavigation("/orders")}
               className="bg-secondary text-white px-4 py-2 rounded-full w-full"
             >
               Entendido

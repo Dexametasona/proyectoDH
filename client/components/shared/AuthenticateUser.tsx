@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { validateEmail } from "@/lib/utils";
 import { Input } from "../ui/input";
 import { useAuthContext } from "@/context/AuthContext";
+import { Eye, EyeClosed } from "lucide-react";
 
 const AuthenticateUser = () => {
   const router = useRouter();
@@ -14,8 +15,9 @@ const AuthenticateUser = () => {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [showPass, setShowPass] = useState(false)
 
-  const { loginContext} = useAuthContext();
+  const { loginContext } = useAuthContext();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,15 +38,15 @@ const AuthenticateUser = () => {
     if (!isValid) return;
     try {
       const response = await loginContext({ email, password });
-      if(response !== null && response.rol === 0){
+      if (response !== null && response.rol === 0) {
         router.push("/admin");
-      }else{
+      } else {
         router.push("/home");
       }
     } catch {
       setLoginError("Email o contraseña incorrecta");
       setTimeout(() => {
-        setLoginError(null)
+        setLoginError(null);
       }, 2000);
     }
   };
@@ -78,15 +80,18 @@ const AuthenticateUser = () => {
             )}
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 relative">
           <Input
             className="rounded-full"
             id="password"
-            type="password"
+            type={showPass? 'text':'password'}
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <button type="button" onClick={()=>setShowPass(!showPass)} className="absolute right-2 bottom-1/2 translate-y-1/2">
+           {showPass ? (<Eye/>):(<EyeClosed/>)}
+          </button>
           {formError &&
             password.length > 0 && ( // Show error only if password is not empty
               <p className="text-red-500 text-xs">{formError}</p>

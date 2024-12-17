@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Menu, User } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu} from "lucide-react";
 
 import {
   DropdownMenu,
@@ -10,15 +10,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { navbarOptions } from "@/constants";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import AuhtBox from "./AuthBox";
+import { useEffect } from "react";
 
 const Header = () => {
   const router = useRouter();
-  const { user, logoutContext, authData } = useAuthContext();
+  const path = usePathname();
+  const { user, logoutContext, authData, loading } = useAuthContext();
+  useEffect(()=>{
+    if(loading) return;
+    if(!authData) return;
+    if(authData.rol === 0 && !path.includes('admin')){
+      router.push('/admin');
+    }
+  },[loading, authData, path, router])
 
   const handleLogout = () => {
     Swal.fire({
@@ -96,75 +105,11 @@ const Header = () => {
           </p>
         ))}
       </div>
-      <div className="auth-box flex">
-        <div className="btns-box sm:flex items-center gap-2">
-          {user ? (
-            <>
-              <p className="text-white text-md uppercase hidden sm:flex">
-                {user.name + " " + user.lastname}
-              </p>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <div className="border-secondary border-2 rounded-full w-10 grid place-items-center aspect-square">
-                    <p className="text-white text-4xl">
-                      {user.name.toUpperCase().charAt(0)}
-                    </p>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent sideOffset={10}>
-                  <DropdownMenuItem
-                    className="hover:bg-slate-400 ease-in-out transition-all duration-200"
-                    onClick={() => handleLogout()}
-                  >
-                    <p className="cursor-pointer">Cerrar sesión</p>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <div>
-              <div className="sm:hidden">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <div className="bg-secondary p-2 rounded-full">
-                      <User></User>
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent sideOffset={10}>
-                    <DropdownMenuItem
-                      className="hover:bg-slate-400 ease-in-out transition-all duration-300"
-                      onClick={() => handleNavigation("/signup")}
-                    >
-                      <p className="cursor-pointer">Crear cuenta</p>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="hover:bg-slate-400 ease-in-out transition-all duration-300"
-                      onClick={() => handleNavigation("/login")}
-                    >
-                      <p className="cursor-pointer">Iniciar sesión</p>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="hidden sm:flex gap-4">
-                <Button
-                  className="rounded-full text-sm border-white border hover:opacity-80"
-                  onClick={() => handleNavigation("/signup")}
-                >
-                  Crear cuenta
-                </Button>
-                <Button
-                  className="rounded-full text-sm hover:opacity-80"
-                  variant={"secondary"}
-                  onClick={() => handleNavigation("/login")}
-                >
-                  Iniciar sesión
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      <AuhtBox 
+      handleLogout={handleLogout} 
+      handleNavigation={handleNavigation}
+      user={user}
+      />
     </div>
   );
 };
