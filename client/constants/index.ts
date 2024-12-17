@@ -22,8 +22,8 @@ export const navbarOptions = [
     link: "/favorites",
   },
   {
-    name: "Contacto",
-    link: "/contact",
+    name: "Reservas",
+    link: "/orders",
   },
 ];
 
