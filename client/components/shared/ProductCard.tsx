@@ -14,9 +14,8 @@ const ProductCard = ({
     <div
       title="ver detalles"
       className="card-container cursor-pointer col-span-6 md:col-span-3 xl:col-span-2 relative py-4 bg-white rounded-md overflow-hidden hover:shadow-lg group max-w-[400px] w-full transition-default hover:-translate-y-1"
-      onClick={() => router.push("/product/" + data.id)}
     >
-      <div className="img-container rounded-md overflow-hidden">
+      <div className="img-container rounded-md overflow-hidden" onClick={() => router.push("/product/" + data.id)}>
         <Image
           className="object-cover w-full aspect-square"
           src={data.photoUrl ?? "/assets/images/img-default.jpg"}
