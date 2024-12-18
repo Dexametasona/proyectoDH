@@ -3,3 +3,4 @@ export interface ICharacteristicRes {
   description: string;
   type: number;
 }
+export type ICharacteristicReq = Omit<ICharacteristicRes, 'id'>
