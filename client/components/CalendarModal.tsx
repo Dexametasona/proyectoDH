@@ -5,13 +5,14 @@ import { format, startOfDay } from "date-fns";
 import { DateRange, Matcher } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { getDateArray } from "@/lib/utils";
+import { IProductRes } from "@/types/IProduct";
 
 interface DatePickerWithRangeProps {
     date: DateRange | null;
     onDateChange: (dates: DateRange | null) => void;
     orders?: Array<{ shipStart: string; shipEnd: string }>;
     disabled: Matcher | Matcher[];
-    product: undefined;
+    product: IProductRes;
 }
 
 export function DateCalendar({

@@ -26,7 +26,7 @@ const ResultsCards = ({ id, photoUrl, name, price }) => {
       />
       <div className="flex flex-col gap-2 pr-3">
         <p className="text-xl font-medium">{name}</p>
-        <p className="text-primary-soft">{`$${price}/hora`}</p>
+        <p className="text-primary-soft">{`$${price}/día`}</p>
       </div>
     </div>
   );
