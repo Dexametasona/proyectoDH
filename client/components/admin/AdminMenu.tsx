@@ -37,6 +37,16 @@ const AdminMenu = () => {
           <Image className={`${pathname ==='/admin/products'?'invert':'' }`} src={"/assets/icons/product-icon.png"} alt="product-icon" width={16} height={16}/>
           <p> Productos</p>
         </Link>
+        <Link
+          href="/admin/characteristics"
+          className={`flex items-center gap-2 p-2 rounded-l-md cursor-pointer relative z-20 hover:bg-gray-700 ${
+            pathname === "/admin/characteristics" ? "bg-white text-primary hover:bg-white ": ""
+            } `}
+        >
+          <Image className={`${pathname ==='/admin/characteristics'?'':'invert' }`} src={"/assets/icons/list-todo.png"} alt="list-todo" width={16} height={16}/>
+          {}
+          <p> Caracteristicas</p>
+        </Link>
       </div>
     </aside>
   );
